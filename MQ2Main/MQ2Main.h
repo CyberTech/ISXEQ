@@ -440,8 +440,8 @@ EQLIB_API struct _ITEMINFO *GetItemFromContents(struct _CONTENTS *c);
 
 
 #ifdef ISXEQ
-#define GETMEMBER() GetMember(LSVARPTR VarPtr, PCHAR Member, int argc, char *argv[], LSTYPEVAR &Dest)
-#define GETMETHOD() GetMethod(LSVARPTR &VarPtr, PCHAR Method, int argc, char *argv[])
+#define GETMEMBER() GetMember(LSOBJECTDATA VarPtr, PCHAR Member, int argc, char *argv[], LSOBJECT &Dest)
+#define GETMETHOD() GetMethod(LSOBJECTDATA &VarPtr, PCHAR Method, int argc, char *argv[])
 #define DECLAREGETMETHOD() bool GETMETHOD()
 #else
 #define GETMEMBER() GetMember(MQ2VARPTR VarPtr, PCHAR Member, PCHAR Index, MQ2TYPEVAR &Dest)
