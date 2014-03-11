@@ -3,3 +3,13 @@
 *.tlog
 *.pdb
 /Release
+/MQ2Chat/ISXEQChatIntermediate
+/MQ2ChatWnd/ISXEQChatWndIntermediate
+/MQ2CustomBinds/ISXEQCustomBindsIntermediate
+/MQ2EQIM/ISXEQEQIMIntermediate
+/MQ2ItemDisplay/ISXEQItemDisplayIntermediate
+/MQ2Labels/ISXEQLabelsIntermediate
+/MQ2Main/ISXEQIntermediate
+/MQ2Map/ISXEQMapIntermediate
+/MQ2Template/ISXEQTemplateIntermediate
+/mq2telnet/ISXEQTelnetIntermediate
