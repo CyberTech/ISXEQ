@@ -335,11 +335,11 @@ namespace MQ2Internal {
         char szFilename[MAX_PATH];
         HMODULE hModule;
         float fpVersion;
-		BOOL bCustom;
-		struct _MQPlugin()
-		{
-			bCustom = 0;
-		}
+        BOOL bCustom;
+        struct _MQPlugin()
+        {
+            bCustom = 0;
+        }
         fMQInitializePlugin Initialize;
         fMQShutdownPlugin Shutdown;
         fMQZoned Zoned;
