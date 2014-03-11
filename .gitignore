@@ -1,2 +1,5 @@
 /.cov
 /.HistoryData
+*.tlog
+*.pdb
+/Release
