@@ -67,8 +67,8 @@ bool ISXEQItemDisplay::Initialize(ISInterface *p_ISInterface)
     RegisterServices();
     EzDetour(CItemDisplayWnd__SetSpell,&ItemDisplayHook::SetSpell_Detour,&ItemDisplayHook::SetSpell_Trampoline);
     EzDetour(CItemDisplayWnd__UpdateStrings, &ItemDisplayHook::UpdateStrings_Detour, &ItemDisplayHook::UpdateStrings_Trampoline);
-    EzDetour(CXWnd__DrawTooltipAtPoint,&XWndHook::DrawTooltipAtPoint_Detour,&XWndHook::DrawTooltipAtPoint_Trampoline);
-    EzDetour(CInvSlotWnd__DrawTooltip, &InvSlotWndHook::DrawTooltip_Detour, &InvSlotWndHook::DrawTooltip_Trampoline);
+    //EzDetour(CXWnd__DrawTooltipAtPoint,&XWndHook::DrawTooltipAtPoint_Detour,&XWndHook::DrawTooltipAtPoint_Trampoline);
+    //EzDetour(CInvSlotWnd__DrawTooltip, &InvSlotWndHook::DrawTooltip_Detour, &InvSlotWndHook::DrawTooltip_Trampoline);
 
     WriteChatf("ISXEQItemDisplay Loaded");
     return true;
