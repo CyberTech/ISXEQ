@@ -111,12 +111,11 @@ void CEditBaseWnd::SetMaxChars(int maxChars)
     if(this->InputText)
     {
         len = this->InputText->Length;
-    }
-
-    if(len > maxChars)
-    {
-        ((CXWnd*)this)->SetWindowTextA(CXStr(this->InputText->Text));
-    }
+		if (len > maxChars)
+		{
+			((CXWnd*)this)->SetWindowTextA(CXStr(this->InputText->Text));
+		}
+	}
 }
 
 CXPoint CXRect::CenterPoint()const
