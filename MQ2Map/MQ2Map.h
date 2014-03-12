@@ -93,7 +93,7 @@ bool MapSelectTarget();
 #ifndef ISXEQ
 BOOL dataMapSpawn(PCHAR szIndex, MQ2TYPEVAR &Ret);
 #else
-bool dataMapSpawn(int argc, char *argv[], LSTYPEVAR &Ret);
+bool dataMapSpawn(int argc, char *argv[], LSOBJECT &Ret);
 #endif
 
 struct _MAPSPAWN* AddSpawn(PSPAWNINFO pNewSpawn,BOOL ExplicitAllow=false);

@@ -20,7 +20,7 @@
 
 #include "..\MQ2Main.h"
 
-#define TLO(funcname) bool funcname(int argc, char *argv[], LSTYPEVAR &Ret)
+#define TLO(funcname) bool funcname(int argc, char *argv[], LSOBJECT &Ret)
 
 TLO(dataNearestDoor)
 {

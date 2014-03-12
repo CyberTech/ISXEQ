@@ -66,8 +66,8 @@ using namespace std;
 #endif
 #define PMQ2TYPEMEMBER PLSTYPEMEMBER
 #define PMQ2TYPEMETHOD PLSTYPEMETHOD
-#define MQ2Type LSType
-#define MQ2TYPEVAR LSTYPEVAR
+#define MQ2Type LSTypeDefinition
+#define MQ2TYPEVAR LSOBJECT
 
 #else
 // ISXEQ_LEGACY
@@ -611,7 +611,7 @@ LEGACY_API BOOL Calculate(PCHAR szFormula, DOUBLE& Dest);
 #else
 #include "ISXEQ\ISXEQUtilities.h"
 #include "ISXEQ\ISXEQCommands.h"
-#define TOPLEVELOBJECT(name,funcname) extern bool funcname(int argc, char *argv[], LSTYPEVAR &Ret);
+#define TOPLEVELOBJECT(name,funcname) extern bool funcname(int argc, char *argv[], LSOBJECT &Ret);
 #include "ISXEQ\ISXEQTopLevelObjects.h"
 #undef TOPLEVELOBJECT
 #endif

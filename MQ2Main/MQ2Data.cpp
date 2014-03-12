@@ -34,7 +34,7 @@ GNU General Public License for more details.
 #ifndef ISXEQ
 #define TLO(funcname) BOOL funcname(PCHAR szIndex, MQ2TYPEVAR &Ret)
 #else
-#define TLO(funcname) bool funcname(int argc, char *argv[], LSTYPEVAR &Ret)
+#define TLO(funcname) bool funcname(int argc, char *argv[], LSOBJECT &Ret)
 #endif
 
 
