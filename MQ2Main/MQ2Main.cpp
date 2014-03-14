@@ -129,19 +129,19 @@ BOOL ParseINIFile(PCHAR lpINIPath)
     gbExactSearchCleanNames = 1==GetPrivateProfileInt("MacroQuest","ExactSearchCleanNames",0,Filename);
     gbTimeStampChat = 1==GetPrivateProfileInt("MacroQuest","TimeStampChat",0,Filename);
     gbBeepOnTells = 1==GetPrivateProfileInt("MacroQuest","BeepOnTells",0,Filename);
-	
+    
     GetPrivateProfileString("MacroQuest","HUDMode","UnderUI",CustomSettings,MAX_STRING,Filename);
     if (!stricmp(CustomSettings,"normal")) {
         gbAlwaysDrawMQHUD=false;
         gbHUDUnderUI=false;
     }
-	else
+    else
         if (!stricmp(CustomSettings,"underui"))
         {
             gbHUDUnderUI=true;
             gbAlwaysDrawMQHUD=false;
         }
-		else
+        else
             if (!stricmp(CustomSettings,"always"))
             {
                 gbHUDUnderUI=true;
@@ -234,12 +234,12 @@ BOOL ParseINIFile(PCHAR lpINIPath)
                     fgets(szBuffer,MAX_STRING,fDB);
                 }
                 fclose(fDB);
-			}
-			if(!gSpewToFile) {//lets check if the user has it set in his/her custom ini
-				sprintf(Filename,"%s\\CustomPlugin.ini",lpINIPath);
-				gSpewToFile = 1==GetPrivateProfileInt("MacroQuest","DebugSpewToFile",0,Filename);
-			}
-			return TRUE;
+            }
+            if(!gSpewToFile) {//lets check if the user has it set in his/her custom ini
+                sprintf(Filename,"%s\\CustomPlugin.ini",lpINIPath);
+                gSpewToFile = 1==GetPrivateProfileInt("MacroQuest","DebugSpewToFile",0,Filename);
+            }
+            return TRUE;
 }
 
 
@@ -318,7 +318,7 @@ bool __cdecl MQ2Initialize()
     InitializeMQ2Pulse();
     InitializeMQ2Commands();
     InitializeMQ2Windows();
-	MQ2MouseHooks(1);
+    MQ2MouseHooks(1);
     Sleep(100);
     InitializeMQ2KeyBinds();
 #ifndef ISXEQ
@@ -341,7 +341,7 @@ void __cdecl MQ2Shutdown()
     DebugTry(ShutdownMQ2Plugins());
 #endif
     DebugTry(ShutdownMQ2Windows());
-	DebugTry(MQ2MouseHooks(0));
+    DebugTry(MQ2MouseHooks(0));
 #ifndef ISXEQ
     DebugTry(ShutdownParser());
 #endif
