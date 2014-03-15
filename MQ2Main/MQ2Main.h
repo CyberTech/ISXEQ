@@ -48,43 +48,33 @@ GNU General Public License for more details.
 #include <algorithm>
 using namespace std;
 
-#if !defined(ISXEQ) && !defined(ISXEQ_LEGACY)
-// MQ2
-#include "..\Dxsdk81\include\dinput.h"
-#include "..\Detours\inc\detours.h" 
-#include "..\Blech\Blech.h"
-#elif !defined(ISXEQ_LEGACY)
-// ISXEQ
-#ifndef MQ2PLUGIN
-#include "ISXEQ\ISXEQ.h"
+#if !defined(ISXEQ)
+	// MQ2
+	#include "..\Dxsdk81\include\dinput.h"
+	#include "..\Detours\inc\detours.h" 
+	#include "..\Blech\Blech.h"
 #else
-#pragma pack(push)
-#pragma pack(4)
-#include <isxdk.h>
-#pragma pack(pop)
-#include "ISXEQ\ISXEQServices.h"
-#endif
-#define PMQ2TYPEMEMBER PLSTYPEMEMBER
-#define PMQ2TYPEMETHOD PLSTYPEMETHOD
-#define MQ2Type LSTypeDefinition
-#define MQ2TYPEVAR LSOBJECT
+	// ISXEQ
+	#ifndef MQ2PLUGIN
+		#include "ISXEQ\ISXEQ.h"
+	#else
+		#pragma pack(push)
+		#pragma pack(4)
+		#include <isxdk.h>
+		#pragma pack(pop)
+		#include "ISXEQ\ISXEQServices.h"
+	#endif
+	#define PMQ2TYPEMEMBER PLSTYPEMEMBER
+	#define PMQ2TYPEMETHOD PLSTYPEMETHOD
+	#define MQ2Type LSTypeDefinition
+	#define MQ2TYPEVAR LSOBJECT
 
-#else
-// ISXEQ_LEGACY
-#include <winthreading.h>
-#include <Index.h>
-#include "..\Dxsdk81\include\dinput.h"
-#include "..\Blech\Blech.h"
 #endif
+
 #include "eqgame.h"
 
-#ifdef ISXEQ_LEGACY
-#define LEGACY_API extern
-#define LEGACY_VAR extern
-#else
 #define LEGACY_API EQLIB_API
 #define LEGACY_VAR EQLIB_VAR
-#endif
 
 #ifdef EQLIB_EXPORTS
 #define EQLIB_API extern "C" __declspec(dllexport)
@@ -171,12 +161,7 @@ extern DWORD CountFrees;
 }
 
 #ifndef ISXEQ
-#ifdef ISXEQ_LEGACY
-#define EzDetour(offset,detour,trampoline)
-#define DETOUR_TRAMPOLINE_EMPTY(blah)
-#else
 #define EzDetour(offset,detour,trampoline) AddDetourf((DWORD)offset,detour,trampoline)
-#endif
 #endif
 
 #ifndef DOUBLE
@@ -268,15 +253,9 @@ EQLIB_API VOID dsp_chat_no_events(const char *,int,bool,bool=1);
 EQLIB_API VOID InitializeMQ2Detours();
 EQLIB_API VOID ShutdownMQ2Detours();
 #ifndef ISXEQ
-#ifdef ISXEQ_LEGACY
-#define RemoveDetour(address)
-#define AddDetour __noop
-#define AddDetourf __noop
-#else
 EQLIB_API BOOL AddDetour(DWORD address, PBYTE pfDetour=0, PBYTE pfTrampoline=0, DWORD Count=20);
 EQLIB_API VOID AddDetourf(DWORD address, ...);
 EQLIB_API VOID RemoveDetour(DWORD address);
-#endif
 #else
 #define RemoveDetour EzUnDetour
 #endif

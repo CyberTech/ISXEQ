@@ -301,7 +301,6 @@ void Heartbeat()
     else
         return;
     DebugTry(UpdateMQ2SpawnSort());
-#ifndef ISXEQ_LEGACY
 #ifndef ISXEQ
     DebugTry(DrawHUD());
     //if (gGameState==GAMESTATE_INGAME && !bMouseLook && ScreenMode==3)
@@ -309,11 +308,9 @@ void Heartbeat()
     //    DebugTry(pWndMgr->DrawCursor());
     //}
 #endif
-#endif
 
     bRunNextCommand   = TRUE;
     DebugTry(Pulse());
-#ifndef ISXEQ_LEGACY
 #ifndef ISXEQ
     DebugTry(Benchmark(bmPluginsPulse,DebugTry(PulsePlugins())));
 #endif
@@ -326,7 +323,6 @@ void Heartbeat()
                 pEQPlayNicePulse();
         }
     }
-#endif
     DebugTry(ProcessPendingGroundItems());
 
 
@@ -356,7 +352,6 @@ void Heartbeat()
 #endif
 }
 
-#ifndef ISXEQ_LEGACY
 // *************************************************************************** 
 // Function:    ProcessGameEvents 
 // Description: Our ProcessGameEvents Hook
@@ -410,4 +405,3 @@ void ShutdownMQ2Pulse()
     RemoveDetour(CEverQuest__EnterZone);
     RemoveDetour(CEverQuest__SetGameState);
 }
-#endif

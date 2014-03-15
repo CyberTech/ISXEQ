@@ -190,8 +190,6 @@ VOID ClickMouseLoc(PCHAR szMouseLoc, PCHAR szButton)
 }
 #endif
 
-#ifndef ISXEQ_LEGACY
-
 // *************************************************************************** 
 // Function: Click 
 // Description: Our '/click' command 
@@ -227,7 +225,6 @@ BOOL IsMouseWaiting()
     }
     return Result;
 }
-#endif
 
 #ifndef ISXEQ
 

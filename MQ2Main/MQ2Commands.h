@@ -1,5 +1,5 @@
 #pragma once
-#if defined(ISXEQ_LEGACY) || !defined(ISXDK_VERSION)
+#if !defined(ISXDK_VERSION)
 /* COMMANDS */
 LEGACY_API VOID NoModKeyCmd                         (PSPAWNINFO pChar, PCHAR szLine);
 LEGACY_API VOID CaptionColorCmd                     (PSPAWNINFO pChar, PCHAR szLine);

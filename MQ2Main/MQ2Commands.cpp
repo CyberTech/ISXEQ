@@ -2632,7 +2632,6 @@ VOID DisplayLoginName(PSPAWNINFO pChar, PCHAR szLine)
     }
 }
 
-#ifndef ISXEQ_LEGACY
 // ***************************************************************************
 // Function:      PluginCommand
 // Description:   Our /plugin command.
@@ -2693,7 +2692,6 @@ VOID PluginCommand(PSPAWNINFO pChar, PCHAR szLine)
         } 
     } 
 }
-#endif
 
 VOID EQDestroyHeldItemOrMoney(PSPAWNINFO pChar, PCHAR szLine)
 {

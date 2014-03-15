@@ -31,9 +31,6 @@ GNU General Public License for more details.
 #ifdef ISXEQ
 #pragma warning(disable:4996)
 #endif
-#ifdef ISXEQ_LEGACY
-#pragma warning(disable:4996)
-#endif
 
 #ifndef ISXEQ
 LEGACY_API class MQ2FloatType *pFloatType;

@@ -29,7 +29,7 @@ GNU General Public License for more details.
 #endif
 
 DWORD WINAPI MQ2Start(LPVOID lpParameter);
-#if !defined(ISXEQ) && !defined(ISXEQ_LEGACY)
+#if !defined(ISXEQ)
 
 BOOL APIENTRY DllMain( HANDLE hModule, 
                       DWORD  ul_reason_for_call, 

@@ -67,13 +67,6 @@ ISXEQ.NET\EQTypes\EQTimer.cs
 ISXEQ.NET\EQTypes\EQWindow.cs
 ISXEQ.NET\EQTypes\EQZone.cs
 ISXEQ.NET\Properties\AssemblyInfo.cs
-ISXEQLegacy\ISXEQLegacy-VS2005.vcproj
-ISXEQLegacy\ISXEQLegacy.cpp
-ISXEQLegacy\ISXEQLegacy.h
-ISXEQLegacy\ISXEQLegacy.vcproj
-ISXEQLegacy\ISXEQLegacyEngine.cpp
-ISXEQLegacy\ISXEQLegacyEngine.h
-ISXEQLegacy\LegacyGlobals.cpp
 memtest\makefile
 memtest\orig.asm
 memtest\orig1.asm

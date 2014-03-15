@@ -16,10 +16,9 @@
 
 #define MQ2PLUGIN
 #ifndef ISXEQ
-#ifndef ISXEQ_LEGACY
 #define ISXEQ
 #endif
-#endif
+
 #include "MQ2Main/MQ2Main.h"
 #include "MQ2Main/MQ2Globals.h"
 

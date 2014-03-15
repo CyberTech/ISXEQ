@@ -200,8 +200,6 @@ int ItemNotify(int argc, char *argv[]);
 int ListItemSlots(int argc, char *argv[]); 
 #endif
 
-#ifndef ISXEQ_LEGACY
-
 void InitializeMQ2Windows()
 {
     int i;
@@ -909,7 +907,6 @@ void RemoveWindow(char *WindowName)
         }
     }
 }
-#endif
 
 #ifndef ISXEQ
 #define RETURN(x) return;

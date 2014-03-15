@@ -432,7 +432,7 @@ namespace MQ2Internal {
         //    inline CXWnd *GetChildItem(const char *Name) {return CSidlScreenWnd::GetChildItem(Name);};
     };
 
-#if !defined(ISXEQ) && !defined(ISXEQ_LEGACY)
+#if !defined(ISXEQ)
     /* CIndex class stolen from teqim - Lax */
     template <class Any>
     class CIndex
