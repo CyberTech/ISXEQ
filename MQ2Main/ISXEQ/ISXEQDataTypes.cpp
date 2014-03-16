@@ -126,7 +126,7 @@ bool MQ2BuffType::GETMETHOD()
     {
         if (PSPELL pSpell=GetSpellByID(pPtr->SpellID))
         {
-            LSVARPTR Temp;
+			LSOBJECTDATA Temp;
             Temp.Ptr=pSpell;
             return pSpellType->GetMethod(Temp,Method,argc,argv);
         }
@@ -174,7 +174,7 @@ bool MQ2CharacterType::GETMETHOD()
     PMQ2TYPEMETHOD pMethod=MQ2CharacterType::FindMethod(Method);
     if (!pMethod)
     {
-        LSVARPTR Temp;
+		LSOBJECTDATA Temp;
         Temp.Ptr=pPtr->pSpawn;
         return pSpawnType->GetMethod(Temp,Method,argc,argv);
     }
@@ -371,7 +371,7 @@ bool MQ2CorpseType::GETMETHOD()
     PMQ2TYPEMETHOD pMethod=MQ2CorpseType::FindMethod(Method);
     if (!pMethod)
     {
-        LSVARPTR Temp;
+		LSOBJECTDATA Temp;
         Temp.Ptr=pActiveCorpse;
         return pSpawnType->GetMethod(Temp,Method,argc,argv);
     }
@@ -392,7 +392,7 @@ bool MQ2MerchantType::GETMETHOD()
     PMQ2TYPEMETHOD pMethod=MQ2MerchantType::FindMethod(Method);
     if (!pMethod)
     {
-        LSVARPTR Temp;
+		LSOBJECTDATA Temp;
         Temp.Ptr=pActiveMerchant;
         return pSpawnType->GetMethod(Temp,Method,argc,argv);
     }
@@ -519,7 +519,7 @@ bool MQ2RaidMemberType::GETMETHOD()
     PMQ2TYPEMETHOD pMethod=MQ2RaidMemberType::FindMethod(Method);
     if (!pMethod)
     {
-        LSVARPTR Temp;
+		LSOBJECTDATA Temp;
         Temp.Ptr=SpawnByName[pRaidMember->Name];
         return pSpawnType->GetMethod(Temp,Method,argc,argv);
     }

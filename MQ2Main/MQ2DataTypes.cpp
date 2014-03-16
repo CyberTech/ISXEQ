@@ -1759,7 +1759,7 @@ bool MQ2BuffType::GETMEMBER()
 #ifndef ISXEQ 
             return pSpellType->GetMember(*(MQ2VARPTR*)&pSpell,Member,Index,Dest);
 #else
-            return pSpellType->GetMember(*(LSVARPTR*)&pSpell,Member,argc,argv,Dest);
+			return pSpellType->GetMember(*(LSOBJECTDATA*)&pSpell, Member, argc, argv, Dest);
 #endif
         }
         return false;
@@ -1853,7 +1853,7 @@ bool MQ2CharacterType::GETMEMBER()
 #ifndef ISXEQ
         return pSpawnType->GetMember(*(MQ2VARPTR*)&pChar->pSpawn,Member,Index,Dest);
 #else
-        return pSpawnType->GetMember(*(LSVARPTR*)&pChar->pSpawn,Member,argc,argv,Dest);
+		return pSpawnType->GetMember(*(LSOBJECTDATA*)&pChar->pSpawn, Member, argc, argv, Dest);
 #endif
     }
 
@@ -6139,7 +6139,7 @@ bool MQ2CorpseType::GETMEMBER()
 #ifndef ISXEQ
         return pSpawnType->GetMember(*(MQ2VARPTR*)&pActiveCorpse,Member,Index,Dest);
 #else
-        return pSpawnType->GetMember(*(LSVARPTR*)&pActiveCorpse,Member,argc,argv,Dest);
+		return pSpawnType->GetMember(*(LSOBJECTDATA*)&pActiveCorpse, Member, argc, argv, Dest);
 #endif
     }
 
@@ -6233,7 +6233,7 @@ bool MQ2MerchantType::GETMEMBER()
 #ifndef ISXEQ
         return pSpawnType->GetMember(*(MQ2VARPTR*)&pActiveMerchant,Member,Index,Dest);
 #else
-        return pSpawnType->GetMember(*(LSVARPTR*)&pActiveMerchant,Member,argc,argv,Dest);
+		return pSpawnType->GetMember(*(LSOBJECTDATA*)&pActiveMerchant, Member, argc, argv, Dest);
 #endif
     }
 
@@ -6355,7 +6355,7 @@ bool MQ2MercenaryType::GETMEMBER()
 #ifndef ISXEQ
         return pSpawnType->GetMember(*(MQ2VARPTR*)&VarPtr.Ptr,Member,Index,Dest);
 #else
-        return pSpawnType->GetMember(*(LSVARPTR*)&VarPtr.Ptr,Member,argc,argv,Dest);
+		return pSpawnType->GetMember(*(LSOBJECTDATA*)&VarPtr.Ptr, Member, argc, argv, Dest);
 #endif
     }
     switch((MercenaryMembers)pMember->ID)
@@ -6427,8 +6427,8 @@ bool MQ2PetType::GETMEMBER()
 #ifndef ISXEQ
         return pSpawnType->GetMember(*(MQ2VARPTR*)&VarPtr.Ptr,Member,Index,Dest);
 #else
-        return pSpawnType->GetMember(*(LSVARPTR*)&VarPtr.Ptr,Member,argc,argv,Dest);
-        //return pSpawnType->GetMember(*(LSVARPTR*)&VarPtr.Ptr,Member,argc,argv,Dest);
+		return pSpawnType->GetMember(*(LSOBJECTDATA*)&VarPtr.Ptr, Member, argc, argv, Dest);
+        //return pSpawnType->GetMember(*(LSOBJECTDATA*)&VarPtr.Ptr,Member,argc,argv,Dest);
 #endif
     }
     switch((PetMembers)pMember->ID)
@@ -7226,7 +7226,7 @@ bool MQ2GroupMemberType::GETMEMBER()
 #ifndef ISXEQ
         return pSpawnType->GetMember(*(MQ2VARPTR*)&pGroupMember,Member,Index,Dest);
 #else
-        return pSpawnType->GetMember(*(LSVARPTR*)&pGroupMember,Member,argc,argv,Dest);
+		return pSpawnType->GetMember(*(LSOBJECTDATA*)&pGroupMember, Member, argc, argv, Dest);
 #endif
     }
 
@@ -7475,7 +7475,7 @@ bool MQ2RaidMemberType::GETMEMBER()
 #ifndef ISXEQ
         return pSpawnType->GetMember(*(MQ2VARPTR*)GetSpawnByName(pRaidMember->Name),Member,Index,Dest);
 #else
-        return pSpawnType->GetMember(*(LSVARPTR*)GetSpawnByName(pRaidMember->Name),Member,argc,argv,Dest);
+		return pSpawnType->GetMember(*(LSOBJECTDATA*)GetSpawnByName(pRaidMember->Name), Member, argc, argv, Dest);
 #endif
     }
 
@@ -7898,7 +7898,7 @@ bool MQ2TargetType::GETMEMBER()
 #ifndef ISXEQ
         return pSpawnType->GetMember(*(MQ2VARPTR*)&VarPtr.Ptr,Member,Index,Dest);
 #else
-        return pSpawnType->GetMember(*(LSVARPTR*)&VarPtr.Ptr,Member,argc,argv,Dest);
+		return pSpawnType->GetMember(*(LSOBJECTDATA*)&VarPtr.Ptr, Member, argc, argv, Dest);
 #endif
     }
     switch((TargetMembers)pMember->ID)
@@ -8248,7 +8248,7 @@ bool MQ2XTargetType::GETMEMBER()
             #ifndef ISXEQ
                 return pSpawnType->GetMember(*(MQ2VARPTR*)&pSpawn,Member,Index,Dest);
             #else
-                return pSpawnType->GetMember(*(LSVARPTR*)&pSpawn,Member,argc,argv,Dest);
+			return pSpawnType->GetMember(*(LSOBJECTDATA*)&pSpawn, Member, argc, argv, Dest);
             #endif
         }
     }
