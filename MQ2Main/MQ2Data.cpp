@@ -1522,14 +1522,14 @@ TLO(dataLineOfSight)
         P1[1]=P2[1]=((PSPAWNINFO)pCharSpawn)->X;
         P1[2]=P2[2]=((PSPAWNINFO)pCharSpawn)->Z;
 #ifdef ISXEQ
-      if (argc != 6)
-         return false;
-      P1[0] = atof(argv[0]);
-      P1[1] = atof(argv[1]);
-      P1[2] = atof(argv[2]);
-      P2[0] = atof(argv[3]);
-      P2[1] = atof(argv[4]);
-      P2[2] = atof(argv[5]);
+        if (argc != 6)
+           return false;
+        P1[0] = static_cast<float>(atof(argv[0]));
+        P1[1] = static_cast<float>(atof(argv[1]));
+        P1[2] = static_cast<float>(atof(argv[2]));
+        P2[0] = static_cast<float>(atof(argv[3]));
+        P2[1] = static_cast<float>(atof(argv[4]));
+        P2[2] = static_cast<float>(atof(argv[5]));
 #else
         if (PCHAR pColon=strchr(szIndex,':'))
         {
