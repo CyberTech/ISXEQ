@@ -5842,20 +5842,22 @@ bool MQ2GroundType::GETMEMBER()
 }
 bool MQ2MacroQuestType::GETMEMBER()
 {
+	printf("MQ2MAcroQuestType called with %s", Member);
     PMQ2TYPEMEMBER pMember=MQ2MacroQuestType::FindMember(Member);
     if (!pMember)
         return false;
-    switch((MacroQuestMembers)pMember->ID)
+	printf("MQ2MAcroQuestType called with %d", pMember->ID);
+	switch ((MacroQuestMembers)pMember->ID)
     {
     case GameState:
         if (gGameState==GAMESTATE_CHARSELECT)
-            Dest.Ptr="CHARSELECT";
+			Dest.ConstCharPtr = "CHARSELECT";
         else if (gGameState==GAMESTATE_INGAME)
-            Dest.Ptr="INGAME";
+			Dest.ConstCharPtr = "INGAME";
         else if (GetGameState() == GAMESTATE_PRECHARSELECT)
-            Dest.Ptr="PRECHARSELECT";
+			Dest.ConstCharPtr = "PRECHARSELECT";
         else
-            Dest.Ptr="UNKNOWN";
+            Dest.ConstCharPtr="UNKNOWN";
         Dest.Type=pStringType;
         return true;
     case LoginName:
@@ -5863,7 +5865,7 @@ bool MQ2MacroQuestType::GETMEMBER()
             if (PCHAR pTemp=GetLoginName())
             {
                 strcpy(DataTypeTemp,pTemp);
-                Dest.Ptr=&DataTypeTemp[0];
+				Dest.ConstCharPtr = &DataTypeTemp[0];
                 Dest.Type=pStringType;
                 return true;
             }
@@ -5872,7 +5874,7 @@ bool MQ2MacroQuestType::GETMEMBER()
     case Server:
         if (EQADDR_SERVERNAME[0])
         {
-            Dest.Ptr=EQADDR_SERVERNAME;
+			Dest.ConstCharPtr = EQADDR_SERVERNAME;
             Dest.Type=pStringType;
             return true;
         }
@@ -5940,8 +5942,9 @@ bool MQ2MacroQuestType::GETMEMBER()
         FileTimeToSystemTime(&FileData.ftLastWriteTime, &st); 
         FindClose(hFile); 
         sprintf(DataTypeTemp, "%d%d%d",st.wYear,st.wMonth,st.wDay); 
-        Dest.Ptr=&DataTypeTemp[0]; 
+		Dest.ConstCharPtr = (const char *)pISInterface->GetTempBuffer(strlen(DataTypeTemp) + 1, (void*)DataTypeTemp);
         Dest.Type=pStringType; 
+		printf("REturning %s", Dest.ConstCharPtr);
         return true; 
     case Ping:
         Dest.DWord=pConnection->Last;

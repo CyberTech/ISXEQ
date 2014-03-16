@@ -108,10 +108,4 @@
 		<LibraryPath>$(ISXDKPATH)lib\$(VSVERSIONDIRNAME);$(LSMODULEPATH)lib\$(VSVERSIONDIRNAME);$(LS2MODULEPATH)lib\$(VSVERSIONDIRNAME);$(LibraryPath)</LibraryPath>
 		<IncludePath>$(ISXDKPATH)include;$(LSMODULEPATH)include;$(LS2MODULEPATH)include;$(IncludePath)</IncludePath>
 	</PropertyGroup>
-	<!-- ISXGAMES Specific BEGIN -->
-	<ImportGroup Label="PropertySheets">
-		<!-- Import props files for boost, crashrpt, libcurl, libtidy, openssl, zlib, etc -->
-		<Import Project="$(LIBISXGAMESPATH)isxGamesCommon_*.props" />
-	</ImportGroup>
-	<!-- ISXGAMES Specific END -->
 </Project>

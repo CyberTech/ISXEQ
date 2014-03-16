@@ -21,7 +21,7 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\isxGamesCommon.props" />
+    <Import Project="..\ISXEQ\isxGamesCommon.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -31,6 +31,8 @@
     <OutDir>..\Release\</OutDir>
     <IntDir>.\ISXEQIntermediate\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -53,6 +55,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>CompileAsCpp</CompileAs>
+      <EnablePREfast>true</EnablePREfast>
     </ClCompile>
     <Link>
       <AdditionalOptions>/OPT:NOICF %(AdditionalOptions)</AdditionalOptions>
@@ -69,6 +72,12 @@
       <ImportLibrary>$(OutDir)ISXEQ.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
+    <PostBuildEvent>
+      <Command>$(SolutionDir)ISXEQ\PostBuild.bat "$(SolutionDir)" "$(TargetDir)" $(TargetName)</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy files to release</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ISXEQ\ISXEQ.cpp" />
@@ -123,6 +132,8 @@
     <ClInclude Include="weapons.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\ISXEQ\isxGamesCommon.props" />
+    <None Include="..\ISXEQ\PostBuild.bat" />
     <None Include="..\Release\Changes-ISXEQ.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

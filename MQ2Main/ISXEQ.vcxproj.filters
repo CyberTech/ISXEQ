@@ -15,6 +15,9 @@
     <Filter Include="Header Files\From MQ2Main">
       <UniqueIdentifier>{e48309d0-17e2-42c3-a827-a8bbdcf2a400}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Build Files">
+      <UniqueIdentifier>{aa579893-08a9-4e01-a943-efc2f155f80b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ISXEQ\ISXEQ.cpp">
@@ -166,5 +169,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Release\Changes-ISXEQ.txt" />
+    <None Include="..\ISXEQ\isxGamesCommon.props">
+      <Filter>Build Files</Filter>
+    </None>
+    <None Include="..\ISXEQ\PostBuild.bat">
+      <Filter>Build Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
