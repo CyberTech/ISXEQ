@@ -62,7 +62,7 @@ LEGACY_API class MQ2PluginType *pPluginType;
 #define FLOATPTR(x) Dest.Ptr=&x
 
 #define Argb RGB
-#define MQ2VARPTR LSVARPTR
+#define MQ2VARPTR LSOBJECTDATA
 #endif
 LEGACY_VAR class MQ2SpawnType *pSpawnType;
 LEGACY_VAR class MQ2CharacterType *pCharacterType;
@@ -118,7 +118,6 @@ LEGACY_VAR class MQ2TargetType *pTargetType;
 LEGACY_VAR class MQ2XTargetType *pXTargetType;
 
 #define UseTemp(mystring) strcpy(DataTypeTemp,mystring)
-#define TypeMember(name) AddMember((DWORD)name,""#name)
 
 #ifndef ISXEQ
 class MQ2BoolType : public MQ2Type
