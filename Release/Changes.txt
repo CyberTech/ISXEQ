@@ -1,3 +1,21 @@
+16 Mar 2014 by eqmule
+-Fixed EQRAIDMEMBER struct
+ This means /echo ${Raid.Member[${Me}].Class} (and the likes) will work again.
+-Fixed a bug with pRaidType where pSpawnType members wouldn't inherit correctly.
+ This means things like /echo ${Raid.Member[${Me}].Race} will work properly (again)... (did it ever work?)
+
+15 Mar 2014 by eqmule
+-Fixed the EQRAID struct 
+ This means, things like /echo ${Raid.Members} will work again.
+
+13 Mar 2014 by eqmule
+-Updated for patch
+-Fixed a problem with MQ2Labels showing up as Unknown
+
+12 Mar 2014 by eqmule
+-Updated for patch
+-The MQ2Type destructor is now virtual Cred: TypePun
+
 09 Mar 2014 by eqmule
 -Added Distance3D float member to the Switch TLO
 -/click left item is back!! (in all its old days glory...)
