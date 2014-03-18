@@ -123,10 +123,10 @@ public:
 
 		if (CommandName[0]!='/' || !CommandName[1] || !ExecuteISCommand(&CommandName[1],pSpace))
 		{
-			char FullCommand[8192]={0};
+			char FullCommand1[8192]={0};
 //			strcpy(FullCommand,szFullLine);
-			pISInterface->DataParse(szFullLine,FullCommand,8192);
-			Trampoline(pChar,FullCommand); 
+			pISInterface->DataParse(szFullLine, FullCommand1,8192);
+			Trampoline(pChar, FullCommand1); 
 		}
 		strcpy(szLastCommand,FullCommand);
 
