@@ -5842,12 +5842,10 @@ bool MQ2GroundType::GETMEMBER()
 }
 bool MQ2MacroQuestType::GETMEMBER()
 {
-	printf("MQ2MAcroQuestType called with %s", Member);
     PMQ2TYPEMEMBER pMember=MQ2MacroQuestType::FindMember(Member);
     if (!pMember)
         return false;
-	printf("MQ2MAcroQuestType called with %d", pMember->ID);
-	switch ((MacroQuestMembers)pMember->ID)
+    switch ((MacroQuestMembers)pMember->ID)
     {
     case GameState:
         if (gGameState==GAMESTATE_CHARSELECT)
@@ -5944,7 +5942,6 @@ bool MQ2MacroQuestType::GETMEMBER()
         sprintf(DataTypeTemp, "%d%d%d",st.wYear,st.wMonth,st.wDay); 
 		Dest.ConstCharPtr = (const char *)pISInterface->GetTempBuffer(strlen(DataTypeTemp) + 1, (void*)DataTypeTemp);
         Dest.Type=pStringType; 
-		printf("REturning %s", Dest.ConstCharPtr);
         return true; 
     case Ping:
         Dest.DWord=pConnection->Last;
