@@ -295,7 +295,6 @@ TLO(dataMath)
 TLO(dataZone)
 {
     int nIndex=0;
-    PZONELIST pZone = NULL;
 
     if (!ISINDEX()) 
     {
@@ -837,7 +836,6 @@ TLO(dataFindItemBank)
 {
     if (!ISINDEX())
         return false;
-    DWORD N=1;
     PCHAR pName=GETFIRST();
     BOOL bExact=false;
 
@@ -855,7 +853,6 @@ TLO(dataFindItemBank)
 
     for (nPack=0 ; nPack < NUM_BANK_SLOTS ; nPack++)
     {
-        PCHARINFO pCharInfo=GetCharInfo();
         PCONTENTS pPack;
 
     if (pCharInfo->pBankArray && (pPack=pCharInfo->pBankArray->Bank[nPack]))
@@ -971,7 +968,6 @@ TLO(dataFindItem)
 {
     if (!ISINDEX())
         return false;
-    DWORD N=1;
     PCHAR pName=GETFIRST();
     BOOL bExact=false;
 
@@ -983,7 +979,6 @@ TLO(dataFindItem)
     CHAR Name[MAX_STRING]={0};
     CHAR Temp[MAX_STRING]={0};
     strlwr(strcpy(Name,pName));
-    PCHARINFO pCharInfo=GetCharInfo();
     PCHARINFO2 pChar2 = GetCharInfo2();
     if(pChar2 && pChar2->pInventoryArray->Inventory.Cursor) {
         if (PCONTENTS pItem=pChar2->pInventoryArray->Inventory.Cursor) {
@@ -1070,7 +1065,6 @@ TLO(dataFindItemCount)
 {
     if (!ISINDEX())
         return false;
-    DWORD N=1;
     PCHAR pName=GETFIRST();
     BOOL bExact=false;
 
@@ -1082,7 +1076,6 @@ TLO(dataFindItemCount)
     CHAR Name[MAX_STRING]={0};
     CHAR Temp[MAX_STRING]={0};
     strlwr(strcpy(Name,pName));
-    PCHARINFO pCharInfo=GetCharInfo();
 
     unsigned long Count=0;
     DWORD nAug = 0;
@@ -1207,7 +1200,6 @@ TLO(dataFindItemBankCount)
 {
     if (!ISINDEX())
         return false;
-    DWORD N=1;
     PCHAR pName=GETFIRST();
     BOOL bExact=false;
 
@@ -1219,7 +1211,6 @@ TLO(dataFindItemBankCount)
     CHAR Name[MAX_STRING]={0};
     CHAR Temp[MAX_STRING]={0};
     strlwr(strcpy(Name,pName));
-    PCHARINFO pCharInfo=GetCharInfo();
 
     unsigned long Count=0;
     unsigned long nPack=0;

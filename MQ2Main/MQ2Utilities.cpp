@@ -1252,7 +1252,6 @@ BOOL SearchThroughItems(SEARCHITEM &SearchItem, PCONTENTS* pResult, DWORD *nResu
     *nResult=nresult;\
     return TRUE;}
 
-    PCHARINFO pChar=(PCHARINFO)pCharData;
     if (MaskSet(Worn) && Flag(Worn))
     {
         // iterate through worn items

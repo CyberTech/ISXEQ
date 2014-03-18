@@ -449,7 +449,6 @@ public:
         volatile PITEMINFO Item=GetItemFromContents(item);
         CHAR out[MAX_STRING] = {0};
         CHAR temp[MAX_STRING] = {0};
-        CHAR temp2[MAX_STRING] = {0};
         PCHAR lore = NULL;
 
         UpdateStrings_Trampoline();
@@ -548,7 +547,6 @@ public:
             sprintf(temp,"Item Lore: %s<BR>",Item->LoreName);
             strcat(out,temp);
         }
-        PCHARINFO pChar = GetCharInfo();     // Ziggy - for item level highlights 
         // Will be 0 for no effect or -1 if other effects present 
         if (Item->Proc.SpellID && Item->Proc.SpellID!=-1) { 
             if (Item->Proc.RequiredLevel == 0 ) 

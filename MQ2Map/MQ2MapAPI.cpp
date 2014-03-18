@@ -143,7 +143,6 @@ VOID MapInit()
 
 PMAPSPAWN AddSpawn(PSPAWNINFO pNewSpawn,BOOL ExplicitAllow)
 {
-    char buf[MAX_STRING] = {0};
     eSpawnType Type=GetSpawnType(pNewSpawn);
     // apply map filter
     if (!ExplicitAllow && !CanDisplaySpawn(Type,pNewSpawn))
@@ -168,6 +167,7 @@ PMAPSPAWN AddSpawn(PSPAWNINFO pNewSpawn,BOOL ExplicitAllow)
     //Debugging
     if (Type == SPAWN_CORPSE || Type == ITEM )
     {
+        char buf[MAX_STRING] = {0};
         sprintf(buf, "AddSpawn(Corpse or Item): Name: %s, Type: %d, BodyType: %d",
             pMapSpawn->pSpawn->Name, pMapSpawn->pSpawn->Type, GetBodyType(pMapSpawn->pSpawn) );
         DebugSpew(buf);
@@ -336,7 +336,6 @@ void MapClear()
 
 void MapUpdate()
 {
-    char buf[MAX_STRING] = {0};
     PCHARINFO pCharInfo=GetCharInfo();
     if (!pCharInfo)
         return;
@@ -374,6 +373,7 @@ void MapUpdate()
     while(pMapSpawn)
     {
 #if 0
+         char buf[MAX_STRING] = {0};
         // Debugging
         DWORD BodyType=GetBodyType(pMapSpawn->pSpawn);
         if ( pMapSpawn->pSpawn->Type == SPAWN_PLAYER )

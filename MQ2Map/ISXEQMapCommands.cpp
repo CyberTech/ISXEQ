@@ -5,7 +5,6 @@ VOID MapFilterSetting( DWORD nMapFilter, int arg, int argc, char *argv[])
 {
     CHAR szBuffer[MAX_STRING] = {0};
     CHAR Buff[MAX_STRING]={0};
-    DWORD dwValue = 0;
     PCHAR szFilterMap[] = {
         "hide",
         "show",
@@ -42,7 +41,6 @@ VOID MapFilterSetting( DWORD nMapFilter, int arg, int argc, char *argv[])
         }
         if (pMapFilter->DefaultColor != -1) 
         {
-            CHAR szBuffer2[MAX_STRING] = {0};
             DWORD R,G,B;
             R= (pMapFilter->Color&0xFF0000)/0x10000;
             G= (pMapFilter->Color&0xFF00)/0x100;
