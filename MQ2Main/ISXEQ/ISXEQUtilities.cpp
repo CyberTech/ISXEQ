@@ -152,7 +152,7 @@ unsigned long ParseSearchSpawnArg(int arg, int argc, char *argv[], SEARCHSPAWN &
          ExtraUsed=1;
         } else if (!stricmp(argv[arg],"light")) {
          // TODO
-            DWORD Light = -1;
+            int Light = -1;
          DWORD i=0;
          if (arg+1<argc)
          {

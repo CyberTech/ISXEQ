@@ -86,14 +86,14 @@ static inline BOOL IsAssistNPC(PSPAWNINFO pSpawn)
     {
         DWORD nAssist;
         {
-            if (GetCharInfo()->pSpawn->GroupAssistNPC[0]==pSpawn->SpawnID)
+			if (GetCharInfo()->pSpawn->GroupAssistNPC[0] == static_cast<int>(pSpawn->SpawnID))
             {
                 return true;
             }
         }
         for (nAssist=0 ; nAssist < 3 ; nAssist++)
         {
-            if (GetCharInfo()->pSpawn->RaidAssistNPC[nAssist]==pSpawn->SpawnID)
+			if (GetCharInfo()->pSpawn->RaidAssistNPC[nAssist] == static_cast<int>(pSpawn->SpawnID))
             {
                 return true;
             }
@@ -109,14 +109,14 @@ static inline BOOL IsMarkedNPC(PSPAWNINFO pSpawn)
         DWORD nMark;
         for (nMark=0 ; nMark < 3 ; nMark++)
         {
-            if (GetCharInfo()->pSpawn->RaidMarkNPC[nMark]==pSpawn->SpawnID)
+            if (GetCharInfo()->pSpawn->RaidMarkNPC[nMark]==static_cast<int>(pSpawn->SpawnID))
             {
                 return true;
             }
         }
         for (nMark=0 ; nMark < 3 ; nMark++)
         {
-            if (GetCharInfo()->pSpawn->GroupMarkNPC[nMark]==pSpawn->SpawnID)
+			if (GetCharInfo()->pSpawn->GroupMarkNPC[nMark] == static_cast<int>(pSpawn->SpawnID))
             {
                 return true;
             }
@@ -226,7 +226,6 @@ static inline eSpawnType GetSpawnType(PSPAWNINFO pSpawn)
         default:
             return NPC;
         }
-        return NPC;
     case SPAWN_CORPSE:
         return CORPSE;
     default:

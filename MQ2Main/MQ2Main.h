@@ -396,7 +396,7 @@ EQLIB_API VOID STMLToPlainText(PCHAR in, PCHAR out);
 EQLIB_API PCHAR GetSubFromLine(PMACROBLOCK pLine, PCHAR szSub);
 EQLIB_API PCHAR GetFilenameFromFullPath(PCHAR Filename);
 EQLIB_API BOOL CompareTimes(PCHAR RealTime, PCHAR ExpectedTime);
-EQLIB_API VOID AddFilter(PCHAR szFilter, DWORD Length, PBOOL pEnabled);
+EQLIB_API VOID AddFilter(PCHAR szFilter, int Length, PBOOL pEnabled);
 EQLIB_API VOID DefaultFilters(VOID);
 EQLIB_API PCHAR ConvertHotkeyNameToKeyName(PCHAR szName);
 LEGACY_API VOID CheckChatForEvent(PCHAR szMsg);

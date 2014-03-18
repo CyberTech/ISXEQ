@@ -488,7 +488,7 @@ DWORD MQToSTML(PCHAR in, PCHAR out, DWORD maxlen, DWORD ColorOverride)
     BOOL bFirstColor=false;
     BOOL bNBSpace=false;
     ColorOverride&=0xFFFFFF;
-    DWORD CurrentColor=ColorOverride;
+    int CurrentColor=ColorOverride;
     int TotalColors=0; // this MUST be signed.
     pchar_out_string_position+=InsertColor(&out[pchar_out_string_position],CurrentColor);
 
@@ -606,7 +606,7 @@ DWORD MQToSTML(PCHAR in, PCHAR out, DWORD maxlen, DWORD ColorOverride)
                                 CurrentColor=0xFFFFFF;
                             break;
                         }
-                        if ((int)CurrentColor!=LastColor)
+                        if (CurrentColor!=LastColor)
                         {
                             pchar_out_string_position+=InsertColor(&out[pchar_out_string_position],CurrentColor);
                         }
@@ -698,7 +698,7 @@ BOOL CompareTimes(PCHAR RealTime, PCHAR ExpectedTime)
     return FALSE;
 }
 
-VOID AddFilter(PCHAR szFilter, DWORD Length, PBOOL pEnabled)
+VOID AddFilter(PCHAR szFilter, int Length, PBOOL pEnabled)
 {
     PFILTER New = (PFILTER)malloc(sizeof(FILTER));
     if (!New) return;
