@@ -12,6 +12,17 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 ******************************************************************************/
 
+// Disable /W4 warnings which are not useful
+#pragma warning(disable:4100) // C100: Unreferenced formal parameter
+#pragma warning(disable:4201) // C4201: nonstandard extension used : nameless struct / union
+#pragma warning(disable:4238) // C4238: nonstandard extension used : class rvalue used as lvalue
+#pragma warning(disable:4239) // C4239: nonstandard extension used
+#pragma warning(disable:4505) // unreferenced local function has been removed
+#pragma warning(disable:4514) // unreferenced inline function has been removed
+#define stricmp _stricmp // Remove warning about stricmp being 'deprecated' from posix (it was never IN posix)
+// End of /W4 warning removal
+
+
 #define VersionString "November 07, 2013"
 #define DebugHeader "[MQ2]"
 #define LoadedString "MQ2 Loaded."
