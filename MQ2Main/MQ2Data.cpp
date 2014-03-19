@@ -1218,7 +1218,8 @@ TLO(dataFindItemBankCount)
     for (nPack=0 ; nPack < NUM_BANK_SLOTS ; nPack++)
     {
         PCHARINFO pCharInfo=GetCharInfo();
-        if (PCONTENTS pPack=pCharInfo->pBankArray->Bank[nPack])
+        PCONTENTS pPack;
+		if (pCharInfo->pBankArray && (pPack=pCharInfo->pBankArray->Bank[nPack]))
         {
             if (bExact)
             {
@@ -1278,7 +1279,8 @@ TLO(dataFindItemBankCount)
     for (nPack=0 ; nPack < NUM_SHAREDBANK_SLOTS ; nPack++)
     {
         PCHARINFO pCharInfo=GetCharInfo();
-        if (PCONTENTS pPack=pCharInfo->pSharedBankArray->SharedBank[nPack])
+		PCONTENTS pPack;
+        if (pCharInfo->pSharedBankArray && (pPack=pCharInfo->pSharedBankArray->SharedBank[nPack]))
         {
             if (bExact)
             {
