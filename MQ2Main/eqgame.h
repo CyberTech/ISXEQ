@@ -90,6 +90,7 @@
 #define __TargetAggroHolder_x                                      0x10CF360
 #define __GroupAggro_x                                             0x10CF3A0
 #define __LoginName_x                                              0xFBDFA8
+#define __Inviter_x                                                0xFB9FF0
 
 
 //// 
@@ -695,3 +696,6 @@
 
 //CHelpWnd
 #define CHelpWnd__SetFile_x                                        0x55E630
+
+//EQ_Spell
+#define EQ_Spell__GetSpellLevelNeeded_x                            0x4B5760
