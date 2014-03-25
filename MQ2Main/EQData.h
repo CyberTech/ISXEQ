@@ -378,6 +378,7 @@ enum MOUSE_DATA_TYPES {
 
 #define MAX_PC_LEVEL                    100
 #define MAX_NPC_LEVEL                   110
+#define MAX_SPELL_LEVEL					255
 #define NUM_SPELL_GEMS                  0xc
 #define NUM_SPELL_SETS                  0xa
 #define NUM_BUFF_SLOTS					0x61
@@ -1658,6 +1659,8 @@ BYTE            unknown[SPELLMGR_FILLER];
 struct _SPELL*  Spells[TOTAL_SPELL_COUNT];
 } SPELLMGR, *PSPELLMGR;
 
+#define   AC_EFFECTS                    0.3000005   // Spell effects multiplier for AC effects (adding a little due to float rounding issues)
+#define   DEFAULT_EFFECTS               1.0000000   // Default effects multplier
 // actual size: 0x4ed 20120316 - ieatacid
 typedef struct _SPELL {
 /*0x000*/   FLOAT   Range;
@@ -1707,9 +1710,8 @@ typedef struct _SPELL {
 /*0x23a*/   BYTE    Deletable;
 /*0x23b*/   BYTE    Unknown0x23b[0x6];
 /*0x241*/   BYTE    CanMGB;
-/*0x242*/   BYTE    Unknown0x242[0x5];
-/*0x247*/   BYTE    Level[0x10];        //per class.
-/*0x257*/   BYTE    Unknown0x257[0x13];
+/*0x242*/   BYTE    Unknown0x242[0x4];
+/*0x246*/   BYTE    ClassLevel[0x24];        //per class., yes there are allocations for 0x24 see 4B5776 in eqgame dated 12 mar 2014 -eqmule
 /*0x26a*/   BYTE    LightType;
 /*0x26b*/   BYTE    SpellType;          //0=detrimental, 1=Beneficial, 2=Beneficial, Group Only
 /*0x26c*/   BYTE    Unknown0x26c;

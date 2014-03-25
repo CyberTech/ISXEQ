@@ -12,7 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 ******************************************************************************/
 
-#define VersionString "November 07, 2013"
+#define VersionString __ExpectedVersionDate
 #define DebugHeader "[MQ2]"
 #define LoadedString "MQ2 Loaded."
 #define ToUnloadString "MQ2 Unloading..."
@@ -59,7 +59,7 @@ using namespace std;
 #include "ISXEQ\ISXEQ.h"
 #else
 #pragma pack(push)
-#pragma pack(4)
+#pragma pack(8)
 #include <isxdk.h>
 #pragma pack(pop)
 #include "ISXEQ\ISXEQServices.h"
@@ -472,7 +472,7 @@ EQLIB_API VOID SendEQMessage(DWORD PacketType, PVOID pData, DWORD Length);
 EQLIB_API PCHAR GetLoginName();
 EQLIB_API FLOAT DistanceToPoint(PSPAWNINFO pSpawn, FLOAT xLoc, FLOAT yLoc);
 EQLIB_API PCHAR ShowSpellSlotInfo(PSPELL pSpell, PCHAR szBuffer);
-EQLIB_API VOID SlotValueCalculate(PCHAR szBuff, PSPELL pSpell, int i, double mp);
+EQLIB_API VOID SlotValueCalculate(PCHAR szBuff, PSPELL pSpell, int i, double mp=1.0);
 EQLIB_API PCHAR GetSpellEffectName(DWORD EffectID, PCHAR szBuffer);
 EQLIB_API VOID GetGameDate(int* Month, int* Day, int* Year);
 EQLIB_API VOID GetGameTime(int* Hour, int* Minute, int* Night);

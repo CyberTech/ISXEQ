@@ -1482,6 +1482,10 @@ bool MQ2SpawnType::GETMEMBER()
         Dest.DWord=(pSpawn->InvitedToGroup);
         Dest.Type=pBoolType;
         return true;
+    case Inviter:
+		Dest.Ptr=(PCHAR)__Inviter;
+		Dest.Type=pStringType;
+		return true;
 #ifndef ISXEQ
     case NearestSpawn:
         if (pSpawn==(PSPAWNINFO)pCharSpawn)
@@ -3744,7 +3748,7 @@ bool MQ2SpellType::GETMEMBER()
     case Level:
         if (!ISINDEX() && GetCharInfo()->pSpawn)
         {
-            Dest.DWord=pSpell->Level[GetCharInfo()->pSpawn->Class-1];
+            Dest.DWord=pSpell->ClassLevel[GetCharInfo()->pSpawn->Class];
             Dest.Type=pIntType;
             return true;
         }
@@ -3752,8 +3756,8 @@ bool MQ2SpellType::GETMEMBER()
         {
             if (ISNUMBER())
             {
-                unsigned long nIndex=GETNUMBER()-1;
-                Dest.DWord=pSpell->Level[nIndex];
+                unsigned long nIndex=GETNUMBER();
+                Dest.DWord=pSpell->ClassLevel[nIndex];
                 Dest.Type=pIntType;
                 return true;
             }
@@ -4018,6 +4022,7 @@ bool MQ2SpellType::GETMEMBER()
             }
             return true;
         }
+	case StacksWith:
     case WillStack:
         {
             if (!ISINDEX()) 

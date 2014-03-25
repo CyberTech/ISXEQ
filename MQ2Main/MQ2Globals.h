@@ -683,6 +683,7 @@ EQLIB_VAR DWORD __gWorld;
 EQLIB_VAR DWORD __HotkeyPage;
 EQLIB_VAR DWORD __HWnd;
 EQLIB_VAR DWORD __InChatMode;
+EQLIB_VAR DWORD __Inviter;
 EQLIB_VAR DWORD __LastTell;
 EQLIB_VAR DWORD __LMouseHeldTime;
 EQLIB_VAR DWORD __LoginName;
@@ -1241,6 +1242,8 @@ EQLIB_VAR DWORD CContainerMgr__CloseContainer;
 EQLIB_VAR DWORD CQuantityWnd__Open;
 
 EQLIB_VAR DWORD CHelpWnd__SetFile;
+EQLIB_VAR DWORD EQ_Spell__GetSpellLevelNeeded;
+
 
 }
 using namespace MQ2Globals;
