@@ -2110,7 +2110,7 @@ public:
 
     }
 	bool GETMEMBER();
-    DECLAREGETMETHOD();
+    //DECLAREGETMETHOD();
 	//INHERITINDIRECT(pSpawnType,Temp.Ptr=GetSpawnByID(((PCHARINFO)ObjectData.Ptr)->pSpawn->PetID),0);
     INHERITDIRECT(pSpawnType);
 
