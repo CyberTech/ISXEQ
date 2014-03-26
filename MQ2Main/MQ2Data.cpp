@@ -54,13 +54,13 @@ TLO(dataSpawn)
         {
             SEARCHSPAWN ssSpawn;
             ClearSearchSpawn(&ssSpawn);
-            //PCHAR pName=GETFIRST();
-            if (*szIndex=='=')
+            PCHAR pName=GETFIRST();
+            if (*pName == '=')
             {
-                szIndex++;
+                pName++;
 				ssSpawn.bExactName = TRUE;
             }
-            strlwr(szIndex);
+            strlwr(pName);
             // set up search spawn
 
 #ifndef ISXEQ
