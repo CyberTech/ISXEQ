@@ -1,5 +1,6 @@
 20 March 2014 by rswiders
 - Brought source into compliance with current ISXDX (thanks CyberTech)
+
 18 March 2014 by CyberTech
 - Fix compatibility with Innerspace SDK v33 and above
 - Remove ISXEQLegacy code, Lax no longer supports it

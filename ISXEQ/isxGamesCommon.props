@@ -82,21 +82,21 @@
 		</When>
 	</Choose>
 	<!-- ISXGAMES Specific END -->
-	<!-- 
+	<!--
 		ISXGAMES Specific BEGIN
 		For isxGames, we use Innerspace SDKs from underneath libisxgames, instead of inside Innerspace dir, so we're
 		going to change the defaults for ISXDK/LSMODULE/LS2MODULEPATH set above in the generic code.
 	-->
-	<PropertyGroup Label="isxGames paths for Inner Space SDKs">
+	<PropertyGroup Label="isxGames paths for Inner Space SDKs" Condition="'$(LIBISXGAMESPATH)' != ''">
 		<ISXDKPATH>$(LIBISXGAMESPATH)3rdParty\LavishSoft\ISXDK\$(ISXDKVERSION)\</ISXDKPATH>
 		<LSMODULEPATH>$(LIBISXGAMESPATH)3rdParty\LavishSoft\LSModule\$(LSMODULEVERSION)\</LSMODULEPATH>
 		<LS2MODULEPATH>$(LIBISXGAMESPATH)3rdParty\LavishSoft\LS2Module\$(LS2MODULEVERSION)\</LS2MODULEPATH>
 	</PropertyGroup>
-	<PropertyGroup Label="ISXGames Project Paths">
+	<PropertyGroup Label="ISXGames Project Paths" Condition="'$(LIBISXGAMESPATH)' != ''">
 		<LibraryPath>$(ProjectDir)lib;$(LIBISXGAMESPATH)lib;$(LibraryPath)</LibraryPath>
 		<IncludePath>$(ProjectDir);$(ProjectDir)\Include;$(LIBISXGAMESPATH);$(LIBISXGAMESPATH)Include;$(IncludePath)</IncludePath>
 	</PropertyGroup>
-	<ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition="'$(LIBISXGAMESPATH)' != ''">
 		<ClCompile>
 			<PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 		</ClCompile>
