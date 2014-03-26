@@ -27,8 +27,8 @@
 	<Choose>
 		<When Condition="'$(PlatformToolsetVersion)' == '120'">
 			<PropertyGroup>
-				<ISXDKVERSION Condition="'$(ISXDKVERSION)' == ''">33</ISXDKVERSION>
-				<LSMODULEVERSION Condition="'$(LSMODULEVERSION)' == ''">20</LSMODULEVERSION>
+				<ISXDKVERSION Condition="'$(ISXDKVERSION)' == ''">34</ISXDKVERSION>
+				<LSMODULEVERSION Condition="'$(LSMODULEVERSION)' == ''">21</LSMODULEVERSION>
 				<LS2MODULEVERSION Condition="'$(LS2MODULEVERSION)' == ''">1</LS2MODULEVERSION>
 				<VSVERSIONDIRNAME>vs12</VSVERSIONDIRNAME>
 			</PropertyGroup>
@@ -88,9 +88,9 @@
 		going to change the defaults for ISXDK/LSMODULE/LS2MODULEPATH set above in the generic code.
 	-->
 	<PropertyGroup Label="isxGames paths for Inner Space SDKs">
-		<ISXDKPATH>$(LIBISXGAMESPATH)3rdParty\ISXDK\$(ISXDKVERSION)\</ISXDKPATH>
-		<LSMODULEPATH>$(LIBISXGAMESPATH)3rdParty\LSModule\$(LSMODULEVERSION)\</LSMODULEPATH>
-		<LS2MODULEPATH>$(LIBISXGAMESPATH)3rdParty\LS2Module\$(LS2MODULEVERSION)\</LS2MODULEPATH>
+		<ISXDKPATH>$(LIBISXGAMESPATH)3rdParty\LavishSoft\ISXDK\$(ISXDKVERSION)\</ISXDKPATH>
+		<LSMODULEPATH>$(LIBISXGAMESPATH)3rdParty\LavishSoft\LSModule\$(LSMODULEVERSION)\</LSMODULEPATH>
+		<LS2MODULEPATH>$(LIBISXGAMESPATH)3rdParty\LavishSoft\LS2Module\$(LS2MODULEVERSION)\</LS2MODULEPATH>
 	</PropertyGroup>
 	<PropertyGroup Label="ISXGames Project Paths">
 		<LibraryPath>$(ProjectDir)lib;$(LIBISXGAMESPATH)lib;$(LibraryPath)</LibraryPath>
