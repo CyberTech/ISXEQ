@@ -6124,13 +6124,13 @@ bool MQ2MacroQuestType::GETMEMBER()
     {
     case GameState:
         if (gGameState==GAMESTATE_CHARSELECT)
-			Dest.ConstCharPtr = "CHARSELECT";
+			Dest.Ptr = "CHARSELECT";
         else if (gGameState==GAMESTATE_INGAME)
-			Dest.ConstCharPtr = "INGAME";
+			Dest.Ptr = "INGAME";
         else if (GetGameState() == GAMESTATE_PRECHARSELECT)
-			Dest.ConstCharPtr = "PRECHARSELECT";
+			Dest.Ptr = "PRECHARSELECT";
         else
-            Dest.ConstCharPtr="UNKNOWN";
+            Dest.Ptr="UNKNOWN";
         Dest.Type=pStringType;
         return true;
     case LoginName:
@@ -6138,7 +6138,7 @@ bool MQ2MacroQuestType::GETMEMBER()
             if (PCHAR pTemp=GetLoginName())
             {
                 strcpy(DataTypeTemp,pTemp);
-				Dest.ConstCharPtr = &DataTypeTemp[0];
+				Dest.Ptr = &DataTypeTemp[0];
                 Dest.Type=pStringType;
                 return true;
             }
@@ -6147,7 +6147,7 @@ bool MQ2MacroQuestType::GETMEMBER()
     case Server:
         if (EQADDR_SERVERNAME[0])
         {
-			Dest.ConstCharPtr = EQADDR_SERVERNAME;
+			Dest.Ptr = EQADDR_SERVERNAME;
             Dest.Type=pStringType;
             return true;
         }
