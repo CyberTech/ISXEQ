@@ -449,6 +449,7 @@ public:
         volatile PITEMINFO Item=GetItemFromContents(item);
         CHAR out[MAX_STRING] = {0};
         CHAR temp[MAX_STRING] = {0};
+        CHAR temp2[MAX_STRING] = {0};
         PCHAR lore = NULL;
 
         UpdateStrings_Trampoline();
