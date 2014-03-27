@@ -6215,7 +6215,7 @@ bool MQ2MacroQuestType::GETMEMBER()
         FileTimeToSystemTime(&FileData.ftLastWriteTime, &st); 
         FindClose(hFile); 
         sprintf(DataTypeTemp, "%d%d%d",st.wYear,st.wMonth,st.wDay); 
-		Dest.ConstCharPtr = (const char *)pISInterface->GetTempBuffer(strlen(DataTypeTemp) + 1, (void*)DataTypeTemp);
+        Dest.Ptr=&DataTypeTemp[0];
         Dest.Type=pStringType; 
         return true; 
     case Ping:
