@@ -107,11 +107,11 @@
     <ClCompile Include="MQ2Windows.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DataTypeList.h" />
     <ClInclude Include="ISXEQ\ISXEQ.h" />
     <ClInclude Include="..\ISXEQClient.h" />
     <ClInclude Include="ISXEQ\ISXEQCommandList.h" />
     <ClInclude Include="ISXEQ\ISXEQCommands.h" />
-    <ClInclude Include="ISXEQ\ISXEQDataTypes.h" />
     <ClInclude Include="ISXEQ\ISXEQServices.h" />
     <ClInclude Include="ISXEQ\ISXEQTopLevelObjects.h" />
     <ClInclude Include="ISXEQ\ISXEQUtilities.h" />

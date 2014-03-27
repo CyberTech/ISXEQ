@@ -106,9 +106,6 @@
     <ClInclude Include="ISXEQ\ISXEQCommands.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ISXEQ\ISXEQDataTypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ISXEQ\ISXEQServices.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -164,6 +161,9 @@
       <Filter>Header Files\From MQ2Main</Filter>
     </ClInclude>
     <ClInclude Include="weapons.h">
+      <Filter>Header Files\From MQ2Main</Filter>
+    </ClInclude>
+    <ClInclude Include="DataTypeList.h">
       <Filter>Header Files\From MQ2Main</Filter>
     </ClInclude>
   </ItemGroup>

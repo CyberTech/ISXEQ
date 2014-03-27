@@ -33,181 +33,31 @@ GNU General Public License for more details.
 #define GETFIRST() Index
 #endif
 
-
-#ifndef ISXEQ
-class MQ2FloatType *pFloatType=0;
-class MQ2IntType *pIntType=0;
-class MQ2ByteType *pByteType=0;
-class MQ2BoolType *pBoolType=0;
-class MQ2StringType *pStringType=0;
-class MQ2MathType *pMathType=0;
-class MQ2TimeType *pTimeType=0;
-class MQ2ArrayType *pArrayType=0;
-#endif
-class MQ2SpawnType *pSpawnType=0;
-class MQ2BuffType *pBuffType=0;
-class MQ2TargetBuffType *pTargetBuffType=0;
-class MQ2SpellType *pSpellType=0;
-class MQ2TicksType *pTicksType=0;
-class MQ2CharacterType *pCharacterType=0;
-class MQ2ClassType *pClassType=0;
-class MQ2RaceType *pRaceType=0;
-class MQ2BodyType *pBodyType=0;
-class MQ2SkillType *pSkillType=0;
-class MQ2AltAbilityType *pAltAbilityType=0;
-class MQ2GroundType *pGroundType=0;
-class MQ2SwitchType *pSwitchType=0;
-class MQ2CorpseType *pCorpseType=0;
-class MQ2MacroType *pMacroType=0;
-class MQ2MacroQuestType *pMacroQuestType=0;
-class MQ2WindowType *pWindowType=0;
-class MQ2MerchantType *pMerchantType=0;
-class MQ2MercenaryType *pMercenaryType=0;
-class MQ2PetType *pPetType=0;
-class MQ2ZoneType *pZoneType=0;
-class MQ2CurrentZoneType *pCurrentZoneType=0;
-class MQ2ItemType *pItemType=0;
-class MQ2DeityType *pDeityType=0;
-class MQ2ArgbType *pArgbType=0;
-class MQ2TypeType *pTypeType=0;
-class MQ2HeadingType *pHeadingType=0;
-class MQ2InvSlotType *pInvSlotType=0;
-class MQ2TimerType *pTimerType=0;
-class MQ2PluginType *pPluginType=0;
-class MQ2RaidType *pRaidType=0;
-class MQ2RaidMemberType *pRaidMemberType=0;
-class MQ2GroupType *pGroupType=0;
-class MQ2GroupMemberType *pGroupMemberType=0;
-class MQ2EvolvingItemType *pEvolvingItemType=0;
-class MQ2DynamicZoneType *pDynamicZoneType=0;
-class MQ2DZMemberType *pDZMemberType=0;
-class MQ2FellowshipType *pFellowshipType=0;
-class MQ2FellowshipMemberType *pFellowshipMemberType=0;
-class MQ2FriendsType *pFriendsType=0;
-class MQ2TargetType *pTargetType=0;
-class MQ2TaskMemberType *pTaskMemberType=0;
-class MQ2TaskType *pTaskType=0;
-class MQ2XTargetType *pXTargetType=0;
+// Datatype Definitions.
+#define DATATYPE(_class_, _var_, _inherits_, _persistentclass_) class _class_ *_var_ = 0;
+#include "DataTypeList.h"
+#undef DATATYPE
 
 #ifndef ISXEQ
 
 void InitializeMQ2DataTypes()
-{    
-    pFloatType = new MQ2FloatType;
-    pIntType = new MQ2IntType;
-    pByteType = new MQ2ByteType;
-    pStringType = new MQ2StringType;
-    pSpawnType = new MQ2SpawnType;
-    pSpellType = new MQ2SpellType;
-    pBuffType = new MQ2BuffType;
-    pTargetBuffType = new MQ2TargetBuffType;
-    pTicksType = new MQ2TicksType;
-    pCharacterType = new MQ2CharacterType;
-    pClassType=new MQ2ClassType;
-    pRaceType=new MQ2RaceType;
-    pGroundType = new MQ2GroundType;
-    pSwitchType = new MQ2SwitchType;
-    pMacroType = new MQ2MacroType;
-    pMacroQuestType = new MQ2MacroQuestType;
-    pMathType = new MQ2MathType;
-    pWindowType = new MQ2WindowType;
-    pMerchantType = new MQ2MerchantType;
-    pMercenaryType = new MQ2MercenaryType;
-    pMercenaryType->SetInheritance(pSpawnType);
-    pPetType = new MQ2PetType;
-    pPetType->SetInheritance(pSpawnType);
-    pZoneType = new MQ2ZoneType;
-    pItemType = new MQ2ItemType;
-    pBoolType = new MQ2BoolType;
-    pBodyType = new MQ2BodyType;
-    pDeityType = new MQ2DeityType;
-    pArgbType = new MQ2ArgbType;
-    pCorpseType = new MQ2CorpseType;
-    pCurrentZoneType = new MQ2CurrentZoneType;
-    pTypeType = new MQ2TypeType;
-    pTimeType = new MQ2TimeType;
-    pHeadingType = new MQ2HeadingType;
-    pInvSlotType = new MQ2InvSlotType;
-    pArrayType = new MQ2ArrayType;
-    pTimerType = new MQ2TimerType;
-    pPluginType = new MQ2PluginType;
-    pSkillType = new MQ2SkillType;
-    pAltAbilityType = new MQ2AltAbilityType;
-    pRaidType = new MQ2RaidType;
-    pRaidMemberType = new MQ2RaidMemberType;
-    pGroupType = new MQ2GroupType;
-    pGroupMemberType = new MQ2GroupMemberType;
-    pGroupMemberType->SetInheritance(pSpawnType);
-    pEvolvingItemType=new MQ2EvolvingItemType;
-    pDynamicZoneType=new MQ2DynamicZoneType;
-    pDZMemberType=new MQ2DZMemberType;
-    pFellowshipType=new MQ2FellowshipType;
-    pFellowshipMemberType=new MQ2FellowshipMemberType;
-    pFriendsType = new MQ2FriendsType;
-    pTargetType = new MQ2TargetType;
-    pTaskMemberType = new MQ2TaskMemberType;
-    pTaskType = new MQ2TaskType;
-    pXTargetType = new MQ2XTargetType;
-
+{
+#define DATATYPE(_class_, _var_, _inherits_, _persistentclass_) \
+    _var_ = new _class_; \
+    if (_inherits_ != nullptr) \
+    { \
+        _var_->SetInheritance(_inherits_); \
+    }
     // NOTE: SetInheritance does NOT make it inherit, just notifies the syntax checker...
-    pCharacterType->SetInheritance(pSpawnType);
-    pBuffType->SetInheritance(pSpellType);
-    pTargetBuffType->SetInheritance(pSpellType);
-    //pCurrentZoneType->SetInheritance(pZoneType);
-    pRaidMemberType->SetInheritance(pSpawnType);
-    pTargetType->SetInheritance(pSpawnType);
-    pXTargetType->SetInheritance(pSpawnType);
+    #include "DataTypeList.h"
+#undef DATATYPE
 }
 
 void ShutdownMQ2DataTypes()
 {
-    delete pSpawnType;
-    delete pFloatType;
-    delete pIntType;
-    delete pByteType;
-    delete pStringType;
-    delete pBuffType;
-    delete pSpellType;
-    delete pTicksType;
-    delete pCharacterType;
-    delete pClassType;
-    delete pRaceType;
-    delete pGroundType;
-    delete pSwitchType;
-    delete pMacroType;
-    delete pMacroQuestType;
-    delete pMathType;
-    delete pWindowType;
-    delete pMercenaryType;
-    delete pPetType;
-    delete pMerchantType;
-    delete pZoneType;
-    delete pItemType;
-    delete pBoolType;
-    delete pBodyType;
-    delete pDeityType;
-    delete pArgbType;
-    delete pCorpseType;
-    delete pCurrentZoneType;
-    delete pTypeType;
-    delete pTimeType;
-    delete pHeadingType;
-    delete pArrayType;
-    delete pTimerType;
-    delete pPluginType;
-    delete pSkillType;
-    delete pAltAbilityType;
-    delete pRaidType;
-    delete pRaidMemberType;
-    delete pGroupType;
-    delete pGroupMemberType;
-    delete pEvolvingItemType;
-    delete pDynamicZoneType;
-    delete pFriendsType;
-    delete pTargetType;
-    delete pTaskMemberType;
-    delete pTaskType;
-    delete pXTargetType;
+    #define DATATYPE(_class_, _var_, _inherits_, _persistentclass_) delete _var_;
+    #include "DataTypeList.h"
+    #undef DATATYPE
 }
 
 bool MQ2TypeType::GETMEMBER()

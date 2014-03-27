@@ -1,3 +1,17 @@
+27 March 2014 by CyberTech
+- Refactor datatype definitions for MQ2 and ISEQ code
+    All datatypes are declared in one file (DataTypeList.h), one time, for both ISXEQ and MQ2.
+    Inheritance and Persistence are defined at the same time and location.
+    This will avoid the ISXEQ build breaking or falling behind when new datatypes are added to MQ2.
+    Additionally, it simplifies the code required for a new MQ2 datatype -- 1 line of code instead of 4
+- Add missing MQ2DynamicZoneType to ISXEQ datatype definitions
+- Add missing MQ2DZMemberType to ISXEQ datatype definitions
+- Add missing MQ2EvolvingItemType to ISXEQ datatype definitions
+- Add missing MQ2FellowshipMemberType to ISXEQ datatype definitions
+- Add missing MQ2FellowshipType to ISXEQ datatype definitions
+- Add missing MQ2TaskMemberType to ISXEQ datatype definitions
+- Add missing MQ2TaskType to ISXEQ datatype definitions
+
 26 March 2014 by CyberTech
 - Update for IS SDK34
 - Fix Level->ClassLevel rename that wans't ported to ISXEQ-only code on initial change

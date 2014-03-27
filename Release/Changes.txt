@@ -1,3 +1,10 @@
+27 March 2014 by CyberTech
+- Refactor datatype definitions for MQ2 and ISEQ code
+    All datatypes are declared in one file (DataTypeList.h), one time, for both ISXEQ and MQ2.
+    Inheritance and Persistence are defined at the same time and location.
+    This will avoid the ISXEQ build breaking or falling behind when new datatypes are added to MQ2.
+    Additionally, it simplifies the code required for a new MQ2 datatype -- 1 line of code instead of 4
+
 26 Mar 2014 by eqmule
 - Fixed Spell[some spell].Description
   it now returns the correct string.
