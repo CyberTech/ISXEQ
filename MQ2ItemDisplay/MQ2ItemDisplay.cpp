@@ -449,7 +449,6 @@ public:
         volatile PITEMINFO Item=GetItemFromContents(item);
         CHAR out[MAX_STRING] = {0};
         CHAR temp[MAX_STRING] = {0};
-        CHAR temp2[MAX_STRING] = {0};
         PCHAR lore = NULL;
 
         UpdateStrings_Trampoline();
@@ -616,7 +615,8 @@ public:
 
         sprintf(temp,"%07d",Item->ItemNumber); 
 #ifndef ISXEQ
-        GetPrivateProfileString("Notes",temp,"",temp2,MAX_STRING,INIFileName); 
+		CHAR temp2[MAX_STRING] = {0};
+		GetPrivateProfileString("Notes",temp,"",temp2,MAX_STRING,INIFileName); 
         if (strlen(temp2)>0) 
         { 
             sprintf(temp,"Note: %s<br>",temp2); 
