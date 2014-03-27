@@ -14,6 +14,8 @@
 
 DATATYPE(MQ2SpawnType,pSpawnType,"EQ Objects");
 DATATYPE(MQ2PetType, pPetType, 0);
+DATATYPE(MQ2MercenaryType, pMercenaryType, 0);
+
 DATATYPE(MQ2CharacterType, pCharacterType, "EQ Objects");
 DATATYPE(MQ2BuffType,pBuffType,0);
 DATATYPE(MQ2SpellType,pSpellType,"EQ Objects");

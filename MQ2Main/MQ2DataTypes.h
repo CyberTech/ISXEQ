@@ -2025,7 +2025,7 @@ public:
 
     }
 	bool GETMEMBER();
-    DECLAREGETMETHOD();
+    //DECLAREGETMETHOD();
     INHERITDIRECT(pSpawnType);
 
     bool ToString(MQ2VARPTR VarPtr, PCHAR Destination)
