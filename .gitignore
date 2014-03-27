@@ -14,3 +14,17 @@
 /MQ2Template/ISXEQTemplateIntermediate
 /mq2telnet/ISXEQTelnetIntermediate
 /*.suo
+/MQ2Bzsrch/Intermediate
+/MQ2Chat/Intermediate
+/MQ2ChatWnd/Intermediate
+/MQ2CustomBinds/Intermediate
+/MQ2EQBugFix/Intermediate
+/MQ2EQIM/Intermediate
+/MQ2HUD/Intermediate
+/MQ2Irc/Intermediate
+/MQ2ItemDisplay/Intermediate
+/MQ2Labels/Intermediate
+/MQ2Main/Intermediate
+/MQ2Map/Intermediate
+/MQ2Main/MQ2Auth0.h
+/mq2telnet/Intermediate
