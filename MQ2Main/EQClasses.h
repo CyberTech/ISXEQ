@@ -368,8 +368,8 @@ EQLIB_OBJECT CXStr::CXStr(class CXStr const &);
 EQLIB_OBJECT CXStr::CXStr(int,int,char);
 EQLIB_OBJECT CXStr::CXStr(unsigned short const *);
 EQLIB_OBJECT CXStr::CXStr(void);
-EQLIB_OBJECT char *CXStr::operator char *(void)const;
-EQLIB_OBJECT unsigned short *CXStr::operator unsigned short *(void)const;
+//EQLIB_OBJECT char *CXStr::operator char *(void)const;
+//EQLIB_OBJECT unsigned short *CXStr::operator unsigned short *(void)const;
 EQLIB_OBJECT bool CXStr::Find(char,int &);
 EQLIB_OBJECT bool CXStr::Find(class CXStr const &,int &);
 EQLIB_OBJECT bool CXStr::Find(unsigned short,int &);
@@ -6054,7 +6054,7 @@ inline void EQLIB_OBJECT KeyCombo::Clear(void)
 {
     *(unsigned long*)&Data[0]=0;
 }
-EQLIB_OBJECT int KeyCombo::operator int(void)const;
+//EQLIB_OBJECT int KeyCombo::operator int(void)const;
 EQLIB_OBJECT bool KeyCombo::GetPrintableLetter(unsigned short *)const;
 inline EQLIB_OBJECT bool KeyCombo::UsesAlt(void)const
 {
