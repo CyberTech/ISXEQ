@@ -28,6 +28,8 @@ GNU General Public License for more details.
 // key state (ctrl/shift/alt)
 // spawn count
 
+#define SPA_ILLUSION                    58
+
 #ifdef ISXEQ
 #pragma warning(disable:4996)
 #endif

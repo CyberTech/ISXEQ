@@ -30,10 +30,10 @@
 - Brought the source up to a compiles-without-error state (thanks iluvseq)
 - Added ISBOXER_COMPAT macro at the top of ISXEQ.cpp -- uncomment this line to enable ISBoxer compatibility. Changes ${Target} to ${EQTarget} and ${Window} to ${EQWindow}
 
-28 Apr 2011 by dkaa
+28 April 2011 by dkaa
 - brought the source up to a compiles-without-error state
 
-25 Aug 2006 by DKAA
+25 August 2006 by DKAA
 - doortarget, ${NearestDoor}, and ${Switch:Toggle} for ISXEQ
     from onetimehero
 

@@ -34,7 +34,8 @@ GNU General Public License for more details.
 #endif
 
 // Datatype Definitions.
-#define DATATYPE(_class_, _var_, _inherits_, _persistentclass_) class _class_ *_var_ = 0;
+#define DATATYPE(_class_, _var_, _inherits_, _persistentclass_) \
+	class _class_ *_var_ = 0;
 #include "DataTypeList.h"
 #undef DATATYPE
 
@@ -48,16 +49,16 @@ void InitializeMQ2DataTypes()
     { \
         _var_->SetInheritance(_inherits_); \
     }
-    // NOTE: SetInheritance does NOT make it inherit, just notifies the syntax checker...
-    #include "DataTypeList.h"
+#include "DataTypeList.h"
 #undef DATATYPE
 }
 
 void ShutdownMQ2DataTypes()
 {
-    #define DATATYPE(_class_, _var_, _inherits_, _persistentclass_) delete _var_;
-    #include "DataTypeList.h"
-    #undef DATATYPE
+#define DATATYPE(_class_, _var_, _inherits_, _persistentclass_) \
+	delete _var_;
+#include "DataTypeList.h"
+#undef DATATYPE
 }
 
 bool MQ2TypeType::GETMEMBER()
@@ -3839,45 +3840,59 @@ bool MQ2SpellType::GETMEMBER()
 			// Check Buffs
             for (nBuff=0; nBuff<NUM_LONG_BUFFS; nBuff++){
                 if (pChar->Buff[nBuff].SpellID>0) {
-                    PSPELL tmpSpell = GetSpellByID(pChar->Buff[nBuff].SpellID);
+                    if(PSPELL buffSpell = GetSpellByID(pChar->Buff[nBuff].SpellID)) {
                     buffduration = pChar->Buff[nBuff].Duration;
 					for (int nSlot=0; nSlot<=11; nSlot++){
-						if (pSpell->Attrib[nSlot]==374){
-							PSPELL tmpSpell2 = GetSpellByID(pSpell->Base2[nSlot]);
-							if (GetSpellDuration(tmpSpell2,(PSPAWNINFO)pCharSpawn)>=0xFFFFFFFE) buffduration = 99999+1;
-							if (!BuffStackTest(tmpSpell, tmpSpell2) || ((pSpell==tmpSpell2) && (buffduration>duration))){
+							if (TriggeringEffectSpell(pSpell, nSlot)){		// Check the triggered effect against the current buff for stacking
+								if(PSPELL triggeredSpell = GetSpellByID(pSpell->Base2[nSlot])) {
+									if (GetSpellDuration(triggeredSpell,(PSPAWNINFO)pCharSpawn)>=0xFFFFFFFE) {
+										buffduration = 99999+1;
+									}
+									if (!BuffStackTest(buffSpell, triggeredSpell) || ((pSpell==triggeredSpell) && (buffduration>duration))) {
 								Dest.DWord = false;
 								return true;
 							}
 						}
 					}
-                    if (GetSpellDuration(tmpSpell,(PSPAWNINFO)pCharSpawn)>=0xFFFFFFFE) buffduration = 99999+1;
-                    if (!BuffStackTest(pSpell, tmpSpell) || ((pSpell==tmpSpell) && (buffduration>duration))){
+						}
+						if (GetSpellDuration(buffSpell,(PSPAWNINFO)pCharSpawn)>=0xFFFFFFFE) {
+							buffduration = 99999+1;
+						}
+						if (!BuffStackTest(buffSpell, pSpell) || ((buffSpell==pSpell) && (buffduration>duration))) {
                         Dest.DWord = false;
                         return true;
                     }
                 }
             }
+            }
 			// Check Songs
             for (nBuff=0; nBuff<NUM_SHORT_BUFFS; nBuff++){
                 if (pChar->ShortBuff[nBuff].SpellID>0) {
-                    PSPELL tmpSpell = GetSpellByID(pChar->ShortBuff[nBuff].SpellID);
+                    if(PSPELL buffSpell = GetSpellByID(pChar->Buff[nBuff].SpellID)) {
                     buffduration = pChar->ShortBuff[nBuff].Duration;
+						if (!IsBardSong(buffSpell) && !((IsSPAEffect(pSpell, SPA_ILLUSION) && !pSpell->DurationWindow))) {		// Don't check against bard songs or buff window illusions
 					for (int nSlot=0; nSlot<=11; nSlot++){
-						if (pSpell->Attrib[nSlot]==374){
-							PSPELL tmpSpell2 = GetSpellByID(pSpell->Base2[nSlot]);
-							if (GetSpellDuration(tmpSpell2,(PSPAWNINFO)pCharSpawn)>=0xFFFFFFFE) buffduration = 99999+1;
-							if (!BuffStackTest(tmpSpell, tmpSpell2) || ((pSpell==tmpSpell2) && (buffduration>duration))){
+								if (TriggeringEffectSpell(pSpell, nSlot)){		// Check the triggered effect against the current buff for stacking
+									if(PSPELL triggeredSpell = GetSpellByID(pSpell->Base2[nSlot])) {
+										if (GetSpellDuration(triggeredSpell,(PSPAWNINFO)pCharSpawn)>=0xFFFFFFFE) {
+											buffduration = 99999+1;
+										}
+										if (!BuffStackTest(buffSpell, triggeredSpell) || ((pSpell==triggeredSpell) && (buffduration>duration))) {
 								Dest.DWord = false;
-            return true;
-        }
+											return true;
+										}
 						}
 					}
-                    if (GetSpellDuration(tmpSpell,(PSPAWNINFO)pCharSpawn)>=0xFFFFFFFE) buffduration = 99999+1;
-                    if (!BuffStackTest(pSpell, tmpSpell) || ((pSpell==tmpSpell) && (buffduration>duration))){
+							}
+							if (GetSpellDuration(buffSpell,(PSPAWNINFO)pCharSpawn)>=0xFFFFFFFE) {
+								buffduration = 99999+1;
+							}
+							if (!BuffStackTest(buffSpell, pSpell) || ((buffSpell==pSpell) && (buffduration>duration))) {
                         Dest.DWord = false;
                         return true;
                     }
+                }
+            }
                 }
             }
             return true;
@@ -3894,24 +3909,30 @@ bool MQ2SpellType::GETMEMBER()
             PEQPETINFOWINDOW pPet = ((PEQPETINFOWINDOW)pPetInfoWnd);
             for (nBuff=0; nBuff<NUM_BUFF_SLOTS; nBuff++){
                 if (pPet->Buff[nBuff]>0 && !(pPet->Buff[nBuff]==0xFFFFFFFF || pPet->Buff[nBuff]==0)) {
-                    PSPELL tmpSpell = GetSpellByID(pPet->Buff[nBuff]);
+                    if(PSPELL buffSpell = GetSpellByID(pPet->Buff[nBuff])) {
                     petbuffduration = ((pPet->BuffFadeETA[nBuff]+5999)/1000)/6;
 					for (int nSlot=0; nSlot<=11; nSlot++){
-						if (pSpell->Attrib[nSlot]==374){
-							PSPELL tmpSpell2 = GetSpellByID(pSpell->Base2[nSlot]);
-							if (GetSpellDuration(tmpSpell2,(PSPAWNINFO)pCharSpawn)>=0xFFFFFFFE) petbuffduration = 99999+1;
-							if (!BuffStackTest(tmpSpell, tmpSpell2) || ((pSpell==tmpSpell2) && (petbuffduration>duration))){
+							if (TriggeringEffectSpell(pSpell, nSlot)){		// Check the triggered effect against the current buff for stacking
+								if(PSPELL triggeredSpell = GetSpellByID(pSpell->Base2[nSlot])) {
+									if (GetSpellDuration(triggeredSpell,(PSPAWNINFO)pCharSpawn)>=0xFFFFFFFE) {
+										petbuffduration = 99999+1;
+									}
+									if (!BuffStackTest(buffSpell, triggeredSpell) || ((pSpell==triggeredSpell) && (petbuffduration>duration))) {
 								Dest.DWord = false;
 								return true;
 							}
 						}
 					}
-                    if (GetSpellDuration(tmpSpell,(PSPAWNINFO)pCharSpawn)>=0xFFFFFFFE) petbuffduration = 99999+1;
-                    if (!BuffStackTest(pSpell, tmpSpell) || ((pSpell==tmpSpell) && (petbuffduration>duration))){
+						}
+						if (GetSpellDuration(buffSpell,(PSPAWNINFO)pCharSpawn)>=0xFFFFFFFE) {
+							petbuffduration = 99999+1;
+						}
+						if (!BuffStackTest(buffSpell, pSpell) || ((buffSpell==pSpell) && (petbuffduration>duration))) {
                         Dest.DWord = false;
                         return true;
                     }
                 }
+            }
             }
             return true;
         }
@@ -8024,7 +8045,7 @@ bool MQ2FriendsType::GETMEMBER()
 bool MQ2TargetType::GETMEMBER()
 {
     int buffID = 0;
-    DWORD i,j;
+    DWORD i;
     if (!VarPtr.Ptr)
         return false;
     PMQ2TYPEMEMBER pMember=MQ2TargetType::FindMember(Member);
@@ -8046,15 +8067,13 @@ bool MQ2TargetType::GETMEMBER()
             if(ISNUMBER())
             {
                 DWORD nBuff = GETNUMBER();
-                if (!nBuff || nBuff >= NUM_BUFF_SLOTS)
+                if (nBuff > NUM_BUFF_SLOTS)
                     return false;
-                j = 0;
-                for(i = 0; i < NUM_BUFF_SLOTS; i++)
-                {
-                    buffID = ((PCTARGETWND)pTargetWnd)->BuffSpellID[i];
-                    if(buffID && nBuff == ++j)
-                    {
-                        Dest.Ptr = GetSpellByID((DWORD)buffID);
+				if(nBuff>=1)
+					nBuff--;
+				buffID = ((PCTARGETWND)pTargetWnd)->BuffSpellID[nBuff];
+				if(buffID && buffID!=-1) {
+					if(Dest.Ptr = GetSpellByID((DWORD)buffID)) {
                         Dest.Type = pSpellType;
                         return true;
                     }
@@ -8067,12 +8086,13 @@ bool MQ2TargetType::GETMEMBER()
                     buffID = ((PCTARGETWND)pTargetWnd)->BuffSpellID[i];
                     if(buffID && !stricmp(GETFIRST(), GetSpellNameByID(buffID)))
                     {
-                        Dest.Ptr = GetSpellByID((DWORD)buffID);
+                        if(Dest.Ptr = GetSpellByID((DWORD)buffID)) {
                         Dest.Type = pSpellType;
                         return true;
                     }
                 }
             }
+        }
         }
         else
         {
@@ -8109,44 +8129,38 @@ bool MQ2TargetType::GETMEMBER()
         {
             if(ISNUMBER())
             {
+				//for some reason we indulged the users by letting them specify 1 based indexes, that
+				// was probably a bad idea in a macrolanguage since its pseudo coding anyway...
+				// and it would actually be a good way to educate users in how to program...
+				// but it is what it is, so ill just nBuff--; and get it over with...
                 DWORD nBuff = GETNUMBER();
-                if (!nBuff || nBuff >= NUM_BUFF_SLOTS)
+                if (nBuff > NUM_BUFF_SLOTS)
                     return false;
-                j = 0;
-                for(i = 0; i < NUM_BUFF_SLOTS; i++)
-                {
-                    buffID = ((PCTARGETWND)pTargetWnd)->BuffSpellID[i];
-                    if(buffID && nBuff == ++j)
-                    {
-                        Dest.DWord = ((((PCTARGETWND)pTargetWnd)->BuffTimer[i] / 1000) + 6) / 6;
+				if(nBuff>=1)
+					nBuff--;
+				buffID = ((PCTARGETWND)pTargetWnd)->BuffSpellID[nBuff];
+				if(buffID && buffID!=-1) {
+					Dest.DWord = ((((PCTARGETWND)pTargetWnd)->BuffTimer[nBuff] / 1000) + 6) / 6;
                         Dest.Type = pTicksType;
                         return true;
                     }
                 }
-            }
             else
             {
+ 				DWORD duration = 0;//we always want to return the buff with the longest duration
+				//cause thats the one that landed last on the mob
                 for(i = 0; i < NUM_BUFF_SLOTS; i++)
                 {
                     buffID = ((PCTARGETWND)pTargetWnd)->BuffSpellID[i];
-                    if(buffID && !stricmp(GETFIRST(), GetSpellNameByID(buffID)))
+                    if(buffID && buffID!=-1 && !stricmp(GETFIRST(), GetSpellNameByID(buffID)))
                     {
-                        Dest.DWord = ((((PCTARGETWND)pTargetWnd)->BuffTimer[i] / 1000) + 6) / 6;
-                        Dest.Type = pTicksType;
-                        return true;
+						if(((PCTARGETWND)pTargetWnd)->BuffTimer[i]>duration) {
+							duration = ((PCTARGETWND)pTargetWnd)->BuffTimer[i];
                     }
                 }
             }
-        }
-        else
-        {
-            // return first buff
-            for(i = 0; i < NUM_BUFF_SLOTS; i++)
-            {
-                buffID = ((PCTARGETWND)pTargetWnd)->BuffSpellID[i];
-                if(buffID)
-                {
-                    Dest.DWord = ((((PCTARGETWND)pTargetWnd)->BuffTimer[i] / 1000) + 6) / 6;
+				if(duration>0) {
+					Dest.DWord = ((duration / 1000) + 6) / 6;
                     Dest.Type = pTicksType;
                     return true;
                 }

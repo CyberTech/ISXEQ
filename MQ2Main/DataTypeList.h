@@ -1,6 +1,6 @@
 /*
     The format of this file is:
-    DATATYPE(CLASSNAME, VARNAME, Pointer to inherited class or_ nullptr, PersistentClass or 0)
+    DATATYPE(CLASSNAME, VARNAME, Pointer to inherited class or nullptr, PersistentClass or 0)
 */
 #ifndef DATATYPE
 #error __FILE__ included without defining DATATYPE(_class_, _var_, _inherits_, _persistentclass_)
@@ -25,7 +25,9 @@ DATATYPE(MQ2TypeType,   pTypeType,   nullptr, 0);
 DATATYPE(MQ2AltAbilityType,       pAltAbilityType,       nullptr, 0);
 DATATYPE(MQ2ArgbType,             pArgbType,             nullptr, 0);
 DATATYPE(MQ2BodyType,             pBodyType,             nullptr, 0);
+DATATYPE(MQ2SpellType,            pSpellType,            nullptr, 0);
 DATATYPE(MQ2BuffType,             pBuffType,             pSpellType, 0);
+DATATYPE(MQ2SpawnType,            pSpawnType,            nullptr, PersistentPointerClass);
 DATATYPE(MQ2CharacterType,        pCharacterType,        pSpawnType, PersistentPointerClass);
 DATATYPE(MQ2ClassType,            pClassType,            nullptr, 0);
 DATATYPE(MQ2CorpseType,           pCorpseType,           nullptr, 0);
@@ -44,15 +46,13 @@ DATATYPE(MQ2HeadingType,          pHeadingType,          nullptr, 0);
 DATATYPE(MQ2InvSlotType,          pInvSlotType,          nullptr, 0);
 DATATYPE(MQ2ItemType,             pItemType,             nullptr, 0);
 DATATYPE(MQ2MacroQuestType,       pMacroQuestType,       nullptr, 0);
-DATATYPE(MQ2MercenaryType,        pMercenaryType,        nullptr, 0);
+DATATYPE(MQ2MercenaryType,        pMercenaryType,        pSpawnType, 0);
 DATATYPE(MQ2MerchantType,         pMerchantType,         nullptr, 0);
-DATATYPE(MQ2PetType,              pPetType,              nullptr, 0);
+DATATYPE(MQ2PetType,              pPetType,              pSpawnType, 0);
 DATATYPE(MQ2RaceType,             pRaceType,             nullptr, 0);
 DATATYPE(MQ2RaidMemberType,       pRaidMemberType,       pSpawnType, 0);
 DATATYPE(MQ2RaidType,             pRaidType,             nullptr, 0);
 DATATYPE(MQ2SkillType,            pSkillType,            nullptr, 0);
-DATATYPE(MQ2SpawnType,            pSpawnType,            nullptr, PersistentPointerClass);
-DATATYPE(MQ2SpellType,            pSpellType,            nullptr, 0);
 DATATYPE(MQ2SwitchType,           pSwitchType,           nullptr, 0);
 DATATYPE(MQ2TargetBuffType,       pTargetBuffType,       pSpellType, 0);
 DATATYPE(MQ2TargetType,           pTargetType,           pSpawnType, 0);

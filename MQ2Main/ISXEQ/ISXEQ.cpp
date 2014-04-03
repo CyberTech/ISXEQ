@@ -229,7 +229,7 @@ void CISXEQ::RegisterDataTypes()
         _var_->SetInheritance(_inherits_); \
     }
     // NOTE: SetInheritance does NOT make it inherit, just notifies the syntax checker...
-    #include "DataTypeList.h"
+#include "DataTypeList.h"
 #undef DATATYPE
 }
 
@@ -308,10 +308,9 @@ void CISXEQ::UnRegisterDataTypes()
         pISInterface->RemoveLSType(*_var_); \
         delete _var_; \
     }
-    #include "DataTypeList.h"
+#include "DataTypeList.h"
 #undef DATATYPE
 }
-
 void CISXEQ::UnRegisterTopLevelObjects()
 {
 #define TOPLEVELOBJECT(_name_,_function_) pISInterface->RemoveTopLevelObject(_name_);
