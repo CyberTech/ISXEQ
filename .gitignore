@@ -7,3 +7,5 @@
 /Release/ISXEQ.lib
 /Release/ISXEQ.map
 /Release/ISXEQ.pdb
+/.cov/analysisConfigurations.config
+/.cov/source-cache.sqlite
