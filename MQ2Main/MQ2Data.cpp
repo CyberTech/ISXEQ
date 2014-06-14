@@ -279,10 +279,19 @@ TLO(dataMacro)
 
 TLO(dataMacroQuest)
 {
+    printf("Warning: The MacroQuest TLO has been deprecated; please use the EverQuest TLO for identical functionality. Removal is scheduled for yyyy-mm-dd.");
     Ret.Ptr=0;
-    Ret.Type=pMacroQuestType;
+    Ret.Type = pEverQuestType;
     return true;
 }
+
+TLO(dataEverQuest)
+{
+    Ret.Ptr=0;
+    Ret.Type = pEverQuestType;
+    return true;
+}
+
 #ifndef ISXEQ
 TLO(dataMath)
 {

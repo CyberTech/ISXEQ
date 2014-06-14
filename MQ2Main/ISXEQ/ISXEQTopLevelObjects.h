@@ -25,8 +25,9 @@ TOPLEVELOBJECT("Spell",dataSpell);
 TOPLEVELOBJECT("Switch",dataSwitch);
 TOPLEVELOBJECT("GroundItem",dataGroundItem);
 TOPLEVELOBJECT("Merchant",dataMerchant);
-TOPLEVELOBJECT("MacroQuest",dataMacroQuest);
-TOPLEVELOBJECT("Zone",dataZone);
+TOPLEVELOBJECT("EverQuest", dataMacroQuest);
+TOPLEVELOBJECT("MacroQuest", dataMacroQuest); // Deprecated
+TOPLEVELOBJECT("Zone", dataZone);
 TOPLEVELOBJECT("Group",dataGroup);
 TOPLEVELOBJECT("Corpse",dataCorpse);
 TOPLEVELOBJECT("Cursor",dataCursor);

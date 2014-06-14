@@ -2456,10 +2456,10 @@ public:
     }
 };
 
-class MQ2MacroQuestType : public MQ2Type
+class EverQuestType : public MQ2Type
 {
 public:
-    static enum MacroQuestMembers
+    static enum EverQuestMembers
     {
         GameState=1,
         LoginName=2,
@@ -2484,10 +2484,11 @@ public:
         ViewportYCenter=21,
         LClickedObject=22,
     };
-    static enum MacroQuestMethods
+    static enum EverQuestMethods
     {
     };
-    MQ2MacroQuestType():MQ2Type("macroquest")
+
+    EverQuestType() :MQ2Type("everquest")
     {
         TypeMember(GameState);
         TypeMember(LoginName);
@@ -2513,7 +2514,7 @@ public:
         TypeMember(LClickedObject);
     }
 
-    ~MQ2MacroQuestType()
+    ~EverQuestType()
     {
     }
 
@@ -2533,6 +2534,16 @@ public:
         return false;
     }
 };
+
+class MQ2MacroQuestType : public MQ2Type
+{
+    // Backwards compatibility type definition for the legacy "macroquest" dtype.
+    MQ2MacroQuestType() :MQ2Type("macroquest")
+    {}
+
+    INHERITDIRECT(pEverQuestType);
+};
+
 #ifndef ISXEQ
 class MQ2MathType : public MQ2Type
 {

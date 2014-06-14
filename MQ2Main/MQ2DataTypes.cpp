@@ -6000,12 +6000,12 @@ bool MQ2GroundType::GETMEMBER()
     return false;
 #undef pGround
 }
-bool MQ2MacroQuestType::GETMEMBER()
+bool EverQuestType::GETMEMBER()
 {
-    PMQ2TYPEMEMBER pMember=MQ2MacroQuestType::FindMember(Member);
+    PMQ2TYPEMEMBER pMember = EverQuestType::FindMember(Member);
     if (!pMember)
         return false;
-    switch ((MacroQuestMembers)pMember->ID)
+    switch ((EverQuestMembers)pMember->ID)
     {
     case GameState:
         if (gGameState==GAMESTATE_CHARSELECT)

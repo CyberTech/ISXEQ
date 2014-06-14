@@ -333,15 +333,15 @@ bool MQ2GroundType::GETMETHOD()
 }
 
 
-bool MQ2MacroQuestType::GETMETHOD()
+bool EverQuestType::GETMETHOD()
 {
-    PMQ2TYPEMETHOD pMethod=MQ2MacroQuestType::FindMethod(Method);
+    PMQ2TYPEMETHOD pMethod = EverQuestType::FindMethod(Method);
     if (!pMethod)
     {
         return false;
     }
     // TODO
-//	switch((MacroQuestMethods)pMethod->ID)
+//	switch((EverQuestMethods)pMethod->ID)
 //	{
 //	}
     return false;
