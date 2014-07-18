@@ -349,13 +349,13 @@ bool MQ2EverQuestType::GETMETHOD()
 
 bool MQ2MacroQuestType::GETMETHOD()
 {
-    PMQ2TYPEMETHOD pMethod = EverQuestType::FindMethod(Method);
+	PMQ2TYPEMETHOD pMethod=MQ2MacroQuestType::FindMethod(Method);
     if (!pMethod)
     {
         return false;
     }
     // TODO
-//	switch((EverQuestMethods)pMethod->ID)
+//	switch((MacroQuestMethods)pMethod->ID)
 //	{
 //	}
     return false;

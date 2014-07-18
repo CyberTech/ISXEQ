@@ -6197,7 +6197,7 @@ bool MQ2GroundType::GETMEMBER()
     return false;
 #undef pGround
 }
-bool EverQuestType::GETMEMBER()
+bool MQ2MacroQuestType::GETMEMBER()
 {
 	PMQ2TYPEMEMBER pMember=MQ2MacroQuestType::FindMember(Member);
     if (!pMember)
@@ -6206,7 +6206,7 @@ bool EverQuestType::GETMEMBER()
 #else
         return pEverQuestType->GetMember(*(LSVARPTR*)&VarPtr.Ptr,Member,argc,argv,Dest);
 #endif
-    switch ((EverQuestMembers)pMember->ID)
+    switch((MacroQuestMembers)pMember->ID)
     {
     case Error:
         if (gszLastNormalError[0])// QUIT SETTING THIS MANUALLY, USE MacroError, FatalError, ETC
@@ -6384,6 +6384,7 @@ bool MQ2EverQuestType::GETMEMBER()
         Dest.Type=pBoolType;
         return true;
 	case WinTitle:
+#ifndef ISXEQ
 		DataTypeTemp[0] = '1';
 		DataTypeTemp[1] = '\0';
 		GetWinTitle(GetCharInfo()->pSpawn,DataTypeTemp);
@@ -6392,8 +6393,11 @@ bool MQ2EverQuestType::GETMEMBER()
 			Dest.Type = pStringType;
 			return true;
 		}
-		break;
-	case PID:
+#else
+        printf("MQ2EverQuestType:WinTitle: Please use ${Display.Window.Text} for this value under Inner Space");
+#endif
+        return false;
+    case PID:
 		Dest.DWord = GetCurrentProcessId();
 		Dest.Type = pIntType;
 		return true;
