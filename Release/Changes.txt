@@ -1,3 +1,233 @@
+16 July 2014 by eqmule
+- Updated for patch
+- NUM_SPELL_SETS is now 30
+- /useitem now searches for items by exact name.
+  Example: /useitem "Philter of the Wolf V"
+  will uee that potion
+  /useitem "Philter of the Wolf VI"
+  will ue that one...
+  prior to this patch doing a /useitem "Philter of the Wolf VI"
+  would use "Philter of the Wolf V" if it found that one first...
+
+30 June 2014 by eqmule
+- Added new command: /removebuff
+  it will remove a buff or a song by name or partial name.
+  Usage: /removebuff Summon Drogmor
+- Added new command: /makemevisible
+  it will make you visible.
+  Usage: /makemevisible
+
+26 June 2014 by eqmule
+- Fixed MercAAExp,MercAAPoints and MercAAPointsSpent
+  this means /echo ${Mercenary.AAPoints} works again.
+- Added Leader to the Task TLO it returns a pStringType
+  Usage: /echo The task leader is ${Task.Leader}
+  Outputs: The task leader is eqmule
+
+23 Jun 2014 by rswiders
+- Corrected several CTD bugs when a character did not have anything in
+  their bank and/or shared bank.
+
+21 Jun 2014 by rswiders
+- Fixed a bug with pMacroQuestType where pEverQuestType members wouldn't
+  inherit correctly. All old ${MacroQuest.} members should work correctly
+  now again.
+
+20 Jun 2014 by eqmule
+- Updated for patch
+- Fixed a problem with writing plugins to MacroQuest.ini when ReadOnly.
+  Bug Reported by: Xath
+  See: http://www.macroquest2.com/phpBB3/viewtopic.php?f=47&t=19458
+
+19 Jun 2014 by eqmule
+- Added back Windows XP Support for GetTickCount64()
+  Plugins should change all calls from GetTickCount64()
+  to GetTickCount642() which detects if its on winxp
+  and calls the old function instead of the new one.
+  As a sidenote, if you are still using winxp, know that right this
+  moment you have already been pwned and with 100% certainty you are part
+  of someones botnet. If you are lucky they wont steal you eqlogin
+  just use your computer to click ads or something...
+- Fixed a bug with .RankName where two different spells
+  can belong to same spellgroup.
+  The solution was to compare by SpellGroup AND the spellname.
+  Bug Reported by: MacQ
+  See http://www.macroquest2.com/phpBB3/viewtopic.php?f=48&t=19455
+
+18 Jun 2014 by eqmule
+- Updated for patch.
+- The Spell TLO member .RankName now works for combatabilities as well
+  Example: /echo My version of Rest is: ${Spell[Rest].RankName}
+  Outputs: [MQ2] My version of Rest is: Rest Rk. II
+
+17 Jun 2014 by eqmule
+- ${Me.PID} ha been moved to the EverQuest TLO
+  so it is now ${EverQuest.PID}
+- ${Me.WinTitle} has been moved to the EverQuest TLO
+  so it is now ${EverQuest.WinTitle}
+- New TLO: EverQuest - Cred: Cybertech
+  it has basically the same members as the old MacroQuest TLO
+  but I think most of them are more fitting under the EverQuest TLO.
+  MacroQuest TLO will inherit EverQuest TLO so backward compatibility is maintained
+  BUT new macros should use EverQuest instead.
+- Added SpellGroup and SubSpellGroup to the Spell TLO
+- Added RankName to the Spell TLO - Cred: petesampras,htw,maskoi
+  it returns a pSpellType rather than a pStringType, but since default is the .Name
+  and I think thats how most people will use it, its called "RankName"
+  Usage: /echo I have the ${Spell[Certitude].RankName} version of Certitude its ID is: ${Spell[Certitude].RankName.ID}
+  Output:
+  [MQ2] I have the Certitude Rk. II version of Ceritude its ID is:
+  Second example: Lets say you have Vinespur Rk. II in your spellbook (and memmed)
+  then doing a /cast "${Spell[Vinespur].RankName}" in your macro will cast it, since its
+  going to be resolved as /cast "Vinespur Rk. II"
+  This should decrease the edititing of inifiles everytime you buy a new rank of a spell.
+
+Friday the 13th!! (of June 2014 by eqmule)
+- Added Rank to the Spell TLO, it returns a pIntType thats either 1, 2 or 3 for spells
+  and 4-30 for clickys and potions. - Cred: petesampras
+  This represents the spell rank, i.e a Rk. II Spell will return a 2.
+  Usage: /echo ${Spell[Certitude Rk. II].Rank}
+  Outputs: [MQ2] 2
+- Added 3 new members to the Character TLO: (a while ago, just forgot to mention it.)
+    ZoneBoundX, ZoneBoundY, ZoneBoundZ
+	they return a pFloatType
+- ${Me.Name}, ${Me.Surname} ${Me.Level} ${Me.ID} now works at charselect as well.
+  There is no good reason to duplicate them, so from now on they are fetched from
+  LocalPlayer instead since that one exist at charselect, but pCharInfo does not.
+- Removed the follow since they are no longer in the client:
+	TypeMember(GroupLeaderExp);
+	TypeMember(RaidLeaderExp);
+	TypeMember(GroupLeaderPoints);
+	TypeMember(RaidLeaderPoints);
+	TypeMember(PctGroupLeaderExp);
+	TypeMember(PctRaidLeaderExp);
+
+10 Jun 2014 by eqmule
+- Since someone asked me this:
+  -Q: Can you make the /setwintitle set it each time u zone?
+  -A: Yes, create a file called zoned.cfg into your Release\Configs Folder
+  and paste for example: /SetWinTitle EverQuest - ${Me.Name} (${Zone.ShortName})
+  into it.
+- Fixed a problem with Auras being detected as a Named spawn. Cred Maskoi.
+- Fixed a bug in SearchSpawn where it would return Untargetable mobs
+  even though the untargetable flag wasnt set.
+  This means ${Spawn[npc radius 100]} wont return Arcane Distillect anymore,
+  but ${Spawn[npc untargetable radius 100]} will. (if one is in radius)
+- IsInGroup and IsInRaid now checks for Player's corpse as well as Player
+  (as long as you specify [pccorpse] in the spawnsearch.)
+  This means you can now do stuff like:
+  /echo ${SpawnCount[pccorpse Group zradius 50 radius 110]}
+  /echo ${SpawnCount[pccorpse Raid zradius 50 radius 110]}
+
+09 Jun 2014 by eqmule
+- Fixed? /while
+  Feel free to test it and report any bugs.
+- Added /GetWinTitle and /SetWinTitle Commands
+- Added WinTitle to the Character TLO: it returns a pStringType
+- Added PID (Process ID) to the Character TLO: it returns a pIntType
+  Usage:
+  /SetWinTitle [${EverQuest.PID}] EverQuest - ${Me.Name} (Lvl:${Me.Level} ${Me.Class})
+  /echo ${EverQuest.WinTitle}
+  [MQ2] [2319] EverQuest - Eqmule (Lvl:100 Shadow Knight)
+
+01 Jun 2014 by eqmule
+- Added three new MQ2Type(s): MQ2TimeStampType, MQ2Int64Type and MQ2DoubleType
+  MQ2TimeStampType has the same submembers as pTicksType
+  with the difference being that the default return value is milliseconds.
+
+- MACRO-BREAKING CHANGE! (if your macro uses Me.GemTimer)
+  Look, for years we relied on updating stuff every 6 seconds (1 tick)...
+  I had to make this change since the client updates more often nowadays.
+  Which is why:
+  ${Me.GemTimer[x]} now returns a pTimeStamp.
+  The default return is milliseconds until gem is refreshed.
+  Usage Example: /echo ${Me.GemTimer[5].TotalSeconds}
+  Outputs: [MQ2] 25
+
+- All references to GetTickCount() have been replaced with GetTickCount64()
+  This will fix problems related to all timers for people who dont do a complete
+  shutdown of their computer earlier or on every 49.7th day.
+  Plugin authors should replace all references to GetTickCount() in their plugins
+  with GetTickCount64() as well.
+- ${Macro.Runtime} now returns a pInt64Type to be able to hold the return of GetTickCount64
+  if you are using ${Macro.Runtime} in your macro, make sure it works as intended. 
+
+23 May 2014 by eqmule
+- Fixed a fix...
+  Sorry but I was in the middle of testing stuff yesterday and today they patched so
+  in order to get everything out quick for x2 weekend
+  I missed a bug in GetSpellByID, its fixed now (again)
+
+23 May 2014 by eqmule
+- Updated for patch
+
+22 May 2014 by eqmule
+- Secured a few functions that calls GetSpellByID against buffer overflows.
+
+21 May 2014 by eqmule
+- Updated for patch
+
+15 May 2014 by eqmule
+- Updated for patch
+
+14 May 2014 by eqmule
+- Updated for patch
+
+12 May 2014 by eqmule
+- Added nogroup to searchspawn - cred htw
+  This means you can do stuff like /echo ${Bool[${NearestSpawn[1, nogroup pc radius 300]}]}
+  it will return TRUE if there is at least 1 player within 300 radius of you thats NOT in your group.
+- Added case Range: to ItemType
+
+08 May 2014 by rswiders
+- Update of SpellSlotInfo for SPA's 157 to format as a ranged value
+- Added MaxBuffSlots, changed FreeBuffSlots to use the new function that gets the max buff slots
+
+29 Apr 2014 by eqmule
+- Updated for patch
+
+26 Apr 2014 by eqmule
+- If using an old ItemDB.txt you will now see a message asking you to update it.
+
+24 Apr 2014 by rswiders
+- Fix for reuse timer in spell slot information
+- Fix for random CTD on some spell display
+- Fix for CTD when item missing in ItemDB
+- Added command /SpellSlotInfo [#|"spell name"]. You can use this to see the spell slot
+  information for any spell without having to right-click display through the MQ2ItemDisplay plugin.
+- Ground spawn updates
+
+18 Apr 2014 by eqmule
+- Fixed a bug in GetSpellByID that would make it return "Unknown Spell" when it 
+  should just return 0
+  This means macros like scribe.mac will work again.
+
+16 Apr 2014 by eqmule
+- Fixed the EQRAIDWINDOW struct
+  This means caption classcolors for raidmembers will again work as intended.
+- Changed how plugins are loaded from MacroQuest.ini
+  I don't think this will affect anyone, but from now on
+  when a plugin is unloaded the [Plugins] section will not be erased
+  The old mq2plugin=mq2plugin is still valid, but eventually
+  you will end up with a list of plugins where the entries
+  will look like mq2plugin=1 or mq2plugin=0
+  I did this because I'm preparing the loader for being able to unload/load
+  plugins directly from its iconmenu.
+
+13 Apr 2014 by rswiders
+- Added GemIcon, HateGenerated, PvPCalc, Unknown182, Unknown222, Unknown223 to the SPELL struct
+- Added HateGenerated to MQ2ItemDisplay output
+
+11 Apr 2014 by rswiders
+- Merged the MQ2GearScore logic into the base code for MQ2ItemDisplay. This means that MQ2GearScore
+  is no longer necessary and MQ2Bzsrch will work correctly for those that want scores.
+  In order to use the new functionality, rename your old ini file to MQ2ItemDisplay.ini to get all
+  the same values. You can stop using MQ2GearScore and go back to use the base code MQ2ItemDisplay
+
+10 Apr 2014 by rswiders
+- Update of SpellSlotInfo for SPA's 124/125/132 to format as a ranged percent and specify that SPA 132
+  is a # of tick(s)
+
 08 Apr 2014 by rswiders
 - Rewrite of SpellSlotInfo, uses new function ParseSpellEffect. Pass a pSpell structure, slot number,
   character buffer and it will return a character buffer with the spell effect information

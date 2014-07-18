@@ -70,6 +70,7 @@ namespace MQ2Internal {
         BOOL bTargNext;
         BOOL bTargPrev;
         BOOL bGroup;
+        BOOL bNoGroup;
         BOOL bRaid;
         BOOL bGM;
         BOOL bNamed;
@@ -207,7 +208,7 @@ namespace MQ2Internal {
         CHAR SourceFile[MAX_STRING];
         DWORD LineNumber;
         BOOL MacroCmd;
-        DWORD CmdScope;//flags for scope 0=if 1=while and more can be added if we need -eqmule
+        DWORD LoopLine;//used for loops/while if its 0 no action is taken, otherwise it will jump to the line indicated. -eqmule
 #ifdef MQ2_PROFILING
         DWORD ExecutionCount;
         LONGLONG ExecutionTime;
@@ -318,9 +319,9 @@ namespace MQ2Internal {
     typedef struct _MQBENCH
     {
         CHAR szName[64];
-        DWORD Entry;
-        DWORD LastTime;
-        DWORD TotalTime;
+        ULONGLONG Entry;
+        ULONGLONG LastTime;
+        ULONGLONG TotalTime;
         DWORD Count;
     } MQBENCH, *PMQBENCH;
 
@@ -538,14 +539,35 @@ namespace MQ2Internal {
     typedef struct _MQ2VarPtr
     {
         union {
-            PVOID Ptr;
-            FLOAT Float;
-            DWORD DWord;
-            ARGBCOLOR Argb;
-            int   Int;
-            UCHAR Array[4];
+            struct {
+				PVOID Ptr;
+				LONG HighPart;
+			};
+			struct {
+				FLOAT Float;
+				LONG HighPart;
+			};
+			struct {
+				DWORD DWord;
+				LONG HighPart;
+			};
+			struct {
+				ARGBCOLOR Argb;
+				LONG HighPart;
+			};
+			struct {
+				int   Int;
+				LONG HighPart;
+			};
+            struct {
+				UCHAR Array[4];
+				LONG HighPart;
+			};
+			DOUBLE Double;
+			__int64   Int64;
+			unsigned __int64   UInt64;
         };
-    } MQ2VARPTR, *PMQ2VARPTR;
+	} MQ2VARPTR, *PMQ2VARPTR;
 
 #ifndef ISXEQ
 
@@ -553,13 +575,37 @@ namespace MQ2Internal {
     {
         class MQ2Type *Type;
         union {
-            MQ2VARPTR VarPtr;
-            PVOID Ptr;
-            FLOAT Float;
-            DWORD DWord;
-            ARGBCOLOR Argb;
-            int   Int;
-            UCHAR Array[4];
+            struct {
+				MQ2VARPTR VarPtr;
+				LONG HighPart;
+			};
+            struct {
+				PVOID Ptr;
+				LONG HighPart;
+			};
+			struct {
+				FLOAT Float;
+				LONG HighPart;
+			};
+			struct {
+				DWORD DWord;
+				LONG HighPart;
+			};
+			struct {
+				ARGBCOLOR Argb;
+				LONG HighPart;
+			};
+			struct {
+				int   Int;
+				LONG HighPart;
+			};
+            struct {
+				UCHAR Array[4];
+				LONG HighPart;
+			};
+			DOUBLE Double;
+			__int64   Int64;
+			unsigned __int64   UInt64;
         };
     } MQ2TYPEVAR, *PMQ2TYPEVAR;
 

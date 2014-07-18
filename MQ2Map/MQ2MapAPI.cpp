@@ -366,9 +366,6 @@ void MapUpdate()
     }
 
     pMapSpawn=pActiveSpawns;
-#ifndef zWarp
-    gSpewToFile=1;
-#endif
 
     while(pMapSpawn)
     {

@@ -34,14 +34,18 @@ GNU General Public License for more details.
 
 #ifndef ISXEQ
 #define pIntPtrType pIntType
+#define pInt64PtrType pInt64Type
 #define pBytePtrType pByteType
 #define pBoolPtrType pBoolType
 #define pFloatPtrType pFloatType
+#define pDoublePtrType pDoubleType
 
 #define INTPTR(x) Dest.DWord=x
+#define INT64PTR(x) Dest.Int64=x
 #define BYTEPTR(x) Dest.Byte=x
 #define BOOLPTR(x) Dest.DWord=x
 #define FLOATPTR(x) Dest.Float=x
+#define DOUBLEPTR(x) Dest.Double=x
 
 #define TypeMember(name) AddMember((DWORD)name,""#name)
 #define TypeMethod(x)
@@ -109,12 +113,14 @@ public:
     static enum IntMembers
     {
         Float=1,
-        Hex=2,
-        Reverse=3,
+        Double=2,
+        Hex=3,
+        Reverse=4,
     };
     MQ2IntType():MQ2Type("int")
     {
         TypeMember(Float);
+        TypeMember(Double);
         TypeMember(Hex);
         TypeMember(Reverse);
     }
@@ -142,6 +148,49 @@ public:
         return true;
     }
 };
+
+class MQ2Int64Type : public MQ2Type
+{
+public:
+    static enum Int64Members
+    {
+        Float=1,
+        Double=2,
+        Hex=3,
+        Reverse=4,
+    };
+    MQ2Int64Type():MQ2Type("int64")
+    {
+        TypeMember(Float);
+        TypeMember(Double);
+        TypeMember(Hex);
+        TypeMember(Reverse);
+    }
+
+    ~MQ2Int64Type()
+    {
+    }
+
+    bool GETMEMBER();
+
+    bool ToString(MQ2VARPTR VarPtr, PCHAR Destination)
+    {
+        _i64toa(VarPtr.Int64,Destination,10);
+        return true;
+    }
+    bool FromData(MQ2VARPTR &VarPtr, MQ2TYPEVAR &Source)
+    {
+        VarPtr.Int64=Source.Int64;
+        return true;
+    }
+
+    bool FromString(MQ2VARPTR &VarPtr, PCHAR Source)
+    {
+        VarPtr.Int64=_atoi64(Source);
+        return true;
+    }
+};
+
 #endif
 class MQ2ArgbType : public MQ2Type
 {
@@ -342,6 +391,52 @@ public:
         return true;
     }
 };
+class MQ2DoubleType : public MQ2Type
+{
+public:
+    static enum DoubleMembers
+    {
+        Deci=1,
+        Centi=2,
+        Milli=3,
+        Int=4,
+        Precision=5,
+    };
+
+    MQ2DoubleType():MQ2Type("double")
+    {
+        TypeMember(Deci);
+        TypeMember(Centi);
+        TypeMember(Milli);
+        TypeMember(Int);
+        TypeMember(Precision);
+    }
+
+    ~MQ2DoubleType()
+    {
+    }
+
+    bool GETMEMBER();
+
+    bool ToString(MQ2VARPTR VarPtr, PCHAR Destination)
+    {
+        sprintf(Destination,"%.2f",VarPtr.Double);
+        return true;
+    }
+    bool FromData(MQ2VARPTR &VarPtr, MQ2TYPEVAR &Source)
+    {
+        if (Source.Type!=pDoubleType && Source.Type!=(MQ2Type*)pHeadingType)
+            VarPtr.Double=Source.Double;
+        else
+			VarPtr.Double=Source.Double;
+        return true;
+    }
+    bool FromString(MQ2VARPTR &VarPtr, PCHAR Source)
+    {
+		VarPtr.Double=atof(Source);
+        return true;
+    }
+};
 #endif
 
 class MQ2TicksType : public MQ2Type
@@ -390,6 +485,55 @@ public:
     bool FromString(MQ2VARPTR &VarPtr, PCHAR Source)
     {
         VarPtr.DWord=atoi(Source);
+        return true;
+    }
+};
+class MQ2TimeStampType : public MQ2Type
+{
+public:
+    static enum TimeStampMembers
+    {
+        Hours=1,
+        Minutes=2,
+        Seconds=3,
+        Time=4,
+        TotalMinutes=5,
+        TotalSeconds=6,
+        Ticks=7,
+        TimeHMS=8,
+    };
+    MQ2TimeStampType():MQ2Type("timestamp")
+    {
+        TypeMember(Hours);
+        TypeMember(Minutes);
+        TypeMember(Seconds);
+        TypeMember(Time);
+        TypeMember(TotalMinutes);
+        TypeMember(TotalSeconds);
+        TypeMember(Ticks);
+        TypeMember(TimeHMS);
+    }
+
+    ~MQ2TimeStampType()
+    {
+    }
+
+    bool GETMEMBER();
+
+
+    bool ToString(MQ2VARPTR VarPtr, PCHAR Destination)
+    {
+		_i64toa(VarPtr.UInt64,Destination,10);
+        return true;
+    }
+    bool FromData(MQ2VARPTR &VarPtr, MQ2TYPEVAR &Source)
+    {
+        VarPtr.UInt64=Source.UInt64;
+        return true;
+    }
+    bool FromString(MQ2VARPTR &VarPtr, PCHAR Source)
+    {
+        VarPtr.UInt64=_atoi64(Source);
         return true;
     }
 };
@@ -492,13 +636,14 @@ public:
         CurrentMana=94,
         MaxMana=95,
         CurrentEndurance=96,
-        MaxEndurance=97,
-        Loc=98,
-        LocYX=99,
-        Owner=100,
-        Following=101,
-		Address=102,
-		Inviter=103,
+		PctEndurance=97,
+        MaxEndurance=98,
+        Loc=99,
+        LocYX=100,
+        Owner=101,
+        Following=102,
+		Address=103,
+		Inviter=104,
 	};
     static enum SpawnMethods
     {
@@ -602,6 +747,7 @@ public:
         TypeMember(CurrentMana);
         TypeMember(MaxMana);
         TypeMember(CurrentEndurance);
+        TypeMember(PctEndurance);
         TypeMember(MaxEndurance);
         TypeMember(Loc);
         TypeMember(LocYX);
@@ -609,6 +755,7 @@ public:
         TypeMember(Following);
         TypeMember(Address);
         TypeMember(Inviter);
+
         TypeMethod(Target);
         TypeMethod(Face);
         TypeMethod(LeftClick);
@@ -673,9 +820,8 @@ class MQ2CharacterType : public MQ2Type
 public:
     static enum CharacterMembers
     {
-        ID=1,
-        Name=2,
-        Level=3,
+		CountSongs=2,
+		MaxBuffSlots=3,
         Exp=4,
         Spawn=5,
         Dar=6,
@@ -694,7 +840,6 @@ public:
         Book=20,
         Skill=21,
         Ability=22,
-        Surname=23,
         Cash=24,
         CashBank=25,
         PlatinumShared=26,
@@ -716,10 +861,6 @@ public:
         FreeInventory=43,
         Gem=44,
         SpellReady=45,
-        GroupLeaderExp=46,
-        RaidLeaderExp=47,
-        GroupLeaderPoints=48,
-        RaidLeaderPoints=49,
         Drunk=50,
         STR=51,
         STA=52,
@@ -756,8 +897,6 @@ public:
         GoldBank=83,
         SilverBank=84,
         CopperBank=85,
-        PctGroupLeaderExp=86,
-        PctRaidLeaderExp=87,
         Stunned=88,
         RangedReady=89,
         AltTimerReady=90,
@@ -859,13 +998,15 @@ public:
         SecondaryAggroPlayer=186,
         AggroLock=187,
         ZoneBound=188,
-		PctMercAAExp=189,
-		MercAAExp=190,
-		Subscription=191,
-		AAPointsAssigned=192,
-		AltCurrency=193,
-		ActiveDisc=194,
-		CountSongs=195,
+        ZoneBoundX=189,
+        ZoneBoundY=190,
+        ZoneBoundZ=191,
+		PctMercAAExp=192,
+		MercAAExp=193,
+		Subscription=194,
+		AAPointsAssigned=195,
+		AltCurrency=196,
+		ActiveDisc=197,
     };
     static enum CharacterMethods
     {
@@ -875,9 +1016,6 @@ public:
     };
     MQ2CharacterType():MQ2Type("character")
     {
-        TypeMember(ID);//1,
-        TypeMember(Name);//2,
-        TypeMember(Level);//3,
         TypeMember(Exp);//4,
         TypeMember(Spawn);//5,
         TypeMember(Dar);//6,
@@ -896,7 +1034,6 @@ public:
         TypeMember(Book);//20,
         TypeMember(Skill);//21,
         TypeMember(Ability);//22,
-        TypeMember(Surname);//23,
         TypeMember(Cash);//24,
         TypeMember(CashBank);//25,
         TypeMember(PlatinumShared);//26,
@@ -918,10 +1055,6 @@ public:
         TypeMember(FreeInventory);
         TypeMember(Gem);
         TypeMember(SpellReady);
-        TypeMember(GroupLeaderExp);
-        TypeMember(RaidLeaderExp);
-        TypeMember(GroupLeaderPoints);
-        TypeMember(RaidLeaderPoints);
         TypeMember(Drunk);
         TypeMember(STR);//51,
         TypeMember(STA);//52,
@@ -958,8 +1091,6 @@ public:
         TypeMember(GoldBank);
         TypeMember(SilverBank);
         TypeMember(CopperBank);
-        TypeMember(PctGroupLeaderExp);
-        TypeMember(PctRaidLeaderExp);
         TypeMember(Stunned);
         TypeMember(RangedReady);
         TypeMember(AltTimerReady);
@@ -1061,6 +1192,9 @@ public:
         TypeMember(SecondaryAggroPlayer);
         TypeMember(AggroLock);
         TypeMember(ZoneBound);
+        TypeMember(ZoneBoundX);
+        TypeMember(ZoneBoundY);
+        TypeMember(ZoneBoundZ);
         TypeMember(PctMercAAExp);
         TypeMember(MercAAExp);
         TypeMember(Subscription);
@@ -1068,6 +1202,7 @@ public:
 		TypeMember(AltCurrency);
 		TypeMember(ActiveDisc);
 		TypeMember(CountSongs);
+		TypeMember(MaxBuffSlots);
 		
         TypeMethod(Stand); 
         TypeMethod(Sit); 
@@ -1084,9 +1219,9 @@ public:
 
     bool ToString(MQ2VARPTR VarPtr, PCHAR Destination)
     {
-        if (!VarPtr.Ptr)
+        if (!pLocalPlayer)
             return false;
-        strcpy(Destination,((PCHARINFO)VarPtr.Ptr)->Name);
+        strcpy(Destination,((PSPAWNINFO)pLocalPlayer)->Name);
         return true;
     }
     void InitVariable(MQ2VARPTR &VarPtr) 
@@ -1172,6 +1307,10 @@ public:
 		Description=52,
 		StacksWith=53,
 		Caster=54,
+		Rank=55,
+		RankName=56,
+		SpellGroup=57,
+		SubSpellGroup=58,
     };
     static enum SpellMethods
     {
@@ -1232,6 +1371,11 @@ public:
 		TypeMember(Description);
 		TypeMember(StacksWith);
 		TypeMember(Caster);
+		TypeMember(Rank);
+		TypeMember(RankName);
+		TypeMember(SpellGroup);
+		TypeMember(SubSpellGroup);
+		
     }
 
     ~MQ2SpellType()
@@ -2459,6 +2603,45 @@ public:
 class EverQuestType : public MQ2Type
 {
 public:
+	static enum MacroQuestMembers
+    {
+		Error=1,
+        SyntaxError=2,
+        MQ2DataError=3,
+		BuildDate=4,
+	};
+	MQ2MacroQuestType() :MQ2Type("macroquest")
+	{
+		TypeMember(Error);
+        TypeMember(SyntaxError);
+        TypeMember(MQ2DataError);
+        TypeMember(BuildDate);
+	}
+	~MQ2MacroQuestType()
+    {
+    }
+
+    bool GETMEMBER();
+    DECLAREGETMETHOD();
+	INHERITDIRECT(pEverQuestType);
+
+    bool ToString(MQ2VARPTR VarPtr, PCHAR Destination)
+    {
+        return false;
+    }
+    bool FromData(MQ2VARPTR &VarPtr, MQ2TYPEVAR &Source)
+    {
+        return false;
+    }
+    bool FromString(MQ2VARPTR &VarPtr, PCHAR Source)
+    {
+        return false;
+    }
+};
+        
+class MQ2EverQuestType : public MQ2Type
+{
+public:
     static enum EverQuestMembers
     {
         GameState=1,
@@ -2466,42 +2649,35 @@ public:
         Server=3,
         LastCommand=4,
         LastTell=5,
-        Error=6,
-        SyntaxError=7,
-        MQ2DataError=8,
-        Running=9,
-        MouseX=10,
-        MouseY=11,
-        BuildDate=12,
-        Ping=13,
-        ChatChannels=14,
-        ChatChannel=15,
-        ViewportX=16,
-        ViewportY=17,
-        ViewportXMax=18,
-        ViewportYMax=19,
-        ViewportXCenter=20,
-        ViewportYCenter=21,
-        LClickedObject=22,
+        Running=6,
+        MouseX=7,
+        MouseY=8,
+        Ping=9,
+        LClickedObject=10,
+        WinTitle=11,
+        PID=12,
+		ChatChannels=13,
+        ChatChannel=14,
+        ViewportX=15,
+        ViewportY=16,
+        ViewportXMax=17,
+        ViewportYMax=18,
+        ViewportXCenter=19,
+        ViewportYCenter=20,
     };
     static enum EverQuestMethods
     {
     };
-
-    EverQuestType() :MQ2Type("everquest")
+    MQ2EverQuestType():MQ2Type("everquest")
     {
         TypeMember(GameState);
         TypeMember(LoginName);
         TypeMember(Server);
         TypeMember(LastCommand);
         TypeMember(LastTell);
-        TypeMember(Error);
-        TypeMember(SyntaxError);
-        TypeMember(MQ2DataError);
-        TypeMember(Running);
+		TypeMember(Running);
         TypeMember(MouseX);
         TypeMember(MouseY);
-        TypeMember(BuildDate);
         TypeMember(Ping);
         TypeMember(ChatChannels);
         TypeMember(ChatChannel);
@@ -2512,9 +2688,11 @@ public:
         TypeMember(ViewportXCenter);
         TypeMember(ViewportYCenter);
         TypeMember(LClickedObject);
+        TypeMember(WinTitle);
+        TypeMember(PID);
     }
 
-    ~EverQuestType()
+    ~MQ2EverQuestType()
     {
     }
 
@@ -2533,15 +2711,6 @@ public:
     {
         return false;
     }
-};
-
-class MQ2MacroQuestType : public MQ2Type
-{
-    // Backwards compatibility type definition for the legacy "macroquest" dtype.
-    MQ2MacroQuestType() :MQ2Type("macroquest")
-    {}
-
-    INHERITDIRECT(pEverQuestType);
 };
 
 #ifndef ISXEQ
@@ -4001,6 +4170,7 @@ public:
         Timer=3,
         xMember=4,
         Members=5,
+        Leader=6,
     };
     MQ2TaskType():MQ2Type("task")
     {
@@ -4009,6 +4179,7 @@ public:
         TypeMember(Timer);
         AddMember(xMember,"Member");
         TypeMember(Members);
+        TypeMember(Leader);
     }
     ~MQ2TaskType()
     {

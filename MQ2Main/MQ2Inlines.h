@@ -37,9 +37,12 @@ static inline EQPlayer *GetSpawnByName(char *spawnName)
 
 static inline PSPELL GetSpellByID(LONG dwSpellID)
 {
-    if (dwSpellID==0 || dwSpellID >= TOTAL_SPELL_COUNT)
+    if (dwSpellID==0 || dwSpellID==-1)
         return 0;
-    return &(*((PSPELLMGR)pSpellMgr)->Spells[abs(dwSpellID)]);
+	long absedspellid = abs(dwSpellID);
+    if (absedspellid >= TOTAL_SPELL_COUNT)
+        return 0;
+    return &(*((PSPELLMGR)pSpellMgr)->Spells[absedspellid]);
 }
 
 static inline PCHAR GetBodyTypeDesc(DWORD BodyTypeID)
@@ -129,6 +132,22 @@ static inline BOOL IsMarkedNPC(PSPAWNINFO pSpawn)
 #define GetMaxHPS() pCharData1->Max_HP(0)
 #define GetMaxEndurance() pCharData1->Max_Endurance()
 #define GetMaxMana() pCharData1->Max_Mana() 
+
+// ***************************************************************************
+// Function:    GetCharMaxBuffSlots
+// Description: Returns the max number of buff slots available for a character
+// ***************************************************************************
+static inline DWORD GetCharMaxBuffSlots()
+{
+	DWORD NumBuffs = 15;
+	NumBuffs += pCharData1->TotalEffect(327, 1, 0, 1, 1);
+
+	if(PCHARINFO pChar = GetCharInfo()) {
+		if(pChar->pSpawn->Level > 70) NumBuffs++;
+		if(pChar->pSpawn->Level > 74) NumBuffs++;
+	}
+	return NumBuffs;
+}
 
 static inline DWORD GetBodyType(PSPAWNINFO pSpawn)
 {
@@ -282,7 +301,6 @@ static inline PSPAWNINFO FindMount(PSPAWNINFO pSpawn)
     return (pSpawn->Mount?pSpawn->Mount:pSpawn); 
 }
 
-
 // ***************************************************************************
 // Function:    ConColorToRGB
 // Description: Returns the RGB color for a con color
@@ -434,3 +452,47 @@ static inline DWORD FixOffset(DWORD nOffset)
 {
     return ((nOffset - 0x400000) + baseAddress);
 }
+
+static inline bool endsWith (char* base, char* str) {
+    int blen = strlen(base);
+    int slen = strlen(str);
+    return (blen >= slen) && (0 == strcmp(base + blen - slen, str));
+}
+// ***************************************************************************
+// Function:    GetTickCount642
+// Description: Returns TickCount
+// If the user is on Windows XP this function will call GetTickCount()
+// instead of GetTickCount64() (which doesnt exist on that platform.)
+// ***************************************************************************
+static inline ULONGLONG GetTickCount642(void)
+{
+	static int once = 1;
+    static ULONGLONG (WINAPI *pGetTickCount64)(void);
+    if (once) {
+		//we dont want to call this one over and over thats just stupid, so once is enough - eqmule
+        pGetTickCount64 = (ULONGLONG (WINAPI *)(void))GetProcAddress(GetModuleHandle("KERNEL32.DLL"), "GetTickCount64");
+		once = 0;
+    }
+	if(pGetTickCount64)
+		return pGetTickCount64();
+    return (ULONGLONG)GetTickCount();
+}
+/*
+need to figure out why this fails in xp and the above doesn't - eqmule
+static inline ULONGLONG GetTickCount64(void)
+{
+	static int once = 1;
+    static ULONGLONG (WINAPI *pGetTickCount64)(void);
+    if (once) {
+		//we dont want to call this one over and over thats just stupid, so once is enough - eqmule
+        pGetTickCount64 = (ULONGLONG (WINAPI *)(void))GetProcAddress(GetModuleHandle("KERNEL32.DLL"), "GetTickCount64");
+		if (!pGetTickCount64)
+			pGetTickCount64 = (ULONGLONG (WINAPI *)(void))GetProcAddress(GetModuleHandle("KERNEL32.DLL"), "GetTickCount");
+		if (!pGetTickCount64) {
+			//MessageBox(NULL,"CRAP","What kind of OS are you running anyway?",MB_OK);
+			return (ULONGLONG)GetTickCount();
+		}
+		once = 0;
+    }
+    return pGetTickCount64();
+}*/
