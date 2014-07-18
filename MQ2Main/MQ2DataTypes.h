@@ -523,17 +523,17 @@ public:
 
     bool ToString(MQ2VARPTR VarPtr, PCHAR Destination)
     {
-		_i64toa(VarPtr.UInt64,Destination,10);
+		_i64toa(VarPtr.Int64,Destination,10);
         return true;
     }
     bool FromData(MQ2VARPTR &VarPtr, MQ2TYPEVAR &Source)
     {
-        VarPtr.UInt64=Source.UInt64;
+        VarPtr.Int64=Source.Int64;
         return true;
     }
     bool FromString(MQ2VARPTR &VarPtr, PCHAR Source)
     {
-        VarPtr.UInt64=_atoi64(Source);
+        VarPtr.Int64=_atoi64(Source);
         return true;
     }
 };
