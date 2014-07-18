@@ -906,7 +906,7 @@ PSPELL GetSpellBySpellGroupID(LONG dwSpellGroupID)
 {
     if (ppSpellMgr) {
 		for (DWORD dwSpellID = 0; dwSpellID < TOTAL_SPELL_COUNT; dwSpellID++) {
-			if (PSPELL pSpell = &(*((PSPELLMGR)pSpellMgr)->Spells[dwSpellID])) {
+			if (PSPELL pSpell = GetSpellByID(dwSpellID)) {
 				if (pSpell->ID > 0) {
 					if (pSpell->SpellGroup == dwSpellGroupID) {
 						return pSpell;
@@ -929,8 +929,9 @@ PCHAR GetSpellNameBySpellGroupID(LONG dwSpellID)
 
 PCHAR GetSpellNameByID(LONG dwSpellID)
 {
-    if (ppSpellMgr) {
-		PSPELL pSpell = &(*((PSPELLMGR)pSpellMgr)->Spells[abs(dwSpellID)]);
+	long absedspellid = abs(dwSpellID);
+    if (ppSpellMgr && absedspellid!=0 && absedspellid!=-1 && absedspellid < TOTAL_SPELL_COUNT) {
+		PSPELL pSpell = GetSpellByID(absedspellid);
 		if (pSpell && pSpell->Name && pSpell->Name[0]!='\0') {
 			return pSpell->Name;
 		}
@@ -942,13 +943,15 @@ PSPELL GetSpellByName(PCHAR szName)
 {
     // PSPELL GetSpellByName(PCHAR NameOrID)
     // This function now accepts SpellID as an argument as well as SpellName
-    if (ppSpellMgr == NULL) return NULL;
+    if (ppSpellMgr == NULL || szName[0]=='\0') {
+		return NULL;
+	}
     if (szName[0]>='0' && szName[0]<='9')
     {
         return GetSpellByID(abs(atoi(szName)));
     }
     for (DWORD dwSpellID = 0; dwSpellID < TOTAL_SPELL_COUNT; dwSpellID++) {
-        if(PSPELL pSpell = &(*((PSPELLMGR)pSpellMgr)->Spells[dwSpellID])) {
+        if(PSPELL pSpell = GetSpellByID(dwSpellID)) {
 			if ((pSpell->ID > 0) && (pSpell->ID < TOTAL_SPELL_COUNT))
 			{
 				if (pSpell->Name != NULL) 
@@ -1516,28 +1519,29 @@ PCHAR GetSpellRestrictions(PSPELL pSpell, unsigned int nIndex, PCHAR szBuffer)
 	return szBuffer;
 }
 
-// *************************************************************************** 
+// ***************************************************************************
 // Function:    GetSpellEffectName, GetSpellEffectNameByID
 // Description: Return spell effect string 
-// *************************************************************************** 
+// ***************************************************************************
 PCHAR GetSpellEffectNameByID(LONG EffectID)
 {
 	CHAR szTemp[MAX_STRING] = {0};
 
-	return GetSpellEffectName(EffectID, szTemp);
+	return GetSpellEffectName(abs(EffectID), szTemp);
 }
 
 PCHAR GetSpellEffectName(LONG EffectID, PCHAR szBuffer) 
 {
-	if(EffectID<=MAX_SPELLEFFECTS) {
-		//we CAN do an abs here cause IF it is negative, it just means we should display is as "Exclude: "
-		strcat(szBuffer,szSPATypes[abs(EffectID)]);
+	//we CAN do an abs here cause IF it is negative, it just means we should display is as "Exclude: "
+	LONG absEffectID = abs(EffectID);
+	if(absEffectID<=MAX_SPELLEFFECTS) {
+		strcat(szBuffer,szSPATypes[absEffectID]);
 	} else {
 		CHAR szTemp[MAX_STRING]={0};
-		sprintf_s(szTemp, "UndefinedEffect%03d", EffectID);
+		sprintf_s(szTemp, "UndefinedEffect%03d", absEffectID);
 		strcat(szBuffer,szTemp);
     }
-	return szBuffer; 
+	return szBuffer;
 } 
 
 PCHAR GetResistTypeName(LONG ResistType, PCHAR szBuffer)
@@ -1641,7 +1645,7 @@ PCHAR GetFactionName(LONG FactionType, PCHAR szBuffer)
 	case 1178: strcat(szBuffer, "(S.H.I.P. Workshop Base Population)"); break;
 	case 1150: strcat(szBuffer, "(Jewel of Atiiki Efreetis)"); break;
 	case 1229: strcat(szBuffer, "(Sebilisian Empire)"); break;
-    default: strcat (szBuffer, "Unknown"); break;
+    default: strcat (szBuffer, "(Unknown)"); break;
     } 
 	return szBuffer;
 }
@@ -1687,12 +1691,12 @@ LONG CalcDuration(LONG calc, LONG max, LONG level)
 	return value;
 }
 
-LONG CalcValue(LONG calc, LONG base, LONG max, LONG tick, LONG level)
+LONG CalcValue(LONG calc, LONG base, LONG max, LONG tick, LONG minlevel, LONG level)
 {
 	if (calc == 0)
 		return base;
 	if (calc == 100) {
-		if (max > 0 && base > max)
+		if (max > 0 && ((base > max) || (level > minlevel)))
 			return max;
 		return base;
 	}
@@ -1862,15 +1866,15 @@ LONG CalcValue(LONG calc, LONG base, LONG max, LONG tick, LONG level)
 	return value;
 }
 
-LONG CalcMaxSpellLevel(LONG calc, LONG base, LONG max, LONG tick, LONG level)
+LONG CalcMaxSpellLevel(LONG calc, LONG base, LONG max, LONG tick, LONG minlevel, LONG level)
 {
 	//WriteChatf("CalcMaxSpellLevel(CALC:%d, BASE:%d, MAX:%d, TICK:%d, LEVEL:%d)", calc, base, max, tick, level);
 	if (abs(max)>0) {
 		//WriteChatf("Inside if (abs(max)>0)");
 		for (LONG maxlevel=1; maxlevel<=level; maxlevel++) {
-			LONG value=CalcValue(calc, base, max, tick, maxlevel);
+			LONG value=CalcValue(calc, base, max, tick, minlevel, maxlevel);
 			//WriteChatf("VALUE:%d, MAX:%d", abs(value), abs(max));
-			if (abs(CalcValue(calc, base, max, tick, maxlevel)) >= abs(max))
+			if (abs(CalcValue(calc, base, max, tick, minlevel, maxlevel)) >= abs(max))
 				return maxlevel;
 		}
 		return level;
@@ -1890,8 +1894,8 @@ LONG CalcMinSpellLevel(PSPELL pSpell)
 
 PCHAR CalcValueRange(LONG calc, LONG base, LONG max, LONG duration, LONG minlevel, LONG level, PCHAR szBuffer, PCHAR szPercent)
 {
-	LONG start=CalcValue(calc, base, max, 1, minlevel);
-	LONG finish=CalcValue(calc, base, max, duration, level);
+	LONG start=CalcValue(calc, base, max, 1, minlevel, minlevel);
+	LONG finish=CalcValue(calc, base, max, duration, minlevel, level);
 	CHAR type[MAX_STRING]={0};
 
 	sprintf(type, "%s", abs(start) < abs(finish)?"Growing":"Decaying");
@@ -2157,7 +2161,7 @@ PCHAR FormatTimer(PCHAR szEffectName, FLOAT value, PCHAR szBuffer)
 	return szBuffer;
 }
 
-PCHAR ParseSpellEffect(PSPELL pSpell, int i, PCHAR szBuffer, LONG level=100)
+PCHAR ParseSpellEffect(PSPELL pSpell, int i, PCHAR szBuffer, LONG level)
 {
 	CHAR szBuff[MAX_STRING]={0};
 	CHAR szTemp[MAX_STRING]={0};
@@ -2198,10 +2202,11 @@ PCHAR ParseSpellEffect(PSPELL pSpell, int i, PCHAR szBuffer, LONG level=100)
 		base=0;
 		break;
 	case SPA_SPELLDAMAGE:
+	case SPA_HEALING:
+	case SPA_SPELLMANACOST:
 		max=base2;
 		break;
 	case SPA_REAGENTCHANCE:
-	case SPA_SPELLMANACOST:
 	case SPA_INCSPELLDMG:
 		base=base2;
 		break;
@@ -2221,14 +2226,14 @@ PCHAR ParseSpellEffect(PSPELL pSpell, int i, PCHAR szBuffer, LONG level=100)
 	GetSpellEffectName(spa, spelleffectname);
 	strcpy(extra, pSpell->Extra);
 
-	LONG maxspelllvl=CalcMaxSpellLevel(calc, base, max, ticks, level);
 	LONG minspelllvl=CalcMinSpellLevel(pSpell);
-	LONG value=CalcValue(calc, base, max, 1, minspelllvl);
-	LONG finish=CalcValue(calc, base, max, ticks, level);
+	LONG maxspelllvl=CalcMaxSpellLevel(calc, base, max, ticks, minspelllvl, level);
+	LONG value=CalcValue(calc, base, max, 1, minspelllvl, minspelllvl);
+	LONG finish=CalcValue(calc, base, max, ticks, minspelllvl, level);
 
-	BOOL usePercent=(spa==SPA_MOVEMENTRATE||spa==SPA_HASTE||spa==SPA_BARDOVERHASTE||spa==SPA_DOUBLEATTACK||spa==SPA_STUNRESIST||spa==SPA_PROCMOD||spa==SPA_DIVINEREZ||
-					 spa==SPA_METABOLISM||spa==SPA_TRIPLEBACKSTAB||spa==SPA_DOTCRIT||spa==SPA_HEALCRIT||spa==SPA_MENDCRIT||spa==SPA_FLURRY||spa==SPA_PETFLURRY||spa==SPA_SPELLCRITCHANCE||
-					 spa==SPA_SHIELDBLOCKCHANCE||spa==SPA_DAMAGECRITMOD);
+	BOOL usePercent=(spa==SPA_MOVEMENTRATE||spa==SPA_HASTE||spa==SPA_BARDOVERHASTE||spa==SPA_SPELLDAMAGE||spa==SPA_HEALING||spa==SPA_DOUBLEATTACK||spa==SPA_STUNRESIST||spa==SPA_PROCMOD||
+					 spa==SPA_DIVINEREZ||spa==SPA_METABOLISM||spa==SPA_TRIPLEBACKSTAB||spa==SPA_DOTCRIT||spa==SPA_HEALCRIT||spa==SPA_MENDCRIT||spa==SPA_FLURRY||spa==SPA_PETFLURRY||
+					 spa==SPA_SPELLCRITCHANCE||spa==SPA_SHIELDBLOCKCHANCE||spa==SPA_DAMAGECRITMOD);
 	BOOL AEEffect=(targettype==TT_PBAE||targettype==TT_TARGETED_AE||targettype==TT_AE_PC_V2||targettype==TT_DIRECTIONAL);
 
 	strcat(range, CalcValueRange(calc, base, max, ticks, minspelllvl, level, szTemp2, usePercent?szPercent:""));
@@ -2351,7 +2356,7 @@ PCHAR ParseSpellEffect(PSPELL pSpell, int i, PCHAR szBuffer, LONG level=100)
         if (ItemDB) { 
 			sprintf(szTemp,"%s (Qty:%d)", ItemDB->szName, (LONG)ItemDB->StackSize<calc?ItemDB->StackSize:calc); 
         } else { 
-            sprintf(szTemp,"[%5d] (Qty:%d)", base, (LONG)ItemDB->StackSize<calc?ItemDB->StackSize:calc); 
+            sprintf(szTemp,"[%5d] (Qty:%d)", base, calc); 
         } 
 		strcat(szBuff, FormatExtra(spelleffectname, szTemp, szTemp2));
         break;
@@ -2595,8 +2600,6 @@ PCHAR ParseSpellEffect(PSPELL pSpell, int i, PCHAR szBuffer, LONG level=100)
 		strcat(szBuff, spelleffectname);
 		break;
     case 124: //spell damage 
-		strcat(szBuff, FormatRange(spelleffectname, value, extendedrange, szTemp2));
-		break;
     case 125: //healing 
 		strcat(szBuff, FormatPercent(spelleffectname, value, finish, szTemp2));
 		break;
@@ -2685,8 +2688,8 @@ PCHAR ParseSpellEffect(PSPELL pSpell, int i, PCHAR szBuffer, LONG level=100)
     case 156: //Illusion: Target 
 		strcat(szBuff, spelleffectname);
 		break;
-    case 157: //Spell-Damage Shield 
-		strcat(szBuff, FormatBase(spelleffectname, base, szTemp2));
+    case 157: //Spell Damage Shield 
+		strcat(szBuff, FormatRange(spelleffectname, -value, extendedrange, szTemp2));
 		break;
     case 158: //Chance to Reflect Spell 
 		strcat(szBuff, FormatPercent(spelleffectname, value, finish, szTemp2));
@@ -2960,8 +2963,11 @@ PCHAR ParseSpellEffect(PSPELL pSpell, int i, PCHAR szBuffer, LONG level=100)
         strcat(szBuff, FormatBase(spelleffectname, base, szTemp2));
 		break;
     case 286: //DD Bonus
-    case 287: //Focus Combat Duration
 		strcat(szBuff, FormatRange(spelleffectname, value, extendedrange, szTemp2));
+        break;
+    case 287: //Focus Combat Duration
+		strcat(szBuff, FormatCount(spelleffectname, value, szTemp2));
+		strcat(szBuff, " tick(s)");
         break;
     case 288: //Add Proc Hit (no spells currently)
         strcat(szBuff, FormatBase(spelleffectname, base, szTemp2));
@@ -3018,7 +3024,7 @@ PCHAR ParseSpellEffect(PSPELL pSpell, int i, PCHAR szBuffer, LONG level=100)
 		strcat(szBuff, spelleffectname);
 		break;
     case 310: //Reuse Timer 
-        strcat(szBuff, FormatTimer(spelleffectname, base/1000.0f, szTemp2)); 
+        strcat(szBuff, FormatTimer(spelleffectname, -base/1000.0f, szTemp2)); 
         break; 
     case 311: //No Combat Skills 
 		strcat(szBuff, spelleffectname);
@@ -3406,7 +3412,7 @@ PCHAR ShowSpellSlotInfo(PSPELL pSpell, PCHAR szBuffer)
     CHAR szTemp[MAX_STRING]={0}; 
     CHAR szBuff[MAX_STRING]={0}; 
 
-    for (int i=0; i<=11; i++) 
+    for (int i=0; i<12; i++) 
     { 
         szBuff[0]=szTemp[0]='\0';
 		strcat(szBuff, ParseSpellEffect(pSpell, i, szTemp));
@@ -3666,7 +3672,9 @@ DebugSpew("%d slot %d wnd %d %d %d", N, pInvMgr->SlotArray[N]->InvSlot,
     for (nPack=0 ; nPack < NUM_BANK_SLOTS ; nPack++)
     {
         PCHARINFO pCharInfo=GetCharInfo();
-        if (PCONTENTS pPack=pCharInfo->pBankArray->Bank[nPack])
+		PCONTENTS pPack=NULL;
+        if (pCharInfo->pBankArray) pPack=pCharInfo->pBankArray->Bank[nPack];
+        if (pPack)
         {
             if (pPack==pContents)
             {
@@ -4792,25 +4800,38 @@ BOOL IsPCNear(PSPAWNINFO pSpawn, FLOAT Radius)
     return false;
 }
 
-BOOL IsInGroup(PSPAWNINFO pSpawn)
+BOOL IsInGroup(PSPAWNINFO pSpawn,BOOL bCorpse)
 {
     DWORD i;
     PCHARINFO pChar=GetCharInfo();
-    if (!pChar->pGroupInfo) return FALSE;
+    if (!pChar->pGroupInfo)
+		return FALSE;
     if (pSpawn==pChar->pSpawn)
         return TRUE;
-    for (i=1;i<6;i++) 
+    for (i=1;i<6;i++) {
         if (pChar->pGroupInfo->pMember[i])
         {
             CHAR Name[MAX_STRING]={0};
             GetCXStr(pChar->pGroupInfo->pMember[i]->pName,Name,MAX_STRING);
-            if (!stricmp(Name,pSpawn->Name))
-                return TRUE;
+            if(!bCorpse) {
+				if (!stricmp(Name,pSpawn->Name)) {
+					return TRUE;
+				}
+			} else {
+				CHAR szSearch[256] = {0};
+				strcpy_s(szSearch,Name);
+				strcat_s(szSearch,"'s corpse");
+				DWORD l = strlen(szSearch);
+				if (!strnicmp(pSpawn->Name,szSearch,l)) {
+					return TRUE;
+				}
+			}
         }
-        return FALSE;
+	}
+    return FALSE;
 }
 
-EQLIB_API BOOL IsInRaid(PSPAWNINFO pSpawn)
+EQLIB_API BOOL IsInRaid(PSPAWNINFO pSpawn, BOOL bCorpse)
 {
     DWORD i;
     if (pSpawn==GetCharInfo()->pSpawn)
@@ -4818,8 +4839,19 @@ EQLIB_API BOOL IsInRaid(PSPAWNINFO pSpawn)
     DWORD l = strlen(pSpawn->Name);
     for (i=0;i<72;i++)
     {
-        if (!strnicmp(pRaid->RaidMember[i].Name,pSpawn->Name,l+1) && pRaid->RaidMember[i].nClass == pSpawn->Class)
-            return TRUE;
+		if(!bCorpse) {
+			if (!strnicmp(pRaid->RaidMember[i].Name,pSpawn->Name,l+1) && pRaid->RaidMember[i].nClass == pSpawn->Class) {
+				return TRUE;
+			}
+		} else {
+			CHAR szSearch[256] = {0};
+			strcpy_s(szSearch,pRaid->RaidMember[i].Name);
+			strcat_s(szSearch,"'s corpse");
+			l = strlen(szSearch);
+			if (!strnicmp(szSearch,pSpawn->Name,l) && pRaid->RaidMember[i].nClass == pSpawn->Class) {
+				return TRUE;
+			}
+		}
     }
     return FALSE;
 } 
@@ -4868,6 +4900,7 @@ BOOL IsNamed(PSPAWNINFO pSpawn)
     if ((!strnicmp(szTemp,"Guard",5))          ||
         (!strnicmp(szTemp,"Defender",8))       ||
         (!strnicmp(szTemp,"Soulbinder",10))    ||
+        (!strnicmp(szTemp,"Aura",4))           ||
         (!strnicmp(szTemp,"Sage",4))           ||
         //(!strnicmp(szTemp,"High_Priest",11))   ||
         (!strnicmp(szTemp,"Ward",4))           ||
@@ -5142,15 +5175,21 @@ BOOL SpawnMatchesSearch(PSEARCHSPAWN pSearchSpawn, PSPAWNINFO pChar, PSPAWNINFO 
     if (pSearchSpawn->SpawnType != SpawnType && pSearchSpawn->SpawnType!=NONE)
     {
         if (pSearchSpawn->SpawnType==NPCCORPSE) {
-            if (SpawnType != CORPSE || pSpawn->Deity)
+            if (SpawnType != CORPSE || pSpawn->Deity) {
                 return FALSE;
+			}
         } else if (pSearchSpawn->SpawnType==PCCORPSE) {
-            if (SpawnType != CORPSE || !pSpawn->Deity)
+            if (SpawnType != CORPSE || !pSpawn->Deity) {
                 return FALSE;
-        } else {
+			}
+        } else  if (pSearchSpawn->SpawnType==NPC && SpawnType==UNTARGETABLE) {
+			return FALSE;
+		} else {
 
             // if the search type is not npc or the mob type is UNT, continue?
             // stupid /who
+           
+
             if (pSearchSpawn->SpawnType!=NPC || SpawnType!=UNTARGETABLE)
                 return FALSE;
         }
@@ -5204,10 +5243,28 @@ BOOL SpawnMatchesSearch(PSEARCHSPAWN pSearchSpawn, PSPAWNINFO pChar, PSPAWNINFO 
         return FALSE;
     if (pSearchSpawn->bTrader && !pSpawn->Trader)
         return FALSE;
-    if (pSearchSpawn->bGroup && !IsInGroup(pSpawn))
+    if (pSearchSpawn->bGroup) {
+		BOOL ingrp = 0;
+		if(pSearchSpawn->SpawnType==PCCORPSE || pSpawn->Type==SPAWN_CORPSE) {
+			ingrp = IsInGroup(pSpawn,1);
+		} else {
+			ingrp = IsInGroup(pSpawn);
+		}
+        if(!ingrp)
+			return FALSE;
+	}
+    if (pSearchSpawn->bNoGroup && IsInGroup(pSpawn))
         return FALSE;
-    if (pSearchSpawn->bRaid && !IsInRaid(pSpawn))
-        return FALSE;
+    if (pSearchSpawn->bRaid) {
+		BOOL ingrp = 0;
+		if(pSearchSpawn->SpawnType==PCCORPSE || pSpawn->Type==SPAWN_CORPSE) {
+			ingrp = IsInRaid(pSpawn,1);
+		} else {
+			ingrp = IsInRaid(pSpawn);
+		}
+         if(!ingrp)
+			 return FALSE;
+	}
     if (pSearchSpawn->bKnownLocation) 
     {
         if ((pSearchSpawn->xLoc!=pSpawn->X || pSearchSpawn->yLoc!=pSpawn->Y))
@@ -5314,6 +5371,8 @@ PCHAR ParseSearchSpawnArgs(PCHAR szArg, PCHAR szRest, PSEARCHSPAWN pSearchSpawn)
             pSearchSpawn->bGM = TRUE;
         } else if (!stricmp(szArg,"group")) {
             pSearchSpawn->bGroup = TRUE;
+		} else if (!stricmp(szArg,"nogroup")) {
+			pSearchSpawn->bNoGroup = TRUE;
         } else if (!stricmp(szArg,"raid")) {
             pSearchSpawn->bRaid = TRUE; 
         } else if (!stricmp(szArg,"noguild")) {
@@ -6075,7 +6134,7 @@ default:
 DWORD FindSpellListByName(PCHAR szName)
 {
     DWORD Index;
-    for (Index=0;Index<10;Index++) {
+	for (Index=0;Index<NUM_SPELL_SETS;Index++) {
         if (!stricmp(pSpellSets[Index].Name,szName)) return Index;
     }
     return -1;
@@ -6354,7 +6413,8 @@ BOOL SpellEffectTest (PSPELL aSpell, PSPELL bSpell, int i){
 //                ${Spell[xxx].WillStack[yyy]}, ${Spell[xxx].StacksWith[yyy]}
 // Author:      Pinkfloydx33
 // ***************************************************************************
-BOOL BuffStackTest(PSPELL aSpell, PSPELL bSpell){
+BOOL BuffStackTest(PSPELL aSpell, PSPELL bSpell)
+{
     if (aSpell->ID==bSpell->ID) return true;
 
     int i;
@@ -6431,10 +6491,9 @@ float GetMeleeRange(class EQPlayer *pSpawn1,class EQPlayer *pSpawn2)
 DWORD GetSpellGemTimer(DWORD nGem)
 {
     _EQCASTSPELLGEM *g = ((PEQCASTSPELLWINDOW)pCastSpellWnd)->SpellSlots[nGem];
-
-    if(g->TimeStamp)
+    if(g->TimeStamp) {
         return g->TimeStamp + g->RecastTime - EQGetTime();
-
+	}
     return 0;
 }
 
@@ -7078,6 +7137,114 @@ int GetTargetBuffBySPA(int spa,bool bIncrease)
 	}
 	return -1;
 }
+DWORD GetSpellRankByName(PCHAR SpellName)
+{
+	char szTemp[256];
+	strcpy_s(szTemp, SpellName);
+	_strupr(szTemp);
+	if (endsWith(szTemp, " II"))
+		return 2;
+	else if (endsWith(szTemp, " III"))
+		return 3;
+	else if (endsWith(szTemp, " IV"))
+		return 4;
+	else if (endsWith(szTemp, " V"))
+		return 5;
+	else if (endsWith(szTemp, " VI"))
+		return 6;
+	else if (endsWith(szTemp, " VII"))
+		return 7;
+	else if (endsWith(szTemp, " VIII"))
+		return 8;
+	else if (endsWith(szTemp, " IX"))
+		return 9;
+	else if (endsWith(szTemp, " X"))
+		return 10;
+	else if (endsWith(szTemp, " XI"))
+		return 11;
+	else if (endsWith(szTemp, " XII"))
+		return 12;
+	else if (endsWith(szTemp, " XIII"))
+		return 13;
+	else if (endsWith(szTemp, " XIV"))
+		return 14;
+	else if (endsWith(szTemp, " XV"))
+		return 15;
+	else if (endsWith(szTemp, " XVI"))
+		return 16;
+	else if (endsWith(szTemp, " XVII"))
+		return 17;
+	else if (endsWith(szTemp, " XVIII"))
+		return 18;
+	else if (endsWith(szTemp, " XIX"))
+		return 19;
+	else if (endsWith(szTemp, " XX"))
+		return 20;
+	else if (endsWith(szTemp, " XXI"))
+		return 21;
+	else if (endsWith(szTemp, " XXII"))
+		return 22;
+	else if (endsWith(szTemp, " XXIII"))
+		return 23;
+	else if (endsWith(szTemp, " XXIV"))
+		return 24;
+	else if (endsWith(szTemp, " XXV"))
+		return 25;
+	else if (endsWith(szTemp, " XXVI"))
+		return 26;
+	else if (endsWith(szTemp, " XXVII"))
+		return 27;
+	else if (endsWith(szTemp, " XXVIII"))
+		return 28;
+	else if (endsWith(szTemp, " XXIX"))
+		return 29;
+	else if (endsWith(szTemp, " XXX"))
+		return 30;
+	else if (endsWith(szTemp, ".II"))
+		return 2;
+	else if (endsWith(szTemp, ".III"))
+		return 3;
+	return 0;
+}
+VOID RemoveBuff(PSPAWNINFO pChar, PCHAR szLine)
+{
+	if(szLine && szLine[0]!='\0') {
+		if(PCHARINFO2 pChar2 = GetCharInfo2()) {
+			for (unsigned long nBuff=0 ; nBuff<NUM_LONG_BUFFS ; nBuff++)
+			{
+				if(pChar2->Buff[nBuff].SpellID==0 || pChar2->Buff[nBuff].SpellID==-1)
+					continue;
+				if(PSPELL pBuffSpell = GetSpellByID(pChar2->Buff[nBuff].SpellID)) {
+					if(!strnicmp(pBuffSpell->Name,szLine,strlen(szLine))) {
+						pPCData->RemoveMyAffect(nBuff);
+						return;
+					}
+				}
+			}
+			for (unsigned long nBuff=0 ; nBuff<NUM_SHORT_BUFFS ; nBuff++)
+			{
+				if(pChar2->ShortBuff[nBuff].SpellID==0 || pChar2->ShortBuff[nBuff].SpellID==-1)
+					continue;
+				if(PSPELL pBuffSpell = GetSpellByID(pChar2->ShortBuff[nBuff].SpellID)) {
+					if(!strnicmp(pBuffSpell->Name,szLine,strlen(szLine))) {
+						pPCData->RemoveMyAffect(nBuff+NUM_LONG_BUFFS);
+						return;
+					}
+				}
+			}
+		}
+	}
+}
+//.text:00638049                 mov     ecx, pinstPCData_x
+//.text:0063804F                 push    0
+//.text:00638051                 push    0
+//.text:00638053                 add     ecx, 1FE0h
+//.text:00638059                 call    ?MakeMeVisible@CharacterZoneClient@@QAEXH_N@Z ; CharacterZoneClient::MakeMeVisible(int,bool)
+VOID MakeMeVisible(PSPAWNINFO pChar, PCHAR szLine)
+{
+	((CharacterZoneClient*)pCharData1)->MakeMeVisible(0,0);
+}
+
 //                                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #endif

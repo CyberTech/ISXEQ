@@ -516,6 +516,37 @@ VOID UpdateItemInfo(PSPAWNINFO pChar, PCHAR szLine)
 }
 
 // ***************************************************************************
+// Function:    ShowSpellSlotInfo
+// Description: Our '/SpellSlotInfo' command
+// Usage:       /SpellSlotInfo [#|"spell name"]
+// ***************************************************************************
+VOID SpellSlotInfo(PSPAWNINFO pChar, PCHAR szLine)
+{
+    CHAR szArg1[MAX_STRING] = {0}; 
+    CHAR szBuff[MAX_STRING] = {0};
+	CHAR szTemp[MAX_STRING] = {0};
+
+	PSPELL pSpell=NULL;
+
+	GetArg(szArg1,szLine,1); 
+
+	IsNumber(szArg1)?pSpell=GetSpellByID(atoi(szArg1)):pSpell=GetSpellByName(szLine);
+	if (!pSpell) {
+		WriteChatf("Usage: /SpellSlotInfo [#|\"spell name\"]");
+		return;
+	}
+
+	//ItemDisplayHook->SetSpell_Detour(pSpell->ID, TRUE);
+	WriteChatf("\ay%s\ax (ID: %d)", pSpell->Name, pSpell->ID);
+    for (int i=0; i<12; i++) { 
+        szBuff[0]=szTemp[0]='\0';
+		strcat(szBuff, ParseSpellEffect(pSpell, i, szTemp));
+		if (strlen(szBuff)>0)
+			WriteChatf("%s", szBuff);
+    }
+}
+
+// ***************************************************************************
 // Function:    MemSpell
 // Description: Our '/MemSpell' command
 // Usage:       /MemSpell gem# "spell name"
@@ -2528,7 +2559,7 @@ VOID BankList(PSPAWNINFO pChar, PCHAR szLine)
     WriteChatColor("-------------------------",USERCOLOR_DEFAULT);
     char Link[256];
     for (int a=0;a<NUM_BANK_SLOTS;a++) {
-        pContainer=pCharInfo->pBankArray->Bank[a];
+		if (pCharInfo->pBankArray) pContainer=pCharInfo->pBankArray->Bank[a];
         if (pContainer) {
             GetItemLink(pContainer,&Link[0]);
             sprintf(szTemp,"Slot %d: %dx %s (%s)",a,pContainer->StackCount ? pContainer->StackCount : 1,Link,GetItemFromContents(pContainer)->LoreName);
@@ -2684,7 +2715,9 @@ VOID PluginCommand(PSPAWNINFO pChar, PCHAR szLine)
         { 
             sprintf(szBuffer,"Plugin '%s' unloaded.",szName); 
             WriteChatColor(szBuffer,USERCOLOR_DEFAULT); 
-            if (!strstr(szCommand,"noauto")) RewriteMQ2Plugins(); 
+            if (!strstr(szCommand,"noauto")) {
+				RewriteMQ2Plugins();
+			}
 
         } 
         else 
@@ -2696,7 +2729,9 @@ VOID PluginCommand(PSPAWNINFO pChar, PCHAR szLine)
         { 
             sprintf(szBuffer,"Plugin '%s' loaded.",szName); 
             WriteChatColor(szBuffer,USERCOLOR_DEFAULT); 
-            if (stricmp(szCommand,"noauto")) RewriteMQ2Plugins(); 
+            if (stricmp(szCommand,"noauto")) {
+				RewriteMQ2Plugins();
+			}
         } 
         else 
         { 
@@ -2979,7 +3014,7 @@ VOID UseItemCmd(PSPAWNINFO pChar, PCHAR szLine)
 		if(IsNumber(szSlot1)) {
 			cmdUseItem(pChar,szLine);
 		} else {
-			if(PCONTENTS pItem = FindItemByName(szSlot1)) {
+			if(PCONTENTS pItem = FindItemByName(szSlot1,1)) {
 				CHAR szTemp[32] = {0};
 				sprintf_s(szTemp,"%d %d",pItem->ItemSlot,pItem->ItemSlot2);
 				cmdUseItem(pChar,szTemp);
@@ -3420,5 +3455,48 @@ VOID Echo(PSPAWNINFO pChar, PCHAR szLine)
 VOID LootAll(PSPAWNINFO pChar, PCHAR szLine)
 {
 	pLootWnd->LootAll(1);
+}
+
+BOOL CALLBACK EnumWindowsProc(HWND hwnd,LPARAM lParam)
+{
+	DWORD procid = 0;
+	GetWindowThreadProcessId(hwnd,&procid);
+	if(procid==*(LPARAM *)lParam) {
+		*(LPARAM *)lParam = (LPARAM)hwnd;
+		return FALSE;
+	}
+	return TRUE;
+}
+
+// ***************************************************************************
+// Function:    SetWinTitle
+// Description: Our '/setwintitle' command
+//              Set the Window Title
+// Usage:       /setwintitle <something something>
+// ***************************************************************************
+VOID SetWinTitle(PSPAWNINFO pChar, PCHAR szLine)
+{
+	DWORD lReturn = GetCurrentProcessId();
+	DWORD pid = lReturn;
+	BOOL ret = EnumWindows(EnumWindowsProc,(LPARAM)&lReturn);
+	if(lReturn!=pid) {
+		if(szLine && szLine[0]!='\0') {
+			SetWindowText((HWND)lReturn,szLine);
+		}
+	}
+}
+VOID GetWinTitle(PSPAWNINFO pChar, PCHAR szLine)
+{
+	BOOL bHide = atoi(szLine);
+	szLine[0] = '\0';
+	DWORD lReturn = GetCurrentProcessId();
+	DWORD pid = lReturn;
+	BOOL ret = EnumWindows(EnumWindowsProc,(LPARAM)&lReturn);
+	if(lReturn!=pid) {
+		if(GetWindowText((HWND)lReturn,szLine,255) && szLine[0]!='\0') {
+			if(!bHide)
+				WriteChatf("Window Title: \ay%s\ax",szLine);
+		}
+	}
 }
 #endif

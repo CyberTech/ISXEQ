@@ -391,7 +391,7 @@ EQLIB_API DWORD EQGetTime();
 
 /* UTILITIES */
 EQLIB_API VOID ConvertCR(PCHAR Text);
-EQLIB_API VOID DrawHUDText(PCHAR Text, DWORD X, DWORD Y, DWORD Argb, DWORD Size);
+EQLIB_API VOID DrawHUDText(PCHAR Text, DWORD X, DWORD Y, DWORD Argb, DWORD Font);
 EQLIB_API VOID FixStringTable();
 EQLIB_API VOID DebugSpew(PCHAR szFormat, ...);
 EQLIB_API VOID DebugSpewAlways(PCHAR szFormat, ...);
@@ -433,6 +433,10 @@ EQLIB_API int GetLanguageIDByName(PCHAR szName);
 EQLIB_API int GetCurrencyIDByName(PCHAR szName);
 EQLIB_API PCHAR GetSpellNameByID(LONG dwSpellID);
 EQLIB_API PSPELL GetSpellByName(PCHAR szName);
+EQLIB_API DWORD GetSpellRankByName(PCHAR SpellName);
+EQLIB_API VOID RemoveBuff(PSPAWNINFO pChar, PCHAR szLine);
+EQLIB_API VOID MakeMeVisible(PSPAWNINFO pChar, PCHAR szLine);
+
 namespace EQData {
 EQLIB_API struct _ITEMINFO *GetItemFromContents(struct _CONTENTS *c);
 };
@@ -472,8 +476,9 @@ EQLIB_API VOID SendEQMessage(DWORD PacketType, PVOID pData, DWORD Length);
 EQLIB_API PCHAR GetLoginName();
 EQLIB_API FLOAT DistanceToPoint(PSPAWNINFO pSpawn, FLOAT xLoc, FLOAT yLoc);
 EQLIB_API PCHAR ShowSpellSlotInfo(PSPELL pSpell, PCHAR szBuffer);
+EQLIB_API PCHAR ParseSpellEffect(PSPELL pSpell, int i, PCHAR szBuffer, LONG level=100);
 EQLIB_API VOID SlotValueCalculate(PCHAR szBuff, PSPELL pSpell, int i, double mp=1.0);
-EQLIB_API LONG CalcValue(LONG calc, LONG base, LONG max, LONG tick, LONG level=MAX_PC_LEVEL);
+EQLIB_API LONG CalcValue(LONG calc, LONG base, LONG max, LONG tick, LONG minlevel=MAX_PC_LEVEL, LONG level=MAX_PC_LEVEL);
 EQLIB_API PCHAR GetSpellEffectName(LONG EffectID, PCHAR szBuffer);
 EQLIB_API VOID GetGameDate(int* Month, int* Day, int* Year);
 EQLIB_API VOID GetGameTime(int* Hour, int* Minute, int* Night);
@@ -533,8 +538,8 @@ LEGACY_API VOID ParseSearchSpawn(int BeginInclusive, int EndExclusive,char *argv
 #endif
 EQLIB_API PCHAR FormatSearchSpawn(PCHAR Buffer, PSEARCHSPAWN pSearchSpawn);
 EQLIB_API BOOL IsPCNear(PSPAWNINFO pSpawn, FLOAT Radius);
-EQLIB_API BOOL IsInGroup(PSPAWNINFO pSpawn);
-EQLIB_API BOOL IsInRaid(PSPAWNINFO pSpawn);
+EQLIB_API BOOL IsInGroup(PSPAWNINFO pSpawn,BOOL bCorpse = 0);
+EQLIB_API BOOL IsInRaid(PSPAWNINFO pSpawn,BOOL bCorpse = 0);
 EQLIB_API BOOL IsAlert(PSPAWNINFO pChar, PSPAWNINFO pSpawn, DWORD List);
 EQLIB_API PALERT GetAlert(DWORD Id);
 EQLIB_API VOID AddNewAlertList(DWORD Id, PALERT pAlert);
