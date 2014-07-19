@@ -917,7 +917,7 @@ bool MQ2TicksType::GETMEMBER()
 
 bool MQ2TimeStampType::GETMEMBER()
 {
-#define nTimeStamp (VarPtr.Int64)
+#define nTimeStamp (VarPtr.UInt64)
     unsigned long N=MemberMap[Member];
     if (!N)
         return false;
@@ -928,15 +928,15 @@ bool MQ2TimeStampType::GETMEMBER()
     switch((TimeStampMembers)pMember->ID)
     {
     case Hours:
-        Dest.Int64=(nTimeStamp/1000)/3600;
+        Dest.UInt64=(nTimeStamp/1000)/3600;
         Dest.Type=pInt64Type;
         return true;
     case Minutes:
-        Dest.Int64=((nTimeStamp/1000)/60)%60;
+        Dest.UInt64=((nTimeStamp/1000)/60)%60;
         Dest.Type=pInt64Type;
         return true;
     case Seconds:
-        Dest.Int64=(nTimeStamp/1000)%60;
+        Dest.UInt64=(nTimeStamp/1000)%60;
         Dest.Type=pInt64Type;
         return true;
     case TimeHMS:
@@ -969,15 +969,15 @@ bool MQ2TimeStampType::GETMEMBER()
         }
         return true;
     case TotalMinutes:
-        Dest.Int64=(nTimeStamp / 1000) / 60;
+        Dest.UInt64=(nTimeStamp / 1000) / 60;
         Dest.Type=pInt64Type;
         return true;
     case TotalSeconds:
-        Dest.Int64=nTimeStamp / 1000;
+        Dest.UInt64=nTimeStamp / 1000;
         Dest.Type=pInt64Type;
         return true;
     case Ticks:
-		Dest.Int64=((nTimeStamp / 1000) + 5) / 6;
+		Dest.UInt64=((nTimeStamp / 1000) + 5) / 6;
         Dest.Type=pInt64Type;
         return true;
     }        
@@ -3600,7 +3600,7 @@ bool MQ2CharacterType::GETMEMBER()
                 if(GetCharInfo2()->MemorizedSpells[nGem] != 0xFFFFFFFF)
                 {
 					//Dest.DWord = (((GetSpellGemTimer(nGem) / 1000) + 5) / 6);
-					Dest.Int64 = GetSpellGemTimer(nGem);
+					Dest.UInt64 = GetSpellGemTimer(nGem);
                     Dest.Type = pTimeStampType;
                     return true;
                 }
@@ -3616,7 +3616,7 @@ bool MQ2CharacterType::GETMEMBER()
                     if (!stricmp(GETFIRST(),pSpell->Name))
                     {
                        // Dest.DWord = (((GetSpellGemTimer(nGem) / 1000) + 5) / 6);
-                        Dest.Int64 = GetSpellGemTimer(nGem);
+                        Dest.UInt64 = GetSpellGemTimer(nGem);
                         Dest.Type = pTimeStampType;
                         return true;
                     }
