@@ -526,7 +526,12 @@ public:
 
     bool ToString(MQ2VARPTR VarPtr, PCHAR Destination)
     {
-		_i64toa(VarPtr.UInt64,Destination,10);
+		/* Note -- if you get an error compiling this for ISXSDK,  
+			error C2039 : 'UInt64' : is not a member of '_LSVarPtr' 
+			Then add "unsigned __int64 UInt64;" under the Int64 definition in _LSVarPtr and _LSTypeVar in ISXDK\include\LavishScript\LSType.h 
+			This should be fixed in ISXDK35 or higher. 
+		*/ 
+		_i64toa(VarPtr.UInt64,Destination,10); 
         return true;
     }
     bool FromData(MQ2VARPTR &VarPtr, MQ2TYPEVAR &Source)
@@ -647,6 +652,8 @@ public:
         Following=102,
 		Address=103,
 		Inviter=104,
+		MercID=105,
+		ContractorID=106,
 	};
     static enum SpawnMethods
     {
@@ -758,6 +765,8 @@ public:
         TypeMember(Following);
         TypeMember(Address);
         TypeMember(Inviter);
+        TypeMember(MercID);
+        TypeMember(ContractorID);
 
         TypeMethod(Target);
         TypeMethod(Face);
@@ -1010,6 +1019,11 @@ public:
 		AAPointsAssigned=195,
 		AltCurrency=196,
 		ActiveDisc=197,
+		Slowed=198,
+		Rooted=199,
+		Mezzed=200,
+		Snared=201,
+		Hasted=202,
     };
     static enum CharacterMethods
     {
@@ -1206,6 +1220,11 @@ public:
 		TypeMember(ActiveDisc);
 		TypeMember(CountSongs);
 		TypeMember(MaxBuffSlots);
+		TypeMember(Slowed);
+		TypeMember(Rooted);
+		TypeMember(Mezzed);
+		TypeMember(Snared);
+		TypeMember(Hasted);
 		
         TypeMethod(Stand); 
         TypeMethod(Sit); 
@@ -1685,6 +1704,8 @@ public:
 		Address=133,
 		PctPower=134,
 		Prestige=135,
+		FirstFreeSlot=136,
+		SlotsUsedByItem=137,
     };
     static enum ItemMethods
     {
@@ -1826,6 +1847,8 @@ public:
         TypeMember(Address);
         TypeMember(PctPower);
         TypeMember(Prestige);
+		TypeMember(FirstFreeSlot);
+		TypeMember(SlotsUsedByItem);
     }
 
     ~MQ2ItemType()
