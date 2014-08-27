@@ -129,6 +129,7 @@ int CMD_MapFilter(int argc, char *argv[])
                 else 
                 {
                     DWORD R,G,B;
+                    R = G = B = 255;
                     if (argc<6) 
                     {
                         MapFilterOptions[i].Color = MapFilterOptions[i].DefaultColor;
@@ -231,9 +232,9 @@ int CMD_MapHighlight(int argc, char *argv[])
             WriteChatf("Highlight color: %d %d %d",(HighlightColor&0x00FF0000)>>16,(HighlightColor&0x0000FF00)>>8,(HighlightColor&0x000000FF));
             return 0;
         }
-        unsigned char R=atoi(argv[2]);
-        unsigned char G=atoi(argv[3]);
-        unsigned char B=atoi(argv[4]);
+        unsigned char R = (unsigned char)atoi(argv[2]);
+        unsigned char G = (unsigned char)atoi(argv[3]);
+        unsigned char B = (unsigned char)atoi(argv[4]);
         HighlightColor=0xFF000000 | (R << 16) | (G << 8) | (B);
         WriteChatf("Highlight color: %d %d %d",R,G,B);
         return 0;
