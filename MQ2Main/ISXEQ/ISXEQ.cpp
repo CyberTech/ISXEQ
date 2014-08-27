@@ -96,7 +96,7 @@ bool CISXEQ::Initialize(ISInterface *p_ISInterface)
 	char CurrentModule[512]={0};
 	GetModuleFileName(0,CurrentModule,512);
 	char *filename;
-	if (filename=strrchr(CurrentModule,'\\'))
+	if ((filename=strrchr(CurrentModule,'\\')) != NULL)
 		filename++;
 	else
 		filename=CurrentModule;

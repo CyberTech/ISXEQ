@@ -252,7 +252,7 @@ void InitializeMQ2Windows()
         PCSIDLWND pWnd=*ppWnd;
         DWORD count = ((_CXWNDMGR*)pWndMgr)->Count; 
 
-        while(pWnd = *ppWnd)
+        while((pWnd = *ppWnd) != NULL)
         {
             if(count-- == 0) 
                 break;
@@ -714,7 +714,6 @@ bool SendWndClick(PCHAR WindowName, PCHAR ScreenID, PCHAR ClickNotification)
 bool SendListSelect(PCHAR WindowName, PCHAR ScreenID, DWORD Value)
 {
     CXWnd *pWnd=FindMQ2Window(WindowName);
-    CXWnd *pParentWnd = 0;
     if (!pWnd)
     {
         MacroError("Window '%s' not available.",WindowName);
@@ -765,7 +764,6 @@ bool SendListSelect(PCHAR WindowName, PCHAR ScreenID, DWORD Value)
 bool SendComboSelect(PCHAR WindowName, PCHAR ScreenID, DWORD Value)
 {
     CXWnd *pWnd=FindMQ2Window(WindowName);
-    CXWnd *pParentWnd = 0;
     if (!pWnd)
     {
         MacroError("Window '%s' not available.",WindowName);
@@ -1086,7 +1084,6 @@ VOID WndNotify(PSPAWNINFO pChar, PCHAR szLine)
 #else
 int WndNotify(int argc, char *argv[])
 {
-    PSPAWNINFO pChar = (PSPAWNINFO)pLocalPlayer;
 #endif
     unsigned long Data=0;
 #ifndef ISXEQ 
@@ -1226,7 +1223,6 @@ int ItemNotify(int argc, char *argv[])
         szArg3=argv[3];
         szArg4=argv[4];
     }
-    PSPAWNINFO pChar = (PSPAWNINFO)pLocalPlayer;
 #endif
     PCHAR pNotification=&szArg2[0];
     EQINVSLOT *pSlot=NULL;
