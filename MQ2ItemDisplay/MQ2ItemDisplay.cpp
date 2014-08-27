@@ -65,9 +65,9 @@ public:
     int GetDmgBonus (PCXSTR * Str)
     {
         char cTemp[2048];
-        INT dmgbonuspos;
+        size_t dmgbonuspos;
         INT dmgbonus = 0;
-        INT badcharpos;
+        size_t badcharpos;
 
         GetCXStr(*Str, cTemp, sizeof (cTemp));
 
