@@ -467,7 +467,7 @@ int CMD_Where(int argc, char* argv[])
 
    ParseSearchSpawn(1,argc,argv,SearchSpawn);
 
-    if (!(pSpawnClosest = SearchThroughSpawns(&SearchSpawn,pChar))) {
+    if ((pSpawnClosest = SearchThroughSpawns(&SearchSpawn,pChar)) == NULL) {
         sprintf(szMsg,"There were no matches for: %s",FormatSearchSpawn(szArg,&SearchSpawn));
     } else {
         INT Angle = (INT)((atan2f(pChar->X - pSpawnClosest->X, pChar->Y - pSpawnClosest->Y) * 180.0f / PI + 360.0f) / 22.5f + 0.5f) % 16;
@@ -1182,7 +1182,7 @@ int CMD_DoorTarget(int argc, char *argv[])
          return 0;
       }
 
-      ID = atoi(argv[2]);
+      ID = (BYTE)atoi(argv[2]);
       for (Count=0; Count<pDoorTable->NumEntries; Count++) {
          if (pDoorTable->pDoor[Count]->ID == ID) {
             strcpy(DoorEnviroTarget.Name, pDoorTable->pDoor[Count]->Name);
