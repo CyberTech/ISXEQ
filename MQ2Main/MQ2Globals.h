@@ -251,6 +251,7 @@ EQLIB_VAR DWORD *g_ppDrawHandler;
 #define g_pDrawHandler (*g_ppDrawHandler)
 
 EQLIB_VAR PCHAR *EQMappableCommandList;
+EQLIB_VAR PBYTE EQbCommandEnabled;
 EQLIB_VAR DWORD gnNormalEQMappableCommands;
 
 #ifndef ISXEQ
@@ -671,6 +672,7 @@ EQLIB_VAR DWORD __AltTimerReady;
 EQLIB_VAR DWORD __Attack;
 EQLIB_VAR DWORD __Autofire;
 EQLIB_VAR DWORD __BindList;
+EQLIB_VAR DWORD __bCommandEnabled;
 EQLIB_VAR DWORD __Clicks;
 EQLIB_VAR DWORD __CommandList;
 EQLIB_VAR DWORD __CurrentMapLabel;
@@ -1071,6 +1073,7 @@ EQLIB_VAR DWORD CSidlScreenWnd__HandleLButtonUp;
 
 EQLIB_VAR DWORD CSkillMgr__IsAvailable;
 EQLIB_VAR DWORD CSkillMgr__GetSkillCap;
+EQLIB_VAR DWORD CSkillMgr__GetNameToken;
 
 EQLIB_VAR DWORD CSliderWnd__GetValue;
 EQLIB_VAR DWORD CSliderWnd__SetValue;

@@ -1760,6 +1760,14 @@ bool MQ2SpawnType::GETMEMBER()
             return true;
         }
         break;
+	case MercID:
+		Dest.DWord=pSpawn->MercID;
+        Dest.Type=pIntType;
+        return true;
+	case ContractorID:
+		Dest.DWord=pSpawn->ContractorID;
+        Dest.Type=pIntType;
+        return true;
     }
     return false;
 }
@@ -3747,6 +3755,61 @@ bool MQ2CharacterType::GETMEMBER()
 			return true;
 		}
 		break;
+	case Slowed:
+	{
+		int nBuff = -1;
+		if ((nBuff=GetSelfBuffBySPA(11,0))!=-1)//Snared
+        {
+			Dest.Ptr=&GetCharInfo2()->Buff[nBuff];
+            Dest.Type=pBuffType;
+            return true;
+        }
+		break;
+	}
+	case Rooted:
+	{
+		int nBuff = -1;
+		if ((nBuff=GetSelfBuffBySPA(90,0))!=-1)//Root
+        {
+			Dest.Ptr=&GetCharInfo2()->Buff[nBuff];
+            Dest.Type=pBuffType;
+            return true;
+        }
+		break;
+	}
+	case Mezzed:
+	{
+		int nBuff = -1;
+		if ((nBuff=GetSelfBuffBySPA(31,0))!=-1)//Entrall
+        {
+			Dest.Ptr=&GetCharInfo2()->Buff[nBuff];
+            Dest.Type=pBuffType;
+            return true;
+        }
+		break;
+	}
+	case Snared:
+	{
+		int nBuff = -1;
+		if ((nBuff=GetSelfBuffBySPA(3,0))!=-1)//Movement Rate
+        {
+			Dest.Ptr=&GetCharInfo2()->Buff[nBuff];
+            Dest.Type=pBuffType;
+            return true;
+        }
+		break;
+	}
+	case Hasted:
+	{
+		int nBuff = -1;
+		if ((nBuff=GetSelfBuffBySPA(11,1))!=-1)
+        {
+			Dest.Ptr=&GetCharInfo2()->Buff[nBuff];
+            Dest.Type=pBuffType;
+            return true;
+        }
+		break;
+	}
 	}
     return false;
 #undef pChar
@@ -5488,6 +5551,58 @@ bool MQ2ItemType::GETMEMBER()
         Dest.DWord=GetItemFromContents(pItem)->Prestige;
         Dest.Type=pBoolType;
         return true;
+	case FirstFreeSlot:
+        if (GetItemFromContents(pItem)->Type == ITEMTYPE_PACK)
+        {
+            Dest.DWord=0;
+            if (pItem->pContentsArray) {
+                for (unsigned long N=0 ; N < GetItemFromContents(pItem)->Slots ; N++) {
+                    if (!pItem->pContentsArray->Contents[N]) {
+                        Dest.DWord = N+1;
+						break;
+					}
+                }
+            }
+            Dest.Type=pIntType;
+            return true;
+        }
+        return false;
+	case SlotsUsedByItem:
+		PCONTENTS pthecontent = ((PCONTENTS)VarPtr.Ptr);
+		if (GetItemFromContents(pthecontent)->Type == ITEMTYPE_PACK)
+		{
+			Dest.DWord=0;
+			BOOL bExact=FALSE;
+			PCHAR pName=GETFIRST();
+			if (*pName=='=')
+			{
+				bExact=TRUE;
+				pName++;
+			}
+			strlwr(pName);
+			if (pthecontent->pContentsArray) {
+				for (unsigned long N=0 ; N < GetItemFromContents(pthecontent)->Slots ; N++) {
+					if (pthecontent->pContentsArray->Contents[N]) {
+						if(PITEMINFO bagitem = GetItemFromContents(pthecontent->pContentsArray->Contents[N])) {
+							strcpy_s(DataTypeTemp, bagitem->Name);
+							strlwr(DataTypeTemp);
+							if(bExact) {
+								if(!_stricmp(DataTypeTemp,pName)) {
+									Dest.DWord++;
+								}
+							} else {
+								if(strstr(DataTypeTemp,pName)) {
+									Dest.DWord++;
+								}
+							}
+						}
+					}
+				}
+				Dest.Type=pIntType;
+				return true;
+			}
+		}
+        return false;
     }
     return false;
 #undef pItem
@@ -8492,6 +8607,11 @@ bool MQ2TargetType::GETMEMBER()
 		break;
 	case Malod:
 	case Tashed:
+		if ((Dest.Int=GetTargetBuffBySubCat("Resist Debuffs"))!=-1)
+        {
+            Dest.Type=pTargetBuffType;
+            return true;
+        }
 		break;
 	case Snared:
 		if ((Dest.Int=GetTargetBuffBySPA(3,0))!=-1)//Movement Rate

@@ -29,8 +29,8 @@ PreSetup("MQ2ItemDisplay");
 // thanks, finally, SOE. we'll leave this here for a while and eventually remove it
 #define DISABLE_TOOLTIP_TIMERS
 
-void Comment(PSPAWNINFO pChar, PCHAR szLine); 
-#ifndef ISXEQ // TODO If we want GearScore under IS, this needs ported to ISXEQItemDisplay
+void Comment(PSPAWNINFO pChar, PCHAR szLine);
+#ifndef ISXEQ // TODO If we want GearScore under IS, this needs ported to ISXEQItemDisplay 
 void DoGearScoreUserCommand(PSPAWNINFO pChar, PCHAR szLine);
 void AddGearScores(PCONTENTS pSlot,ITEMINFO *pItem,char *out,char *br);
 #endif
@@ -1461,10 +1461,10 @@ void AddGearScores(PCONTENTS pSlot,ITEMINFO *pItem,char *out,char *br)
 		strcat(out,br);
 	}
 	// Trap the 3x call back stuff. 
-	if (GetTickCount642()-lastTick > 1000 && ReportBestStr[0]!=0 && ReportChannel[0] == '/')
+	if (MQGetTickCount64()-lastTick > 1000 && ReportBestStr[0]!=0 && ReportChannel[0] == '/')
 	{
 		char szCmd[MAX_STRING];
-		lastTick = GetTickCount642();
+		lastTick = MQGetTickCount64();
 		sprintf(szCmd,"%s %s",ReportChannel,ReportBestStr);
 		EzCommand(szCmd);
 		//WriteChatf("AddGearScores::Reporting Cmd = %s",szCmd);

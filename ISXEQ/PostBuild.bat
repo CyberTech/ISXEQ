@@ -68,3 +68,4 @@ set SYMBOLCACHE=N:\SymbolCache\Personal
 		exit /B 1
 	)
 	exit /B 0
+

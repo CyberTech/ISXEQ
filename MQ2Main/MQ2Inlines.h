@@ -470,6 +470,7 @@ inline unsigned __int64 MQGetTickCount64(void)
     typedef unsigned long long (WINAPI *fGetTickCount64)(VOID);
     static fGetTickCount64 pGetTickCount64 = NULL;
 
+
     if (pGetTickCount64 == NULL)
     {
         if ((pGetTickCount64 = reinterpret_cast<fGetTickCount64>(::GetProcAddress(::GetModuleHandleA("kernel32.dll"), "GetTickCount64"))) == NULL)
@@ -478,17 +479,34 @@ inline unsigned __int64 MQGetTickCount64(void)
             pGetTickCount64 = reinterpret_cast<fGetTickCount64>(&MQGetTickCount64);
         }
     }
-
     if (pGetTickCount64 != reinterpret_cast<fGetTickCount64>(&MQGetTickCount64))
     {
         return pGetTickCount64();
     }
-
     return ::GetTickCount(); // Fall back to GetTickCount which always exists
 }
-
 // Deprecated: Forwards to MQGetTickCount64()
 inline unsigned __int64 GetTickCount642(void)
 {
     return MQGetTickCount64();
 }
+/*
+need to figure out why this fails in xp and the above doesn't - eqmule
+static inline ULONGLONG GetTickCount64(void)
+{
+	static int once = 1;
+    static ULONGLONG (WINAPI *pGetTickCount64)(void);
+    if (once) {
+		//we dont want to call this one over and over thats just stupid, so once is enough - eqmule
+        pGetTickCount64 = (ULONGLONG (WINAPI *)(void))GetProcAddress(GetModuleHandle("KERNEL32.DLL"), "GetTickCount64");
+		if (!pGetTickCount64)
+			pGetTickCount64 = (ULONGLONG (WINAPI *)(void))GetProcAddress(GetModuleHandle("KERNEL32.DLL"), "GetTickCount");
+		if (!pGetTickCount64) {
+			//MessageBox(NULL,"CRAP","What kind of OS are you running anyway?",MB_OK);
+			return (ULONGLONG)GetTickCount();
+		}
+		once = 0;
+    }
+    return pGetTickCount64();
+}
+*/
