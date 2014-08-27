@@ -336,7 +336,6 @@ int CMD_Target(int argc, char* argv[])
     ClearSearchSpawn(&SearchSpawn);
     CHAR szMsg[MAX_STRING] = {0};
     BOOL DidTarget = FALSE;
-    BOOL bArg = TRUE;
 
     bRunNextCommand = TRUE;
     for(int i=1;i<argc;i++)
@@ -605,7 +604,7 @@ int CMD_MemSpell(int argc, char *argv[])
    if (!ppSpellBookWnd) return -1;
    DWORD Favorite = (DWORD)&MemSpellFavorite;
    DWORD sp;
-   WORD Gem = -1;
+   int Gem = -1;
    PCHARINFO pCharInfo = NULL;
    if (!pSpellBookWnd) return -1;
    if (NULL == (pCharInfo = GetCharInfo())) return -1;
@@ -644,75 +643,76 @@ int CMD_MemSpell(int argc, char *argv[])
 //              Does (or lists) your abilities 
 // Usage:       /doability [list|ability|#] 
 // *************************************************************************** 
-int CMD_DoAbility(int argc, char *argv[]) 
-{ 
-	if (argc<2)
-	{
-		printf("Syntax: %s list|<ability>",argv[0]);
-		return 0;
-	}
+int CMD_DoAbility(int argc, char *argv[])
+{
+  if (argc < 2)
+  {
+    printf("Syntax: %s list|<ability>", argv[0]);
+    return 0;
+  }
 
-    DWORD Index, DoIndex = 0xFFFFFFFF;
+  DWORD Index;
 
-    if (!stricmp(argv[1],"list") || !stricmp(argv[1], "-list")) 
-	{
-        WriteChatColor("Abilities:",USERCOLOR_DEFAULT);
-        for (Index=4;Index<10;Index++) {
-            if (EQADDR_DOABILITYLIST[Index]==0xFFFFFFFF)
-			{
-                WriteChatf("%d. <Empty>",Index-3);
-            } 
-			else if (szSkills[EQADDR_DOABILITYLIST[Index]]) 
-			{
-                WriteChatf("%d. %s",Index-3,szSkills[EQADDR_DOABILITYLIST[Index]]);
-            } 
-			else 
-			{
-                WriteChatf("%d. *Unknown%d",Index-3,EQADDR_DOABILITYLIST[Index]);
-            }
-        }
-        WriteChatColor("Combat Skills:");
-        for (Index=0;Index<4;Index++) 
-		{
-            if (EQADDR_DOABILITYLIST[Index]==0xFFFFFFFF) 
-			{
-                WriteChatf("%d. <Empty>",Index+7);
-            } 
-			else if (szSkills[EQADDR_DOABILITYLIST[Index]]) 
-			{
-                WriteChatf("%d. %s",Index+7,szSkills[EQADDR_DOABILITYLIST[Index]]);
-            } 
-			else 
-			{
-                WriteChatf("%d. *Unknown%d",Index+7,EQADDR_DOABILITYLIST[Index]);
-            }
-        }
-        WriteChatColor("Combat Abiilities:",USERCOLOR_DEFAULT);
-        for (Index=10;Index<18;Index++) 
-		{
-            if (EQADDR_DOABILITYLIST[Index]==0xFFFFFFFF) 
-			{
-                WriteChatf("%d. <Empty>",Index+1);
-			} 
-			else if (EQADDR_DOABILITYLIST[Index] > 132) 
-			{ // highest number we have defined so far
-				WriteChatf("%d. *Unknown%d",Index+1,EQADDR_DOABILITYLIST[Index]);
-			} 
-			else if (szSkills[EQADDR_DOABILITYLIST[Index]]) 
-			{
-				WriteChatf("%d. %s",Index+1,szSkills[EQADDR_DOABILITYLIST[Index]]);
-			} 
-			else 
-			{
-				WriteChatf("%d. *Unknown%d",Index+1,EQADDR_DOABILITYLIST[Index]);
-			}
-        }
-        return 0;
+  if (!stricmp(argv[1], "list") || !stricmp(argv[1], "-list"))
+  {
+    WriteChatColor("Abilities:", USERCOLOR_DEFAULT);
+    for (Index = 4; Index < 10; Index++)
+    {
+      if (EQADDR_DOABILITYLIST[Index] == 0xFFFFFFFF)
+      {
+        WriteChatf("%d. <Empty>", Index - 3);
+      }
+      else if (szSkills[EQADDR_DOABILITYLIST[Index]])
+      {
+        WriteChatf("%d. %s", Index - 3, szSkills[EQADDR_DOABILITYLIST[Index]]);
+      }
+      else
+      {
+        WriteChatf("%d. *Unknown%d", Index - 3, EQADDR_DOABILITYLIST[Index]);
+      }
     }
+    WriteChatColor("Combat Skills:");
+    for (Index = 0; Index < 4; Index++)
+    {
+      if (EQADDR_DOABILITYLIST[Index] == 0xFFFFFFFF)
+      {
+        WriteChatf("%d. <Empty>", Index + 7);
+      }
+      else if (szSkills[EQADDR_DOABILITYLIST[Index]])
+      {
+        WriteChatf("%d. %s", Index + 7, szSkills[EQADDR_DOABILITYLIST[Index]]);
+      }
+      else
+      {
+        WriteChatf("%d. *Unknown%d", Index + 7, EQADDR_DOABILITYLIST[Index]);
+      }
+    }
+    WriteChatColor("Combat Abiilities:", USERCOLOR_DEFAULT);
+    for (Index = 10; Index < 18; Index++)
+    {
+      if (EQADDR_DOABILITYLIST[Index] == 0xFFFFFFFF)
+      {
+        WriteChatf("%d. <Empty>", Index + 1);
+      }
+      else if (EQADDR_DOABILITYLIST[Index] > 132)
+      { // highest number we have defined so far
+        WriteChatf("%d. *Unknown%d", Index + 1, EQADDR_DOABILITYLIST[Index]);
+      }
+      else if (szSkills[EQADDR_DOABILITYLIST[Index]])
+      {
+        WriteChatf("%d. %s", Index + 1, szSkills[EQADDR_DOABILITYLIST[Index]]);
+      }
+      else
+      {
+        WriteChatf("%d. *Unknown%d", Index + 1, EQADDR_DOABILITYLIST[Index]);
+      }
+    }
+    return 0;
+  }
 
-   UseAbility(argv[1]);
+  UseAbility(argv[1]);
 
-   return 0;
+  return 0;
 }
 /*
 int CMD_DoAbility(int argc, char *argv[]) 
@@ -845,14 +845,12 @@ int CMD_EQFace(int argc, char *argv[])
     CHAR szMsg[MAX_STRING] = {0};
     CHAR szName[MAX_STRING] = {0};
     CHAR szArg[MAX_STRING] = {0};
-   PCHAR pszArg = NULL;
-    BOOL bArg = TRUE;
+    PCHAR pszArg = NULL;
     BOOL bOtherArgs = FALSE;
     BOOL Away = FALSE;
     BOOL Predict = FALSE;
     BOOL Fast = FALSE;
     BOOL Look = TRUE;
-    BOOL Parsing = TRUE;
     DOUBLE Distance;
 
    for(int qq=1; qq<argc; qq++)
@@ -1174,7 +1172,7 @@ int CMD_DoorTarget(int argc, char *argv[])
    CHAR szBuffer[MAX_STRING] = {0};
    CHAR szSearch[MAX_STRING] = {0};
    FLOAT cDistance = 100000.0f;
-   BYTE ID = -1;
+   BYTE ID = 0;
    ZeroMemory(&DoorEnviroTarget,sizeof(DoorEnviroTarget));
    pDoorTarget = NULL;
 
