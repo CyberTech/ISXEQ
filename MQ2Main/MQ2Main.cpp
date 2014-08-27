@@ -82,175 +82,184 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 // ***************************************************************************
 BOOL ParseINIFile(PCHAR lpINIPath)
 {
-    CHAR Filename[MAX_STRING] = {0};
-    CHAR MQChatSettings[MAX_STRING] = {0};
-    CHAR CustomSettings[MAX_STRING] = {0};
-    CHAR ClientINI[MAX_STRING] = {0};
-    CHAR szBuffer[MAX_STRING] = {0};
-	CHAR szBuffer2[MAX_STRING] = {0};
-    CHAR ClientName[MAX_STRING] = {0};
-    CHAR FilterList[MAX_STRING*10] = {0};
+    CHAR Filename[MAX_STRING] = { 0 };
+    CHAR CustomSettings[MAX_STRING] = { 0 };
+    CHAR ClientINI[MAX_STRING] = { 0 };
+    CHAR szBuffer[MAX_STRING] = { 0 };
+    CHAR szBuffer2[MAX_STRING] = { 0 };
+    CHAR FilterList[MAX_STRING * 10] = { 0 };
     GetEQPath(gszEQPath);
 
 
-    sprintf(Filename,"%s\\MacroQuest.ini",lpINIPath);
-    sprintf(ClientINI,"%s\\eqgame.ini",lpINIPath);
-    strcpy(gszINIFilename,Filename);
+    sprintf(Filename, "%s\\MacroQuest.ini", lpINIPath);
+    sprintf(ClientINI, "%s\\eqgame.ini", lpINIPath);
+    strcpy(gszINIFilename, Filename);
 
-    DebugSpew("Expected Client version: %s %s",__ExpectedVersionDate,__ExpectedVersionTime);
-    DebugSpew("    Real Client version: %s %s",__ActualVersionDate,__ActualVersionTime);
+    DebugSpew("Expected Client version: %s %s", __ExpectedVersionDate, __ExpectedVersionTime);
+    DebugSpew("    Real Client version: %s %s", __ActualVersionDate, __ActualVersionTime);
 
     // note: __ClientOverride is always #defined as 1 or 0
 #if (!__ClientOverride)
-    if (strncmp(__ExpectedVersionDate,(const char *)__ActualVersionDate,strlen(__ExpectedVersionDate)) ||
-        strncmp(__ExpectedVersionTime,(const char *)__ActualVersionTime,strlen(__ExpectedVersionTime)))
+    if (strncmp(__ExpectedVersionDate, (const char *)__ActualVersionDate, strlen(__ExpectedVersionDate)) ||
+        strncmp(__ExpectedVersionTime, (const char *)__ActualVersionTime, strlen(__ExpectedVersionTime)))
     {
-        MessageBox(NULL,"Incorrect client version","MacroQuest",MB_OK);
+        MessageBox(NULL, "Incorrect client version", "MacroQuest", MB_OK);
         return FALSE;
     }
 #endif
 
-    gFilterSkillsAll = 0!=GetPrivateProfileInt("MacroQuest","FilterSkills",0,Filename);
-    gFilterSkillsIncrease = 2==GetPrivateProfileInt("MacroQuest","FilterSkills",0,Filename);
-    gFilterDebug  = 1==GetPrivateProfileInt("MacroQuest","FilterDebug",0,Filename);
-    gFilterMQ2DataErrors  = 1==GetPrivateProfileInt("MacroQuest","FilterMQ2Data",0,Filename);
-    gFilterTarget = 1==GetPrivateProfileInt("MacroQuest","FilterTarget",0,Filename);
-    gFilterMoney  = 1==GetPrivateProfileInt("MacroQuest","FilterMoney",0,Filename);
-    gFilterFood   = 1==GetPrivateProfileInt("MacroQuest","FilterFood",0,Filename);
-    gFilterMacro  = GetPrivateProfileInt("MacroQuest","FilterMacro",0,Filename);
-    gFilterEncumber=1==GetPrivateProfileInt("MacroQuest","FilterEncumber",0,Filename);
-    gFilterCustom = 1==GetPrivateProfileInt("MacroQuest","FilterCustom",1,Filename);
-    gSpewToFile   = 1==GetPrivateProfileInt("MacroQuest","DebugSpewToFile",0,Filename);
-    gMQPauseOnChat= 1==GetPrivateProfileInt("MacroQuest","MQPauseOnChat",0,Filename);
-    gKeepKeys     = 1==GetPrivateProfileInt("MacroQuest","KeepKeys",0,Filename);
-    bLaxColor=1==GetPrivateProfileInt("MacroQuest","LaxColor",0,Filename);
-    bAllErrorsDumpStack = 1==GetPrivateProfileInt("MacroQuest","AllErrorsDumpStack",1,Filename);
-    bAllErrorsFatal = 1==GetPrivateProfileInt("MacroQuest","AllErrorsFatal",0,Filename);
-    gbMQ2LoadingMsg = 1==GetPrivateProfileInt("MacroQuest","MQ2LoadingMsg",1,Filename);
-    gbExactSearchCleanNames = 1==GetPrivateProfileInt("MacroQuest","ExactSearchCleanNames",0,Filename);
-    gbTimeStampChat = 1==GetPrivateProfileInt("MacroQuest","TimeStampChat",0,Filename);
-    gbBeepOnTells = 1==GetPrivateProfileInt("MacroQuest","BeepOnTells",0,Filename);
-	gCreateMQ2NewsWindow = 1==GetPrivateProfileInt("MacroQuest","CreateMQ2NewsWindow",1,Filename);
-    
-    GetPrivateProfileString("MacroQuest","HUDMode","UnderUI",CustomSettings,MAX_STRING,Filename);
-    if (!stricmp(CustomSettings,"normal")) {
-        gbAlwaysDrawMQHUD=false;
-        gbHUDUnderUI=false;
+    gFilterSkillsAll = 0 != GetPrivateProfileInt("MacroQuest", "FilterSkills", 0, Filename);
+    gFilterSkillsIncrease = 2 == GetPrivateProfileInt("MacroQuest", "FilterSkills", 0, Filename);
+    gFilterDebug = 1 == GetPrivateProfileInt("MacroQuest", "FilterDebug", 0, Filename);
+    gFilterMQ2DataErrors = 1 == GetPrivateProfileInt("MacroQuest", "FilterMQ2Data", 0, Filename);
+    gFilterTarget = 1 == GetPrivateProfileInt("MacroQuest", "FilterTarget", 0, Filename);
+    gFilterMoney = 1 == GetPrivateProfileInt("MacroQuest", "FilterMoney", 0, Filename);
+    gFilterFood = 1 == GetPrivateProfileInt("MacroQuest", "FilterFood", 0, Filename);
+    gFilterMacro = GetPrivateProfileInt("MacroQuest", "FilterMacro", 0, Filename);
+    gFilterEncumber = 1 == GetPrivateProfileInt("MacroQuest", "FilterEncumber", 0, Filename);
+    gFilterCustom = 1 == GetPrivateProfileInt("MacroQuest", "FilterCustom", 1, Filename);
+    gSpewToFile = 1 == GetPrivateProfileInt("MacroQuest", "DebugSpewToFile", 0, Filename);
+    gMQPauseOnChat = 1 == GetPrivateProfileInt("MacroQuest", "MQPauseOnChat", 0, Filename);
+    gKeepKeys = 1 == GetPrivateProfileInt("MacroQuest", "KeepKeys", 0, Filename);
+    bLaxColor = 1 == GetPrivateProfileInt("MacroQuest", "LaxColor", 0, Filename);
+    bAllErrorsDumpStack = 1 == GetPrivateProfileInt("MacroQuest", "AllErrorsDumpStack", 1, Filename);
+    bAllErrorsFatal = 1 == GetPrivateProfileInt("MacroQuest", "AllErrorsFatal", 0, Filename);
+    gbMQ2LoadingMsg = 1 == GetPrivateProfileInt("MacroQuest", "MQ2LoadingMsg", 1, Filename);
+    gbExactSearchCleanNames = 1 == GetPrivateProfileInt("MacroQuest", "ExactSearchCleanNames", 0, Filename);
+    gbTimeStampChat = 1 == GetPrivateProfileInt("MacroQuest", "TimeStampChat", 0, Filename);
+    gbBeepOnTells = 1 == GetPrivateProfileInt("MacroQuest", "BeepOnTells", 0, Filename);
+    gCreateMQ2NewsWindow = 1 == GetPrivateProfileInt("MacroQuest", "CreateMQ2NewsWindow", 1, Filename);
+
+    GetPrivateProfileString("MacroQuest", "HUDMode", "UnderUI", CustomSettings, MAX_STRING, Filename);
+    if (!stricmp(CustomSettings, "normal"))
+    {
+        gbAlwaysDrawMQHUD = false;
+        gbHUDUnderUI = false;
+    }
+    else if (!stricmp(CustomSettings, "underui"))
+    {
+        gbHUDUnderUI = true;
+        gbAlwaysDrawMQHUD = false;
+    }
+    else if (!stricmp(CustomSettings, "always"))
+    {
+        gbHUDUnderUI = true;
+        gbAlwaysDrawMQHUD = true;
+    }
+
+    GetPrivateProfileString("Captions", "NPC", gszSpawnNPCName, gszSpawnNPCName, MAX_STRING, Filename);
+    GetPrivateProfileString("Captions", "Player1", gszSpawnPlayerName[1], gszSpawnPlayerName[1], MAX_STRING, Filename);
+    GetPrivateProfileString("Captions", "Player2", gszSpawnPlayerName[2], gszSpawnPlayerName[2], MAX_STRING, Filename);
+    GetPrivateProfileString("Captions", "Player3", gszSpawnPlayerName[3], gszSpawnPlayerName[3], MAX_STRING, Filename);
+    GetPrivateProfileString("Captions", "Player4", gszSpawnPlayerName[4], gszSpawnPlayerName[4], MAX_STRING, Filename);
+    GetPrivateProfileString("Captions", "Player5", gszSpawnPlayerName[5], gszSpawnPlayerName[5], MAX_STRING, Filename);
+    GetPrivateProfileString("Captions", "Player6", gszSpawnPlayerName[6], gszSpawnPlayerName[6], MAX_STRING, Filename);
+
+    GetPrivateProfileString("Captions", "Corpse", gszSpawnCorpseName, gszSpawnCorpseName, MAX_STRING, Filename);
+    GetPrivateProfileString("Captions", "Pet", gszSpawnPetName, gszSpawnPetName, MAX_STRING, Filename);
+    gMaxSpawnCaptions = GetPrivateProfileInt("Captions", "Update", gMaxSpawnCaptions, Filename);
+    gMQCaptions = 1 == GetPrivateProfileInt("Captions", "MQCaptions", 1, Filename);
+    ConvertCR(gszSpawnNPCName);
+    ConvertCR(gszSpawnPlayerName[1]);
+    ConvertCR(gszSpawnPlayerName[2]);
+    ConvertCR(gszSpawnPlayerName[3]);
+    ConvertCR(gszSpawnPlayerName[4]);
+    ConvertCR(gszSpawnPlayerName[5]);
+    ConvertCR(gszSpawnPlayerName[6]);
+    ConvertCR(gszSpawnCorpseName);
+    ConvertCR(gszSpawnPetName);
+
+    gFilterSWho.Lastname = GetPrivateProfileInt("SWho Filter", "Lastname", 1, Filename);
+    gFilterSWho.Class = GetPrivateProfileInt("SWho Filter", "Class", 1, Filename);
+    gFilterSWho.Race = GetPrivateProfileInt("SWho Filter", "Race", 1, Filename);
+    gFilterSWho.Level = GetPrivateProfileInt("SWho Filter", "Level", 1, Filename);
+    gFilterSWho.GM = GetPrivateProfileInt("SWho Filter", "GM", 1, Filename);
+    gFilterSWho.Guild = GetPrivateProfileInt("SWho Filter", "Guild", 1, Filename);
+    gFilterSWho.Sneak = GetPrivateProfileInt("SWho Filter", "Sneak", 1, Filename);
+    gFilterSWho.LD = GetPrivateProfileInt("SWho Filter", "LD", 1, Filename);
+    gFilterSWho.LFG = GetPrivateProfileInt("SWho Filter", "LFG", 1, Filename);
+    gFilterSWho.NPCTag = GetPrivateProfileInt("SWho Filter", "NPCTag", 1, Filename);
+    gFilterSWho.Trader = GetPrivateProfileInt("SWho Filter", "Trader", 1, Filename);
+    gFilterSWho.AFK = GetPrivateProfileInt("SWho Filter", "AFK", 1, Filename);
+    gFilterSWho.Anon = GetPrivateProfileInt("SWho Filter", "Anon", 1, Filename);
+    gFilterSWho.Distance = GetPrivateProfileInt("SWho Filter", "Distance", 1, Filename);
+    gFilterSWho.Light = GetPrivateProfileInt("SWho Filter", "Light", 0, Filename);
+    gFilterSWho.Body = GetPrivateProfileInt("SWho Filter", "Body", 0, Filename);
+    gFilterSWho.SpawnID = GetPrivateProfileInt("SWho Filter", "SpawnID", 0, Filename);
+    gFilterSWho.Holding = GetPrivateProfileInt("SWho Filter", "Holding", 0, Filename);
+    gFilterSWho.ConColor = GetPrivateProfileInt("SWho Filter", "ConColor", 0, Filename);
+    gFilterSWho.Invisible = GetPrivateProfileInt("SWho Filter", "Invisible", 0, Filename);
+
+    GetPrivateProfileString("MacroQuest", "MacroPath", ".", szBuffer, MAX_STRING, Filename);
+    if (szBuffer[0] == '.')
+    {
+        sprintf(gszMacroPath, "%s%s", lpINIPath, szBuffer + 1);
     }
     else
-        if (!stricmp(CustomSettings,"underui"))
+    {
+        strcat(gszMacroPath, szBuffer);
+    }
+
+
+    GetPrivateProfileString("MacroQuest", "LogPath", ".", szBuffer, MAX_STRING, Filename);
+    if (szBuffer[0] == '.')
+    {
+        sprintf(gszLogPath, "%s%s", lpINIPath, szBuffer + 1);
+    }
+    else
+    {
+        strcat(gszLogPath, szBuffer);
+    }
+
+    DefaultFilters();
+    GetPrivateProfileString("Filter Names", NULL, "", FilterList, MAX_STRING * 10, Filename);
+    PCHAR pFilterList = FilterList;
+    while (pFilterList[0] != 0)
+    {
+        GetPrivateProfileString("Filter Names", pFilterList, "", szBuffer, MAX_STRING, Filename);
+        if (szBuffer[0] != 0 && strcmp(szBuffer, "NOBODY"))
         {
-            gbHUDUnderUI=true;
-            gbAlwaysDrawMQHUD=false;
+            AddFilter(szBuffer, -1, &gFilterCustom);
         }
-        else
-            if (!stricmp(CustomSettings,"always"))
+        pFilterList += strlen(pFilterList) + 1;
+    }
+
+    sprintf(Filename, "%s\\ItemDB.txt", lpINIPath);
+    FILE *fDB = fopen(Filename, "rt");
+    strcpy(gszItemDB, Filename);
+    char *pDest = 0;
+    if (fDB)
+    {
+        fgets(szBuffer, MAX_STRING, fDB);
+        while ((!feof(fDB)) && (strstr(szBuffer, "\t")))
+        {
+            PITEMDB Item = (PITEMDB)malloc(sizeof(ITEMDB));
+            Item->pNext = gItemDB;
+            Item->ID = atoi(szBuffer);
+            strcpy(szBuffer2, strstr(szBuffer, "\t") + 1);
+            Item->StackSize = atoi(szBuffer2);
+            if ((pDest = strstr(szBuffer2, "\t")) != NULL)
             {
-                gbHUDUnderUI=true;
-                gbAlwaysDrawMQHUD=true;
+                strcpy(Item->szName, pDest + 1);
+                Item->szName[strstr(Item->szName, "\n") - Item->szName] = 0;
+                gItemDB = Item;
+                fgets(szBuffer, MAX_STRING, fDB);
             }
-
-
-
-            GetPrivateProfileString("Captions","NPC",gszSpawnNPCName,gszSpawnNPCName,MAX_STRING,Filename);
-            GetPrivateProfileString("Captions","Player1",gszSpawnPlayerName[1],gszSpawnPlayerName[1],MAX_STRING,Filename);
-            GetPrivateProfileString("Captions","Player2",gszSpawnPlayerName[2],gszSpawnPlayerName[2],MAX_STRING,Filename);
-            GetPrivateProfileString("Captions","Player3",gszSpawnPlayerName[3],gszSpawnPlayerName[3],MAX_STRING,Filename);
-            GetPrivateProfileString("Captions","Player4",gszSpawnPlayerName[4],gszSpawnPlayerName[4],MAX_STRING,Filename);
-            GetPrivateProfileString("Captions","Player5",gszSpawnPlayerName[5],gszSpawnPlayerName[5],MAX_STRING,Filename);
-            GetPrivateProfileString("Captions","Player6",gszSpawnPlayerName[6],gszSpawnPlayerName[6],MAX_STRING,Filename);
-
-            GetPrivateProfileString("Captions","Corpse",gszSpawnCorpseName,gszSpawnCorpseName,MAX_STRING,Filename);
-            GetPrivateProfileString("Captions","Pet",gszSpawnPetName,gszSpawnPetName,MAX_STRING,Filename);
-            gMaxSpawnCaptions=GetPrivateProfileInt("Captions","Update",gMaxSpawnCaptions,Filename);
-            gMQCaptions = 1==GetPrivateProfileInt("Captions","MQCaptions",1,Filename); 
-            ConvertCR(gszSpawnNPCName);
-            ConvertCR(gszSpawnPlayerName[1]);
-            ConvertCR(gszSpawnPlayerName[2]);
-            ConvertCR(gszSpawnPlayerName[3]);
-            ConvertCR(gszSpawnPlayerName[4]);
-            ConvertCR(gszSpawnPlayerName[5]);
-            ConvertCR(gszSpawnPlayerName[6]);
-            ConvertCR(gszSpawnCorpseName);
-            ConvertCR(gszSpawnPetName);
-
-            gFilterSWho.Lastname= GetPrivateProfileInt("SWho Filter","Lastname",1,Filename);
-            gFilterSWho.Class    = GetPrivateProfileInt("SWho Filter","Class",1,Filename);
-            gFilterSWho.Race    = GetPrivateProfileInt("SWho Filter","Race",1,Filename);
-            gFilterSWho.Level    = GetPrivateProfileInt("SWho Filter","Level",1,Filename);
-            gFilterSWho.GM        = GetPrivateProfileInt("SWho Filter","GM",1,Filename);
-            gFilterSWho.Guild    = GetPrivateProfileInt("SWho Filter","Guild",1,Filename);
-            gFilterSWho.Sneak   = GetPrivateProfileInt("SWho Filter","Sneak",1,Filename); 
-            gFilterSWho.LD        = GetPrivateProfileInt("SWho Filter","LD",1,Filename);
-            gFilterSWho.LFG        = GetPrivateProfileInt("SWho Filter","LFG",1,Filename);
-            gFilterSWho.NPCTag    = GetPrivateProfileInt("SWho Filter","NPCTag",1,Filename);
-            gFilterSWho.Trader    = GetPrivateProfileInt("SWho Filter","Trader",1,Filename);
-            gFilterSWho.AFK        = GetPrivateProfileInt("SWho Filter","AFK",1,Filename);
-            gFilterSWho.Anon    = GetPrivateProfileInt("SWho Filter","Anon",1,Filename);
-            gFilterSWho.Distance= GetPrivateProfileInt("SWho Filter","Distance",1,Filename);
-            gFilterSWho.Light    = GetPrivateProfileInt("SWho Filter","Light",0,Filename);
-            gFilterSWho.Body    = GetPrivateProfileInt("SWho Filter","Body",0,Filename);
-            gFilterSWho.SpawnID = GetPrivateProfileInt("SWho Filter","SpawnID",0,Filename);
-            gFilterSWho.Holding = GetPrivateProfileInt("SWho Filter","Holding",0,Filename);
-            gFilterSWho.ConColor= GetPrivateProfileInt("SWho Filter","ConColor",0,Filename);
-            gFilterSWho.Invisible= GetPrivateProfileInt("SWho Filter","Invisible",0,Filename);
-
-            GetPrivateProfileString("MacroQuest","MacroPath",".",szBuffer,MAX_STRING,Filename);
-            if (szBuffer[0]=='.') {
-                sprintf(gszMacroPath,"%s%s",lpINIPath,szBuffer+1);
-            } else {
-                strcat(gszMacroPath,szBuffer);
+            else
+            {
+                sprintf_s(szBuffer, "Your file: %s is old.\nPlease replace it with the one from the latest zip", Filename);
+                MessageBox(NULL, szBuffer, "ItemDB.txt version mismatch", MB_OK);
+                exit(0);
             }
-
-
-            GetPrivateProfileString("MacroQuest","LogPath",".",szBuffer,MAX_STRING,Filename);
-            if (szBuffer[0]=='.') {
-                sprintf(gszLogPath,"%s%s",lpINIPath,szBuffer+1);
-            } else {
-                strcat(gszLogPath,szBuffer);
-            }
-
-            DefaultFilters();
-            GetPrivateProfileString("Filter Names",NULL,"",FilterList,MAX_STRING*10,Filename);
-            PCHAR pFilterList = FilterList;
-            while (pFilterList[0]!=0) {
-                GetPrivateProfileString("Filter Names",pFilterList,"",szBuffer,MAX_STRING,Filename);
-                if (szBuffer[0]!=0 && strcmp(szBuffer,"NOBODY")) {
-                    AddFilter(szBuffer,-1,&gFilterCustom);
-                }
-                pFilterList+=strlen(pFilterList)+1;
-            }
-
-            sprintf(Filename,"%s\\ItemDB.txt",lpINIPath);
-            FILE *fDB = fopen(Filename,"rt");
-            strcpy(gszItemDB,Filename);
-			char *pDest = 0;
-            if (fDB) {
-                fgets(szBuffer,MAX_STRING,fDB);
-                while ((!feof(fDB)) && (strstr(szBuffer,"\t"))) {
-                    PITEMDB Item = (PITEMDB)malloc(sizeof(ITEMDB));
-                    Item->pNext = gItemDB;
-                    Item->ID = atoi(szBuffer);
-					strcpy(szBuffer2, strstr(szBuffer,"\t")+1);
-					Item->StackSize = atoi(szBuffer2);
-					if(pDest = strstr(szBuffer2,"\t")) {
-						strcpy(Item->szName,pDest+1);
-						Item->szName[strstr(Item->szName,"\n")-Item->szName]=0;
-						gItemDB = Item;
-						fgets(szBuffer,MAX_STRING,fDB);
-					} else {
-						sprintf_s(szBuffer,"Your file: %s is old.\nPlease replace it with the one from the latest zip",Filename);
-						MessageBox(NULL,szBuffer,"ItemDB.txt version mismatch",MB_OK);
-						exit(0);
-					}
-                }
-                fclose(fDB);
-            }
-            if(!gSpewToFile) {//lets check if the user has it set in his/her custom ini
-                sprintf(Filename,"%s\\CustomPlugin.ini",lpINIPath);
-                gSpewToFile = 1==GetPrivateProfileInt("MacroQuest","DebugSpewToFile",0,Filename);
-            }
-            return TRUE;
+        }
+        fclose(fDB);
+    }
+    if (!gSpewToFile)
+    {//lets check if the user has it set in his/her custom ini
+        sprintf(Filename, "%s\\CustomPlugin.ini", lpINIPath);
+        gSpewToFile = 1 == GetPrivateProfileInt("MacroQuest", "DebugSpewToFile", 0, Filename);
+    }
+    return TRUE;
 }
 
 
