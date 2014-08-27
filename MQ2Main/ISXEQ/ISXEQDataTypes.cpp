@@ -492,7 +492,7 @@ bool MQ2AltAbilityType::GETMETHOD()
         return false;
     PALTABILITY pAbility=*(PALTABILITY*)VarPtr.Ptr;
     PMQ2TYPEMETHOD pMethod=MQ2AltAbilityType::FindMethod(Method);
-    if (!pMethod)
+		if (!pMethod || !pAbility)
     {
         return false;
     }
