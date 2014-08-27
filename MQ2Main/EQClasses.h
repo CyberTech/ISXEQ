@@ -1169,7 +1169,7 @@ EQLIB_OBJECT void CChatWindow::HistoryBack(void);
 EQLIB_OBJECT void CChatWindow::HistoryForward(void);
 EQLIB_OBJECT void CChatWindow::PageDown(void);
 EQLIB_OBJECT void CChatWindow::PageUp(void);
-EQLIB_OBJECT void CChatWindow::SetChatFont(int);
+EQLIB_OBJECT void CChatWindow::SetChatFont(DWORD);
 // virtual
 EQLIB_OBJECT CChatWindow::~CChatWindow(void);
 EQLIB_OBJECT int CChatWindow::Draw(void)const;

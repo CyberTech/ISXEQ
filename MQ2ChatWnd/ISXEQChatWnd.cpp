@@ -133,7 +133,7 @@ public:
         return CSidlScreenWnd::WndNotification(pWnd,Message,unknown);
     };
 
-    void SetChatFont(int size) // brainiac 12-12-2007
+    void SetChatFont(DWORD size) // brainiac 12-12-2007
     {
         struct FONTDATA
         {
@@ -147,7 +147,7 @@ public:
         Fonts = (FONTDATA*)&(((char*)pWndMgr)[EQ_CHAT_FONT_OFFSET]);
 
         // check font array bounds and pointers
-        if (size < 0 || size >= Fonts->NumFonts) {
+        if (size >= Fonts->NumFonts) {
             return;
         }
         if (Fonts->Fonts == NULL || MQChatWnd == NULL) {
@@ -547,8 +547,8 @@ int CMD_MQFont(int argc, char *argv[])
 {
     if (MQChatWnd != NULL) {
         if (argc > 1 && MQChatWnd) {
-            int size = atoi(argv[1]);
-            if (size < 0 || size > 10) {
+            DWORD size = (DWORD)atoi(argv[1]);
+            if (size > 10) {
                 printf("Usage: %s 0-10", argv[0]);
                 return 0;
             }

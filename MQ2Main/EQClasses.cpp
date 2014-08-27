@@ -996,7 +996,7 @@ FUNCTION_AT_ADDRESS(void  CChatWindow::PageUp(void),CChatWindow__PageUp);
 FUNCTION_AT_ADDRESS(void  CChatWindow::PageDown(void),CChatWindow__PageDown);
 #endif
 #ifdef CChatWindow__SetChatFont_x
-FUNCTION_AT_ADDRESS(void  CChatWindow::SetChatFont(int),CChatWindow__SetChatFont);
+FUNCTION_AT_ADDRESS(void  CChatWindow::SetChatFont(DWORD),CChatWindow__SetChatFont);
 #endif
 #ifdef CChatWindow__Clear_x
 FUNCTION_AT_ADDRESS(void  CChatWindow::Clear(void),CChatWindow__Clear);
