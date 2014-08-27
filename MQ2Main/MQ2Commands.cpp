@@ -2014,7 +2014,7 @@ VOID LoadSpells(PSPAWNINFO pChar, PCHAR szLine)
     if (!stricmp(szArg1,"list")) { 
 
         DoIndex = IsNumber(szArg2)?atoi(szArg2):FindSpellListByName(szArg2); 
-        if (DoIndex < 0 || DoIndex > NUM_SPELL_SETS-1) { 
+        if (DoIndex > NUM_SPELL_SETS-1) { 
             sprintf(szBuffer,"Unable to find favorite list '%s'",szArg2); 
             WriteChatColor(szBuffer,USERCOLOR_DEFAULT); 
             return; 
@@ -2031,7 +2031,7 @@ VOID LoadSpells(PSPAWNINFO pChar, PCHAR szLine)
     } 
 
     DoIndex = IsNumber(szArg1)?atoi(szArg1):FindSpellListByName(szArg1); 
-    if (DoIndex >= 0 && DoIndex <NUM_SPELL_SETS) { 
+    if (DoIndex <NUM_SPELL_SETS) { 
         pSpellBookWnd->MemorizeSet((int*)&pSpellSets[DoIndex],NUM_SPELL_GEMS); 
     } else { 
         sprintf(szBuffer,"Unable to find favorite list '%s'",szArg1); 

@@ -794,16 +794,19 @@ DWORD GetZoneID(PCHAR ZoneShortName)
 {
     PZONELIST pZone = NULL;
     if (!ppWorldData | !pWorldData)
-		return -1;
-    for (int nIndex=0; nIndex < MAX_ZONES; nIndex++) {
+        return MAX_ZONES + 1;
+    for (int nIndex = 0; nIndex < MAX_ZONES; nIndex++)
+    {
         pZone = ((PWORLDDATA)pWorldData)->ZoneArray[nIndex];
-        if(pZone) {
-            if (!_stricmp(pZone->ShortName,ZoneShortName)) {
+        if (pZone)
+        {
+            if (!_stricmp(pZone->ShortName, ZoneShortName))
+            {
                 return nIndex;
             }
-		}
+        }
     }
-    return -1; 
+    return MAX_ZONES + 1;
 }
 
 // ***************************************************************************
@@ -1392,7 +1395,6 @@ PCHAR GetClassesFromMask(LONG mask, PCHAR szBuffer)
 // *************************************************************************** 
 PCHAR GetSpellRestrictions(PSPELL pSpell, unsigned int nIndex, PCHAR szBuffer)
 {
-	CHAR szTemp[MAX_STRING] = {0};
 	if (!szBuffer)
 		return NULL;
 	if (!pSpell) {
@@ -1864,7 +1866,7 @@ LONG CalcMaxSpellLevel(LONG calc, LONG base, LONG max, LONG tick, LONG minlevel,
 		for (LONG maxlevel=1; maxlevel<=level; maxlevel++) {
 			LONG value=CalcValue(calc, base, max, tick, minlevel, maxlevel);
 			//WriteChatf("VALUE:%d, MAX:%d", abs(value), abs(max));
-			if (abs(CalcValue(calc, base, max, tick, minlevel, maxlevel)) >= abs(max))
+            if (abs(value) >= abs(max))
 				return maxlevel;
 		}
 		return level;
@@ -3741,11 +3743,11 @@ int FindInvSlot(PCHAR pName, BOOL Exact)
 
 int FindNextInvSlot(PCHAR pName, BOOL Exact)
 {
-    CHAR szTemp[MAX_STRING]={0};
+#if 0
+    CHAR szTemp[MAX_STRING] = { 0 };
     CHAR Name[MAX_STRING]={0};
     strlwr(strcpy(Name,pName));
 
-#if 0
     PEQINVSLOTMGR pInvMgr=(PEQINVSLOTMGR)pInvSlotMgr;
     for (unsigned long N = LastFoundInvSlot+1 ; N < 0x800 ; N++)
     {
@@ -5598,7 +5600,6 @@ VOID FreeAlerts(DWORD List)
 
 BOOL GetClosestAlert(PSPAWNINFO pChar, DWORD List)
 {
-    CHAR szName[MAX_STRING] = {0};
     if (!ppSpawnManager) return FALSE;
     if (!pSpawnList) return FALSE;
     PSPAWNINFO pSpawn, pClosest = FALSE;
@@ -5617,7 +5618,6 @@ BOOL GetClosestAlert(PSPAWNINFO pChar, DWORD List)
 
 BOOL IsAlert(PSPAWNINFO pChar, PSPAWNINFO pSpawn, DWORD List)
 {
-    CHAR szName[MAX_STRING] = {0};
     SEARCHSPAWN SearchSpawn;
     PALERT pCurrent = GetAlert(List);
     if (!pCurrent) return NULL;
@@ -6121,7 +6121,7 @@ DWORD FindSpellListByName(PCHAR szName)
 	for (Index=0;Index<NUM_SPELL_SETS;Index++) {
         if (!stricmp(pSpellSets[Index].Name,szName)) return Index;
     }
-    return -1;
+    return NUM_SPELL_SETS+1;
 }
 
 VOID RewriteAliases(VOID)
@@ -6910,7 +6910,6 @@ BOOL PickupOrDropItem(DWORD type, PCONTENTS pItem)
 	//if it is do some magic and open the bag so we can get the pslot
 	if(!pItem)
 		return FALSE;
-	PEQINVSLOTMGR pInvMgr  = (PEQINVSLOTMGR)pInvSlotMgr;
 	WORD InvSlot = pItem->ItemSlot,BagSlot = 0xFFFF;
 	BOOL itsinsideapack = 0;
 	if(IsItemInsideContainer(pItem)) {
