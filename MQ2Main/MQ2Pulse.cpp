@@ -92,8 +92,6 @@ void Pulse()
     PSPAWNINFO pChar = pCharOrMount = (PSPAWNINFO)pCharSpawn;
     if (pCharInfo && pCharInfo->pSpawn) pChar=pCharInfo->pSpawn;
 
-    static WORD LastZone=-1;
-
     static PSPAWNINFO pCharOld = NULL;
     static FLOAT LastX = 0.0f;
     static FLOAT LastY = 0.0f;
