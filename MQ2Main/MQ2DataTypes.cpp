@@ -1931,7 +1931,6 @@ bool MQ2CharacterType::GETMEMBER()
     int nLang = 0;
     char buf[MAX_STRING]  = {0};
     unsigned long nBuff;
-    char buf2[MAX_STRING] = {0};
 
     switch((CharacterMembers)pMember->ID)
     {
@@ -2635,7 +2634,7 @@ bool MQ2CharacterType::GETMEMBER()
                 //numeric
                 for (unsigned long nAbility=0 ; nAbility<AA_CHAR_MAX_REAL ; nAbility++) {
                     if ( PALTABILITY pAbility=pAltAdvManager->GetAltAbility(pPCData->GetAltAbilityIndex(nAbility)) ) {
-                        if (pAbility->ID == GETNUMBER() ) {
+                        if (pAbility->ID == (DWORD)GETNUMBER() ) {
                             pAltAdvManager->IsAbilityReady(pPCData,pAbility,&Dest.Int);
                             if (Dest.Int<0)
                                 return false;
@@ -2670,7 +2669,7 @@ bool MQ2CharacterType::GETMEMBER()
                 //numeric
                 for (unsigned long nAbility=0 ; nAbility<AA_CHAR_MAX_REAL ; nAbility++) {
                     if ( PALTABILITY pAbility=pAltAdvManager->GetAltAbility(pPCData->GetAltAbilityIndex(nAbility)) ) {
-                        if (pAbility->ID == GETNUMBER()) {
+                        if (pAbility->ID == (DWORD)GETNUMBER()) {
                             Dest.DWord=pAltAdvManager->IsAbilityReady(pPCData,pAbility,0);
                             Dest.Type=pBoolType;
                             return true;
@@ -2699,7 +2698,7 @@ bool MQ2CharacterType::GETMEMBER()
                 //numeric
                 for (unsigned long nAbility=0 ; nAbility<AA_CHAR_MAX_REAL ; nAbility++) {
                     if ( PALTABILITY pAbility=pAltAdvManager->GetAltAbility(pPCData->GetAltAbilityIndex(nAbility)) ) {
-                        if (pAbility->ID == GETNUMBER()) {
+                        if (pAbility->ID == (DWORD)GETNUMBER()) {
                             Dest.Ptr = pAbility;
                             Dest.Type = pAltAbilityType;
                             return true;

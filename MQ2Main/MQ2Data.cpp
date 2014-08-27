@@ -1462,7 +1462,7 @@ TLO(dataAltAbility)
         {
             if ( PALTABILITY pAbility=pAltAdvManager->GetAltAbility(nAbility))
             {
-                if (pAbility->ID == GETNUMBER() )
+                if (pAbility->ID == (DWORD)GETNUMBER() )
                 {
                     Ret.Ptr=pAbility;
                     Ret.Type=pAltAbilityType;

@@ -2453,7 +2453,7 @@ public:
     }
     bool FromString(MQ2VARPTR &VarPtr, PCHAR Source)
     {
-        if (VarPtr.Ptr=FindMQ2Window(Source))
+        if ((VarPtr.Ptr=FindMQ2Window(Source)) != NULL)
             return true;
         return false;
     }
