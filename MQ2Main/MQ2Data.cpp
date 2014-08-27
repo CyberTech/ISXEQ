@@ -828,7 +828,7 @@ TLO(dataSelectedItem)
             Ret.Ptr = pC;
             Ret.Type=pItemType;
             return true;
-        } else {//im working on this -eqmule 2013 dec 14
+        } else {// TODO im working on this -eqmule 2013 dec 14
             PCONTENTS pItem = FindItemByName("Worn Totem");
             if(pItem) {
                 CInvSlot *pSlot=pInvSlotMgr->FindInvSlot(pItem->ItemSlot);
@@ -986,7 +986,6 @@ TLO(dataFindItem)
     CHAR Name[MAX_STRING]={0};
     CHAR Temp[MAX_STRING]={0};
     strlwr(strcpy(Name,pName));
-    PCHARINFO pCharInfo=GetCharInfo();
 	PCHARINFO2 pChar2 = GetCharInfo2();
 	if(pChar2 && pChar2->pInventoryArray && pChar2->pInventoryArray->Inventory.Cursor) {
 		if (PCONTENTS pItem=pChar2->pInventoryArray->Inventory.Cursor) {
